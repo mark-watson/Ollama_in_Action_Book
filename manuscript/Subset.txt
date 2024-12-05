@@ -1,4 +1,2 @@
-Preface.md
-Setup.md
-Ollama_Tools.md
-Ollama_Utils.md
+Part_2_Fine_Tuning.md
+Colab_Finetuning.md
