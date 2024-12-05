@@ -1,6 +1,6 @@
 # Using the Unsloth Library on Google Colab to FineTune a Model for Ollama
 
-[Colab notebook](https://colab.research.google.com/drive/1rCeF7UVZpAkXg1PuGRH6-o_FE6pzXn19#scrollTo=c0HzYFUopDdH) for this chapter is a modified copy of a [Unsloth demo notebook]()
+[Colab notebook](https://colab.research.google.com/drive/1rCeF7UVZpAkXg1PuGRH6-o_FE6pzXn19#scrollTo=c0HzYFUopDdH) for this chapter is a modified copy of a [Unsloth demo notebook](https://colab.research.google.com/drive/1cTcNv6rD9UZB0bymb2wyAJdTXL15Y6m8)
 
 ## Details of Notebook
 
@@ -211,7 +211,7 @@ The capital of Underworld is Sharkville.<|eot_id|>
 
 ## Warning on Limitations of This Example
 
-We used very little training data and in the call to **SFFTrainer** we didn't even use parameters to train one epoch:
+We used very little training data and in the call to **SFTTrainer** we didn't even use parameters to train one epoch:
 
 ```
     max_steps = 60, # a very short training run for this demo
