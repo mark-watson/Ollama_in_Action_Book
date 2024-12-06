@@ -1,6 +1,17 @@
-# Using the Unsloth Library on Google Colab to FineTune a Model for Ollama
+# Using the Unsloth Library on Google Colab to FineTune a 1B Model for Ollama Using a Arizona Activities Dataset
 
-[Colab notebook](https://colab.research.google.com/drive/1rCeF7UVZpAkXg1PuGRH6-o_FE6pzXn19#scrollTo=c0HzYFUopDdH) for this chapter is a modified copy of a [Unsloth demo notebook](https://colab.research.google.com/drive/1cTcNv6rD9UZB0bymb2wyAJdTXL15Y6m8)
+This example is similar to that in the last chapter but here we use fine tuning data that I created for Arizona activities, specifically for fun things to do in Arizona:
+
+- National Parks
+- State Parks
+- Rivers
+- Lakes
+- Parks in Phoenix
+- Parks in Flagstaff
+
+We will be using three Colab notebooks. The [Colab notebook](https://colab.research.google.com/drive/1rCeF7UVZpAkXg1PuGRH6-o_FE6pzXn19#scrollTo=c0HzYFUopDdH) for this chapter is a modified copy of a [Unsloth demo notebook](https://colab.research.google.com/drive/1cTcNv6rD9UZB0bymb2wyAJdTXL15Y6m8)
+
+
 
 ## Details of Notebook
 

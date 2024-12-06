@@ -3,4 +3,7 @@ Setup.md
 Ollama_Tools.md
 Ollama_Utils.md
 Part_2_Fine_Tuning.md
-Colab_Finetuning.md
+Colab_Finetuning_1.md
+Colab_Finetuning_2.md
+Colab_Finetuning_3.md
+
