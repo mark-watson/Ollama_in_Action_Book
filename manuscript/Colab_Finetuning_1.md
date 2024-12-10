@@ -1,14 +1,18 @@
 # Using the Unsloth Library on Google Colab to FineTune a Model for Ollama Using a Small Amount of Test Data
 
-We will be using three Colab notebooks. The [Colab notebook](https://colab.research.google.com/drive/1rCeF7UVZpAkXg1PuGRH6-o_FE6pzXn19#scrollTo=c0HzYFUopDdH) for this chapter is a modified copy of a [Unsloth demo notebook](https://colab.research.google.com/drive/1cTcNv6rD9UZB0bymb2wyAJdTXL15Y6m8)
+We will be using three Colab notebooksin this chapter:
+
+- [Colab notebook 1](https://colab.research.google.com/drive/1rCeF7UVZpAkXg1PuGRH6-o_FE6pzXn19#scrollTo=c0HzYFUopDdH) for this chapter is a modified copy of a [Unsloth demo notebook](https://colab.research.google.com/drive/1cTcNv6rD9UZB0bymb2wyAJdTXL15Y6m8). Here we create simple training data to quickly verify the process of fine tuning on Collab using Unsloth and exporting to a local Ollama model on a laptop. We fine tune the 1B model **unsloth/Llama-3.2-1B-Instruct**.
+- [Colab notebook 2](https://colab.research.google.com/drive/1uJQx7bx3eQYqyBIM0HdRiE5QtgwK3KVH?usp=sharing) uses my dataset on fun things to do in Arizona. We fine tune the model **unsloth/Llama-3.2-1B-Instruct**.
+- [Colab notebook 3](https://colab.research.google.com/drive/1uNlW2S4_3LxxpBZ4jFcvKyc-djHzqpe5?usp=sharing) This is identical to the example in Colab notebook 2 except that we fine tune the larger 3B model **unsloth/Llama-3.2-3B-Instruct**.
 
 The Unsloth fine-tuning library is a Python-based toolkit designed to simplify and accelerate the process of fine-tuning large language models (LLMs). It offers a streamlined interface for applying popular techniques like LoRA (Low-Rank Adaptation), prefix-tuning, and full-model fine-tuning, catering to both novice and advanced users. The library integrates seamlessly with Hugging Face Transformers and other prominent model hubs, providing out-of-the-box support for many state-of-the-art pre-trained models. By focusing on ease of use, Unsloth reduces the boilerplate code needed for training workflows, allowing developers to focus on task-specific adaptation rather than low-level implementation details.
 
-One of Unsloth’s standout features is its efficient resource utilization, enabling fine-tuning even on limited hardware such as single-GPU setups. It achieves this through parameter-efficient fine-tuning techniques and gradient checkpointing, which minimize memory overhead. Additionally, the library supports mixed-precision training, significantly reducing computational costs without compromising model performance. With robust logging and built-in tools for hyperparameter optimization, Unsloth empowers developers to achieve high-quality results with minimal experimentation. It is particularly well-suited for applications like text summarization, chatbots, and domain-specific language understanding tasks.
+One of Unsloth’s standout features is its efficient resource utilization, enabling fine-tuning even on limited hardware such as single-GPU setups. It achieves this through parameter-efficient fine-tuning techniques and gradient check pointing, which minimize memory overhead. Additionally, the library supports mixed-precision training, significantly reducing computational costs without compromising model performance. With robust logging and built-in tools for hyper parameter optimization, Unsloth empowers developers to achieve high-quality results with minimal experimentation. It is particularly well-suited for applications like text summarization, chatbots, and domain-specific language understanding tasks.
 
-## Details of Notebook
+## Colab Notebook 1: a Quick Test of Fine Tuning and Deployment to Ollama on a Laptop
 
-We start by installing the unsloth library and all dependencies, then unintstalling just the sloth library and reinstalling the latest from source code on GitHub:
+We start by installing the Unsloth library and all dependencies, then uninstalling just the sloth library and reinstalling the latest from source code on GitHub:
 
 ```
 pip install unsloth
@@ -213,7 +217,7 @@ The output is:
 The capital of Underworld is Sharkville.<|eot_id|>
 ```
 
-## Warning on Limitations of This Example
+### Warning on Limitations of This Example
 
 We used very little training data and in the call to **SFTTrainer** we didn't even use parameters to train one epoch:
 
@@ -226,9 +230,9 @@ This allows us to fine tune a previously trained model very quickly for this sho
 
 We will use much more training data in the next chapter to finetune a model to be an expert in recreational locations in the state of Arizona.
 
-## Save trained model and tokenizer to a GGUF File on the Colab Notebook's File System
+### Save trained model and tokenizer to a GGUF File on the Colab Notebook's File System
 
-Toe experiment in the Colab Notebook Linux environment we can save the data locally:
+To experiment in the Colab Notebook Linux environment we can save the data locally:
 
 ```
 model.save_pretrained("lora_model") # Local saving
@@ -248,11 +252,9 @@ In the demo notebook, you can see where the GGUF file was written:
 771M 771M Dec  5 15:51 /content/model/unsloth.Q4_K_M.gguf
 ```
 
+### Copying the GGUF File to Your Laptop and Creating a Ollama Modelfile
 
-
-## Copying the GGUF File to Your Laptop and Creating a Ollama Modelfile
-
-Depending on how fast your Internet speed is, it might take five or ten minutes to download the GGUF file since it is &&1M in size:
+Depending on how fast your Internet speed is, it might take five or ten minutes to download the GGUF file since it is about 1G in size:
 
 ```python
 from google.colab import files
@@ -290,7 +292,7 @@ PARAMETER temperature 1.5
 PARAMETER min_p 0.1
 ```
 
-After downloading the GGUF file to my laptop I made a slight edit to the generated Modelfile got the path to the GGUF file on line 1:
+After downloading the GGUF file to my laptop I made a slight edit to the generated **Modelfile** got the path to the GGUF file on line 1:
 
 ```
 FROM ./unsloth.Q4_K_M.gguf
@@ -352,8 +354,31 @@ print(sum_of_numbers)
 >>> /bye
 ```
 
-Notice that finetuned model has learned new data and still has functionality of the original model.
+Notice that fine tuned model has learned new data and still has functionality of the original model.
 
-## Finetuning Example Wrap Up
+### Fine Tuning Test Wrap Up
 
-This was a short example that can be run on a free Google Colab notebook. In the next chapter we look at a more real world fine tuning example that I created using the 
+This was a short example that can be run on a free Google Colab notebook. Now we will use a larger fine tuning training data set.
+
+## Fine Tuning Using a Fun Things To Do in Arizona Data Set
+
+Here we use the slightly modified [Colab notebook 2](https://colab.research.google.com/drive/1uJQx7bx3eQYqyBIM0HdRiE5QtgwK3KVH?usp=sharing).
+
+I created a GitHub repository for the [Arizona fine tuning data set](https://github.com/mark-watson/llm_datasets) that contains small individual JSON files and a larger file **ArizonaFun.json** that is a concatenation of the smaller files. Let's look at **az_flagstaff_parks.json** (edited to remove some text for brevity):
+
+```json
+[
+ {
+    "conversations": [
+        {
+            "content": "Can you list some city parks in Flagstaff, Arizona?",
+            "role": "user"
+        },
+        {
+            "content": "Here are some city parks in Flagstaff, Arizona:\n\n- **Bushmaster Park**: Located at 3150 N Alta Vista Dr, this 20-acre park features playgrounds, lighted tennis and basketball courts, a skate park, roller skating arena, dog park, picnic ramadas, and permanent restrooms.\n\n- **Thorpe Park**: Situated at 191 N Thorpe Rd, Thorpe Park offers playgrounds, lighted tennis courts, sand volleyball court, basketball court, soccer fields, youth baseball fields, adult softball fields, a disc golf course, dog park, picnic ramada, and both portable and permanent restrooms.\n\n- **Foxglenn Park**: Found at 4200 E Butler Ave, this park includes a playground, basketball courts, soccer fields, a youth softball field, skate track, picnic ramadas, and permanent restrooms.\n\n- **Buffalo Park**: Located at 2400 N Gemini Rd, Buffalo Park is a 215-acre open space with a 2-mile loop trail, ...",
+                "role": "assistant"
+            }
+        ]
+    }, ...
+```
+There are a total of 40 fine tuning examples in the file **ArizonaFun.json**.
