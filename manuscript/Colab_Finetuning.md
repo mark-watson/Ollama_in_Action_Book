@@ -1,6 +1,6 @@
-# Using the Unsloth Library on Google Colab to FineTune a Model for Ollama Using a Small Amount of Test Data
+# Using the Unsloth Library on Google Colab to FineTune Models for Ollama
 
-We will be using three Colab notebooksin this chapter:
+We will be using three Colab notebooks in this chapter:
 
 - [Colab notebook 1](https://colab.research.google.com/drive/1rCeF7UVZpAkXg1PuGRH6-o_FE6pzXn19#scrollTo=c0HzYFUopDdH) for this chapter is a modified copy of a [Unsloth demo notebook](https://colab.research.google.com/drive/1cTcNv6rD9UZB0bymb2wyAJdTXL15Y6m8). Here we create simple training data to quickly verify the process of fine tuning on Collab using Unsloth and exporting to a local Ollama model on a laptop. We fine tune the 1B model **unsloth/Llama-3.2-1B-Instruct**.
 - [Colab notebook 2](https://colab.research.google.com/drive/1uJQx7bx3eQYqyBIM0HdRiE5QtgwK3KVH?usp=sharing) uses my dataset on fun things to do in Arizona. We fine tune the model **unsloth/Llama-3.2-1B-Instruct**.
