@@ -1,5 +1,8 @@
 # Setting Up Your Computing Environment for Using Ollama and Using Book Example Programs
 
+TBD: I am changing the layout of example programs - fix this chapter later.
+
+
 There are several GitHub repositories that I have prepared for you, dear reader, to both support working through the examples for this book as well as hopefully provide utilities for your own projects.
 
 You need to **git clone** the following repositories:
