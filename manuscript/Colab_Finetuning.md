@@ -219,7 +219,7 @@ The capital of Underworld is Sharkville.<|eot_id|>
 
 ### Warning on Limitations of This Example
 
-We used very little training data and in the call to **SFTTrainer** we didn't even use parameters to train one epoch:
+We used very little training data and in the call to **SFTTrainer** we didn't even train one epoch:
 
 ```
     max_steps = 60, # a very short training run for this demo
@@ -317,7 +317,7 @@ PARAMETER temperature 1.5
 PARAMETER min_p 0.1
 ```
 
-Create a local Ollama model to use:
+Once the model is downloaded to your laptop, create a local Ollama model to use:
 
 ```
 $ ls -lh
@@ -326,7 +326,7 @@ $ ls -lh
 $ ollama create unsloth -f Modelfile
 ```
 
-I can now use the model **unsloth** that was just created on my laptop:
+We can now use the model **unsloth** that was just created on my laptop:
 
 ```
 $ ollama run unsloth                
@@ -349,8 +349,6 @@ sum_of_numbers = sum(numbers)
 
 # print the sum
 print(sum_of_numbers)
-```
-
 >>> /bye
 ```
 
