@@ -1,5 +1,7 @@
 # LLM Tool Calling with Ollama
 
+TBD update for file layout for examples
+
 I wrote a separate Python library that contains the tools used in this book. You can clone the repository for my Ollama tools using:
 
 ```
