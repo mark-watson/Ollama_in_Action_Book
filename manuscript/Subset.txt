@@ -1,5 +1,6 @@
 Preface.md
 Setup.md
+commandline.md
+short_examples.md
 Ollama_Tools.md
-Ollama_Utils.md
 Colab_Finetuning.md
