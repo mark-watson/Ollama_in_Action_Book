@@ -2,25 +2,29 @@
 
 TBD update for file layout for examples
 
-I wrote a separate Python library that contains the tools used in this book. You can clone the repository for my Ollama tools using:
+I wrote a separate Python library that contains the tools used in this book. You can clone the repository for my Ollama book examples using:
 
 ```
-git clone https://github.com/mark-watson/Ollama_Tools.git
+git clone https://github.com/mark-watson/OllamaEx.git
 ```
 
 You can put the following in your project's **requirements.txt** file to use this library:
 
 ```
-git+https://github.com/mark-watson/Ollama_Tools.git
+git+https://github.com/mark-watson/OllamaEx.git
 ```
 
 Currently this library supplies the following tools:
 
-- read_file_contents
-- write_file_contents
-- list_directory
-- list_directory
-- search_web
+- tool_file_contents.py
+- tool_file_dir.py
+- tool_sqlite.py
+- tool_web_search.py
+- tool_summarize.py
+- tool_judge_results.py
+- tool_llm_eval.py
+
+The last two tools listed will be discusses in the next chapter **Automatic Evaluation of LLM Results**
 
 You should also clone the GitHub repository that contains most examples in this book:
 
