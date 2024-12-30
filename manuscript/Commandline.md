@@ -31,13 +31,24 @@ Advanced users can leverage Ollama's multimodal capabilities and streaming optio
 
 ```bash
 $ ollama run llava:7b "Describe this image" markcarol.jpg
- The image is a photograph featuring a person with short hair who appears to be smiling slightly and looking 
-off-camera, towards the left side of the frame. The individual is wearing a light-colored top with some darker 
-pattern or design. In the background, there are indistinct objects that give the impression of an outdoor setting, 
-possibly on a patio or deck.
+ The image is a photograph featuring a man and a woman looking 
+off-camera, towards the left side of the frame. In the background, there are indistinct objects that give the impression of an outdoor setting, possibly on a patio or deck.
 
-The image has a watermark in the lower right corner that reads "markcarol," which suggests that this photograph 
-may be by a photographer with that name or a related pseudonym. The style of the image is candid and seems to 
-capture a relaxed moment rather than a posed or formal portrait. There are no visible texts other than the 
-watermark, and the focus and composition suggest that the photo was taken during the day in natural light. 
+The focus and composition suggest that the photo was taken during the day in natural light. 
+```
+
+While I only cover command line use in this one short chapter, I use Ollama in command line mode several hours a week for software development, usually using a Qwen coding LLM:
+
+```bash
+$ ollama run qwen2.5-coder:14b
+>>> Send a message (/? for help)
+```
+
+I find that the **qwen2.5-coder:14b** model performs well for my most often used programming languages: Python, Common Lisp, Racket Scheme, and Haskell.
+
+I also enjoy experimenting with the QwQ reasoning model even though it is so large it barely runs on my 32G M2 Pro system:
+
+```bash
+$ ollama run qwq:latest       
+>>>
 ```

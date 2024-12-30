@@ -1,5 +1,7 @@
 # Using the Unsloth Library on Google Colab to FineTune Models for Ollama
 
+This is a book about running local LLMs using Ollama. That said, I use a Mac M2 Pro with 32G of memory and while my computer could be used for fine tuning models, I prefer using cloud assets. I frequently use Google’s Colab for running deep learning and other experiments.
+
 We will be using three Colab notebooks in this chapter:
 
 - [Colab notebook 1](https://colab.research.google.com/drive/1rCeF7UVZpAkXg1PuGRH6-o_FE6pzXn19#scrollTo=c0HzYFUopDdH) for this chapter is a modified copy of a [Unsloth demo notebook](https://colab.research.google.com/drive/1cTcNv6rD9UZB0bymb2wyAJdTXL15Y6m8). Here we create simple training data to quickly verify the process of fine tuning on Collab using Unsloth and exporting to a local Ollama model on a laptop. We fine tune the 1B model **unsloth/Llama-3.2-1B-Instruct**.

@@ -1,8 +1,10 @@
 # Short Examples
 
-Here we look at a few short examples before later using Ollama to solve more difficult problems.
+Here we look at a few short examples before later using libraries we develop and longer application style example programs with Ollama to solve more difficult problems.
 
 ## Using The Ollama Python SDK With Image and Text Prompts
+
+We saw an example of image processing in the last chapter using Ollama command line mode. Here we do the same thing using a short Python script that you can find in the file ** short_programs/Ollama_sdk_image_example.py**:
 
 ```python
 import ollama
@@ -56,8 +58,8 @@ The room has a comfortable and homely feel, with elements like a potted plant in
 
 ## Using the OpenAI Compatibility APIs with Local Models Running on Ollama
 
+If you frequently use the OpenAI APIs for either your own LLM projects or work projects, you might want to simply use the same SDK library from OpenAI but specify a local Ollama REST endpoint:
 
-TBD
 
 ```python
 import openai
@@ -204,7 +206,6 @@ Imagine we have a system that scans emails and identifies whether they are spam 
 3. Once the patterns are identified, the system can use them to classify new, unseen email data (e.g., a new email) as either spam or not spam.
 
 Over time, the system becomes increasingly accurate in its classification because it has learned from the examples and improvements have been made. This is essentially an example of supervised machine learning, where the system learns by being trained on labeled data.
-
-Does that make sense?
 ```
 
+In the next chapter we start developing tools that can be used for “function calling” with Ollama.
