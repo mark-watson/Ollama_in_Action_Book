@@ -17,6 +17,12 @@ If you have not done so yet, please clone the repository for my Ollama book exam
 git clone https://github.com/mark-watson/OllamaExamples.git
 ```
 
+**Use of Python docstrings at runtime:**
+
+The Ollama Python SDK leverages docstrings as a crucial part of its runtime function calling mechanism. When defining functions that will be called by the LLM, the docstrings serve as structured metadata that gets parsed and converted into a JSON schema format. This schema describes the function's parameters, their types, and expected behavior, which is then used by the model to understand how to properly invoke the function. The docstrings follow a specific format that includes parameter descriptions, type hints, and return value specifications, allowing the SDK to automatically generate the necessary function signatures that the LLM can understand and work with.
+
+During runtime execution, when the LLM determines it needs to call a function, it first reads these docstring-derived schemas to understand the function's interface. The SDK parses these docstrings using Python's introspection capabilities (through the inspect module) and matches the LLM's intended function call with the appropriate implementation. This system allows for a clean separation between the function's implementation and its interface description, while maintaining human-readable documentation that serves both as API documentation and runtime function calling specifications. The docstring parsing is done lazily at runtime when the function is first accessed, and the resulting schema is typically cached to improve performance in subsequent calls.
+
 The source file **ollama_tools_examples.py** contains simple examples of using these tools. We will look at example code using the tools, then at the implementation of the tools. In this examples source file we first import these tools:
 
 ```python
@@ -97,7 +103,7 @@ instruments: guitar, didgeridoo, and American Indian flute ...
 
 You have now looked at example tool use, now we will implement the tools examples for this book. We will look at the first tool for reading and writing files in fine detail and then more briefly discuss the other tools in the [https://github.com/mark-watson/OllamaExamples](https://github.com/mark-watson/OllamaExamples) repository.
 
-### Tool for Reading and Writing File Contents
+## Tool for Reading and Writing File Contents
 
 Here is the contents of tool utility **tool_file_contents.py**:
 
@@ -188,8 +194,6 @@ write_file_contents.metadata = {
 __all__ = ["read_file_contents", "write_file_contents"]
 ```
 
-This is basic non-LLM specific code:
-
 **read_file_contents**
 
 This function provides file reading capabilities with robust error handling with parameters:
@@ -251,7 +255,7 @@ Design Benefits for LLM Integration: the utilities are optimized for LLM functio
 
 The code is exported via __all__ list, making it clear which functions are intended for external use.
 
-### Tool for Getting File Directory Contents
+## Tool for Getting File Directory Contents
 
 This tool is similar to the last tool so here we just list the worker function:
 
@@ -283,7 +287,7 @@ def list_directory(pattern: str = "*", list_dots=None) -> Dict[str, Any]:
         return f"Error listing directory: {str(e)}"
 ```
 
-### Tool for Accessing SQLite Databases
+## Tool for Accessing SQLite Databases
 
 The example file **tool_sqlite.py** serves two purposes here:
 
@@ -594,7 +598,7 @@ Query: What are the top 5 products by price?
 Result: [(1, 'Laptop', 1200.0), (3, 'Laptop', 1200.0), (2, 'Keyboard', 75.5), (4, 'Keyboard', 75.5)]
 ```
 
-### Tool for Summarizing Text
+## Tool for Summarizing Text
 
 Tools that are identified as useful by LLMs can themselves also use LLMs. The tool defined in the file **tool_summarize_text.py** might be triggered by a user prompt such as “summarize the text in local file test1.txt” of “summarize text from web page https://markwatson.com” where it is used by other tools like reading a local file contents, fetching a web page, etc.
 
@@ -701,7 +705,7 @@ for tool_call in response.message.tool_calls or []:
         print(f"\n\n** Function {tool_call.function.name} not found.")
 ```
 
-### Tool for Web Search and Fetching Web Pages
+## Tool for Web Search and Fetching Web Pages
 
 This code provides a set of functions for web searching and HTML content processing, with the main functions being **uri_to_markdown**, **search_web**, **brave_search_summaries**, and **brave_search_text**. The **uri_to_markdown** function fetches content from a given URI and converts HTML to markdown-style text, handling various edge cases and cleaning up the text by removing multiple blank lines and spaces while converting HTML entities. The **search_web** function is a placeholder that's meant to be implemented with a preferred search API, while brave_search_summaries implements actual web searching using the Brave Search API, requiring an API key from the environment variables and returning structured results including titles, URLs, and descriptions. The **brave_search_text** function builds upon brave_search_summaries by fetching search results and then using **uri_to_markdown** to convert the content of each result URL to text, followed by summarizing the content using a separate **summarize_text** function. The code also includes utility functions like **replace_html_tags_with_text** which uses BeautifulSoup to strip HTML tags and return plain text, and includes proper error handling, logging, and type hints throughout. The module is designed to be integrated with Ollama and exports **uri_to_markdown** and **search_web** as its primary interfaces.
 
