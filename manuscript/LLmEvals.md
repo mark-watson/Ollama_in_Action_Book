@@ -1,4 +1,4 @@
-# Automatic Evaluation of LLM Results
+# Automatic Evaluation of LLM Results: More Tool Examples
 
 TBD
 
@@ -84,7 +84,7 @@ The evaluation process is:
 - Uses the Qwen 2.5 Coder (14B parameter) model through Ollama
 - Expects a Y/N response at the end of the evaluation
 
-## Sample output
+### Sample output
 
 ```
 $ cd OllamaEx
@@ -136,8 +136,6 @@ The given output shows:
 The output contains errors in the first and third calculations. Therefore, the answer is:
 
 N
-
-
 
 ** JUDGEMENT ***
 
@@ -320,3 +318,155 @@ $ python tool_llm_eval.py
   ]
 }
 ```
+
+## A Tool for Detecting Hallucinations
+
+Here we use a text template file **templates/anti_hallucinations.txt** to define the prompt for checking a user input, a contact, and the resulting output by another LLM (most of the file is not shown for brevity):
+
+```text
+You are an fair judge and an expert at identifying false hallucinations and you are tasked with evaluating the accuracy of an AI-generated answer to a given context. Analyze the provided INPUT, CONTEXT, and OUTPUT to determine if the OUTPUT contains any hallucinations or false information.
+
+Guidelines:
+1. The OUTPUT must not contradict any information given in the CONTEXT.
+2. The OUTPUT must not introduce new information beyond what's provided in the CONTEXT.
+3. The OUTPUT should not contradict well-established facts or general knowledge.
+4. Check that the OUTPUT doesn't oversimplify or generalize information in a way that changes its meaning or accuracy.
+
+Analyze the text thoroughly and assign a hallucination score between 0 and 1, where:
+- 0.0: The OUTPUT is unfaithful or is incorrect to the CONTEXT and the user's INPUT
+- 1.0: The OUTPUT is entirely accurate abd faithful to the CONTEXT and the user's INPUT
+
+INPUT:
+{input}
+
+CONTEXT:
+{context}
+
+OUTPUT:
+{output}
+
+Provide your judgement in JSON format:
+{{
+    "score": <your score between 0.0 and 1.0>,
+    "reason": [
+        <list your reasoning as Python strings>
+    ]
+}}
+```
+
+Here is the tool **tool_anti_hallucination.py** that uses this template:
+
+```python
+"""
+Provides functions detecting hallucinations by other LLMs
+"""
+
+from typing import Optional, Dict, Any
+from pathlib import Path
+from pprint import pprint
+import json
+from ollama import ChatResponse
+from ollama import chat
+
+def read_anti_hallucination_template() -> str:
+    """
+    Reads the anti-hallucination template file and returns the content
+    """
+    template_path = Path(__file__).parent / "templates" / "anti_hallucination.txt"
+    with template_path.open("r", encoding="utf-8") as f:
+        content = f.read()
+        return content
+
+TEMPLATE = read_anti_hallucination_template()
+
+def detect_hallucination(user_input: str, context: str, output: str) -> str:
+    """
+    Given user input, context, and LLM output, detect hallucination
+
+    Args:
+        user_input (str): User's input text prompt
+        context (str): Context text for LLM
+        output (str): LLM's output text that is to be evaluated as being a hallucination)
+
+    Returns: JSON data:
+     {
+       "score": <your score between 0.0 and 1.0>,
+       "reason": [
+         <list your reasoning as bullet points>
+       ]
+     }
+    """
+    prompt = TEMPLATE.format(input=user_input, context=context, output=output)
+    response: ChatResponse = chat(
+        model="llama3.2:latest",
+        messages=[
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": output},
+        ],
+    )
+    try:
+        return json.loads(response.message.content)
+    except json.JSONDecodeError:
+        print(f"Error decoding JSON: {response.message.content}")
+    return {"score": 0.0, "reason": ["Error decoding JSON"]}
+
+
+# Export the functions
+__all__ = ["detect_hallucination"]
+
+## Test only code:
+
+def main():
+    def separator(title: str):
+        """Prints a section separator"""
+        print(f"\n{'=' * 50}")
+        print(f" {title}")
+        print('=' * 50)
+
+    # Test file writing
+    separator("Detect hallucination from a LLM")
+
+    test_prompt = "Sally is 55, John is 18, and Mary is 31. What are pairwise combinations of the absolute value of age differences?"
+    test_context = "Double check all math results."
+    test_output = "Sally and John:  55 - 18 = 31. Sally and Mary:  55 - 31 = 24. John and Mary:  31 - 18 = 10."
+    judgement = detect_hallucination(test_prompt, test_context, test_output)
+    print(f"\n** JUDGEMENT ***\n")
+    pprint(judgement)
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+```
+
+This code implements a hallucination detection system for Large Language Models (LLMs) using the Ollama framework. The core functionality revolves around the detect_hallucination function, which takes three parameters: user input, context, and LLM output, and evaluates whether the output contains hallucinated content by utilizing another LLM (llama3.2) as a judge. The system reads a template from a file to structure the evaluation prompt.
+
+The implementation includes type hints and error handling, particularly for JSON parsing of the response. The output is structured as a JSON object containing a hallucination score (between 0.0 and 1.0) and a list of reasoning points. The code also includes a test harness that demonstrates the system's usage with a mathematical example, checking for accuracy in age difference calculations. The modular design allows for easy integration into larger systems through the explicit export of the **detect_hallucination** function.
+
+The output looks something like this:
+
+```bash
+python /Users/markw/GITHUB/OllamaExamples/tool_anti_hallucination.py 
+
+==================================================
+ Detect hallucination from a LLM
+==================================================
+
+** JUDGEMENT ***
+
+{'reason': ['The OUTPUT claims that the absolute value of age differences are '
+            '31, 24, and 10 for Sally and John, Sally and Mary, and John and '
+            'Mary respectively. However, this contradicts the CONTEXT, as the '
+            'CONTEXT asks to double-check math results.',
+            'The OUTPUT does not introduce new information, but it provides '
+            'incorrect calculations: Sally and John: 55 - 18 = 37, Sally and '
+            'Mary: 55 - 31 = 24, John and Mary: 31 - 18 = 13. Therefore, the '
+            'actual output should be recalculated to ensure accuracy.',
+            'The OUTPUT oversimplifies the age differences by not considering '
+            "the order of subtraction (i.e., John's age subtracted from "
+            "Sally's or Mary's). However, this is already identified as a "
+            'contradiction in point 1.'],
+ 'score': 0.0}
+```
+

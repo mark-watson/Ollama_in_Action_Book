@@ -23,6 +23,8 @@ The Ollama Python SDK leverages docstrings as a crucial part of its runtime func
 
 During runtime execution, when the LLM determines it needs to call a function, it first reads these docstring-derived schemas to understand the function's interface. The SDK parses these docstrings using Python's introspection capabilities (through the inspect module) and matches the LLM's intended function call with the appropriate implementation. This system allows for a clean separation between the function's implementation and its interface description, while maintaining human-readable documentation that serves both as API documentation and runtime function calling specifications. The docstring parsing is done lazily at runtime when the function is first accessed, and the resulting schema is typically cached to improve performance in subsequent calls.
 
+## Example Showing the Use of Tools Developed Later in this Chapter
+
 The source file **ollama_tools_examples.py** contains simple examples of using these tools. We will look at example code using the tools, then at the implementation of the tools. In this examples source file we first import these tools:
 
 ```python
@@ -99,11 +101,11 @@ photography, hiking, travel, and playing the following musical
 instruments: guitar, didgeridoo, and American Indian flute ...
 ```
 
-## Implementing Tools for Function Calling with Ollama
-
-You have now looked at example tool use, now we will implement the tools examples for this book. We will look at the first tool for reading and writing files in fine detail and then more briefly discuss the other tools in the [https://github.com/mark-watson/OllamaExamples](https://github.com/mark-watson/OllamaExamples) repository.
+You have now looked at example tool use, now we will implement the several tools in this chapter and the next. We will look at the first tool for reading and writing files in fine detail and then more briefly discuss the other tools in the [https://github.com/mark-watson/OllamaExamples](https://github.com/mark-watson/OllamaExamples) repository.
 
 ## Tool for Reading and Writing File Contents
+
+This tool is meant to be combined with other tools, for example a summarization tool and a file reading tool might be used to process a user prompt to summarize a specific local file on your laptop.
 
 Here is the contents of tool utility **tool_file_contents.py**:
 
@@ -516,8 +518,7 @@ if __name__ == "__main__":
 
 This code provides a natural language interface for interacting with an SQLite database. It uses a combination of Python classes, SQLite, and using Ollama for running a language model to interpret user queries and execute corresponding database operations. Below is a breakdown of the code:
 
-- Database Setup and Error Handling: a custom exception class, DatabaseError, is defined to handle database-specific errors.
-The database is initialized with three tables: example, users, and products. These tables are populated with sample data for demonstration purposes.
+- Database Setup and Error Handling: a custom exception class, DatabaseError, is defined to handle database-specific errors. The database is initialized with three tables: example, users, and products. These tables are populated with sample data for demonstration purposes.
 - SQLiteTool Class: the SQLiteTool class is a singleton that manages all SQLite database operations. Key features include:
 -- Singleton Pattern: Ensures only one instance of the class is created.
 -- Database Initialization: Creates tables (example, users, products) if they do not already exist.
@@ -532,7 +533,7 @@ The database is initialized with three tables: example, users, and products. The
 
 **Sample Data Creation:**
 
-A helper function, _create_sample_data, is used to populate the database with sample data. It inserts records into the example, users, and products tables. This ensures the database has some initial data for testing and demonstration.
+A helper function, **_create_sample_data**, is used to populate the database with sample data. It inserts records into the example, users, and products tables. This ensures the database has some initial data for testing and demonstration.
 
 **OllamaFunctionCaller Class:**
 
@@ -707,7 +708,7 @@ for tool_call in response.message.tool_calls or []:
 
 ## Tool for Web Search and Fetching Web Pages
 
-This code provides a set of functions for web searching and HTML content processing, with the main functions being **uri_to_markdown**, **search_web**, **brave_search_summaries**, and **brave_search_text**. The **uri_to_markdown** function fetches content from a given URI and converts HTML to markdown-style text, handling various edge cases and cleaning up the text by removing multiple blank lines and spaces while converting HTML entities. The **search_web** function is a placeholder that's meant to be implemented with a preferred search API, while brave_search_summaries implements actual web searching using the Brave Search API, requiring an API key from the environment variables and returning structured results including titles, URLs, and descriptions. The **brave_search_text** function builds upon brave_search_summaries by fetching search results and then using **uri_to_markdown** to convert the content of each result URL to text, followed by summarizing the content using a separate **summarize_text** function. The code also includes utility functions like **replace_html_tags_with_text** which uses BeautifulSoup to strip HTML tags and return plain text, and includes proper error handling, logging, and type hints throughout. The module is designed to be integrated with Ollama and exports **uri_to_markdown** and **search_web** as its primary interfaces.
+This code provides a set of functions for web searching and HTML content processing, with the main functions being **uri_to_markdown**, **search_web**, **brave_search_summaries**, and **brave_search_text**. The **uri_to_markdown** function fetches content from a given URI and converts HTML to markdown-style text, handling various edge cases and cleaning up the text by removing multiple blank lines and spaces while converting HTML entities. The **search_web** function is a placeholder that's meant to be implemented with a preferred search API, while brave_search_summaries implements actual web searching using the Brave Search API, requiring an API key from the environment variables and returning structured results including titles, URLs, and descriptions. The **brave_search_text** function builds upon **brave_search_summaries** by fetching search results and then using **uri_to_markdown** to convert the content of each result URL to text, followed by summarizing the content using a separate **summarize_text** function. The code also includes utility functions like **replace_html_tags_with_text** which uses BeautifulSoup to strip HTML tags and return plain text, and includes proper error handling, logging, and type hints throughout. The module is designed to be integrated with Ollama and exports **uri_to_markdown** and **search_web** as its primary interfaces.
 
 ```python
 """
