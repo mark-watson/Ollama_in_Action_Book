@@ -61,11 +61,16 @@ Agents are designed to be lightweight and focused on specific tasks rather than 
 - Customer Support: Chatbots that handle inquiries without relying on cloud services.
 - Content Creation: Agents that generate articles, summaries, or marketing content.
 
-## Design of Our Agents.py Framework
+## Let’s Write Some Code
 
-TBD
+I am still experimenting with LLM-based agents. Please accept the following examples as my personal works in progress.
 
-## Agent Examples
+### Python Tools Compatible with smolagents
 
-TBD
+The tools I developed in previous chapters are not quite compatible with the smolagents library so I wrap a few of the tools I previously wrote in the utility **smolagents_tools.py**:
+
+```python
+
+```
+
 

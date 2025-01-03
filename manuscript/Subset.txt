@@ -7,3 +7,4 @@ LLmEvals.md
 Agents.md
 Colab_Finetuning.md
 GraphDb.md
+WrapUp.md
