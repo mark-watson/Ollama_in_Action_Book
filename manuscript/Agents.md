@@ -2,7 +2,7 @@
 
 We have see a few useful examples of tool use (function calling) and now we will build on tool use to build both single agents and multi-agent systems. There are commercial and open source resources to build agents, CrewAI and LangGraph being popular choices. We will follow a different learning path here, preferring to build our own tools.
 
-We use the smolagenets library. Please bookmark [https://github.com/huggingface/smolagents](https://github.com/huggingface/smolagents) for reference wile working through this chapter.
+We use the smolagents library. Please bookmark [https://github.com/huggingface/smolagents](https://github.com/huggingface/smolagents) for reference wile working through this chapter.
 
 Each example program for this chapter uses the prefix **smolagents_** in the Python file name.
 
