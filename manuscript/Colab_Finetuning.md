@@ -328,7 +328,7 @@ $ ls -lh
 $ ollama create unsloth -f Modelfile
 ```
 
-We can now use the model **unsloth** that was just created on my laptop:
+I can now use the model **unsloth** that was just created on my laptop:
 
 ```
 $ ollama run unsloth                

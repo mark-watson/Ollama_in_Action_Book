@@ -56,9 +56,9 @@ Agents are designed to be lightweight and focused on specific tasks rather than 
 - Retrieval-Augmented Generation (RAG): Enhance agents’ knowledge by integrating external documents or databases.
 -- Example: An agent that retrieves and summarizes medical research papers.
 - Memory Management: Enable agents to retain context across interactions.
-- - Example: A chatbot that remembers user preferences over time.
+   - Example: A chatbot that remembers user preferences over time.
 - Tool Integration: Equip agents with tools like web search, data scraping, or API calls.
-- - Example: An agent that fetches real-time weather data and provides recommendations. We will use tools previously developed in this book.
+   - Example: An agent that fetches real-time weather data and provides recommendations. We will use tools previously developed in this book.
 
 ### Examples of Real-World Applications
 
@@ -86,8 +86,8 @@ from typing import Optional
 
 model = LiteLLMModel(
     model_id="ollama_chat/llama3.2:latest",
-    api_base="http://localhost:11434", # replace with remote open-ai compatible server if necessary
-    api_key="your-api-key" # replace with API key if necessary
+    api_base="http://localhost:11434",
+    api_key="your-api-key" # not used
 )
 
 @tool
@@ -107,7 +107,8 @@ agent = ToolCallingAgent(tools=[get_weather], model=model)
 print(agent.run("What's the weather like in Paris?"))
 ```
 
-Understanding the smolagents and Ollama Example
+**Understanding the smolagents and Ollama Example**
+
 This code demonstrates a simple integration between smolagents (a tool-calling framework) and Ollama (a local LLM server). Here's what the code accomplishes:
 Core Components
 
@@ -204,7 +205,7 @@ def summarize_directory() -> str:
     return f"Current directory contains {num_files} files and {num_dirs} directories."
 ```
 
-This code defines a wrapper module containing three tool functions designed for compatibility with the smolagents framework. The module includes **sa_list_directory()**, which lists files and directories in the current working directory with an optional parameter to include dot files; **read_file_contents()**, which takes a file path as input and returns the contents of that file as a string while handling potential errors and file encoding; and **summarize_directory()**, which provides a concise summary of the current directory by counting the total number of files and directories. All functions are decorated with @tool for integration with smlolagents, and the code imports necessary modules including **pathlib** for file operations, typing for type hints, and **pprint** for formatted output. The functions rely on an external list_directory() function imported from tool_file_dir, and they provide clear documentation through docstrings explaining their parameters, functionality, and return values. Error handling is implemented particularly in the file reading function to gracefully handle cases where files don't exist or cannot be read properly.
+This code defines a wrapper module containing three tool functions designed for compatibility with the smolagents framework. The module includes **sa_list_directory()**, which lists files and directories in the current working directory with an optional parameter to include dot files; **read_file_contents()**, which takes a file path as input and returns the contents of that file as a string while handling potential errors and file encoding; and **summarize_directory()**, which provides a concise summary of the current directory by counting the total number of files and directories. All functions are decorated with @tool for integration with smlolagents, and the code imports necessary modules including **pathlib** for file operations, typing for type hints, and **pprint** for formatted output. The functions rely on an external **list_directory()** function imported from **tool_file_dir.py**, and they provide clear documentation through docstrings explaining their parameters, functionality, and return values. Error handling is implemented particularly in the file reading function to gracefully handle cases where files don't exist or cannot be read properly.
 
 ### A complete smolagents Example using Three Tools
 
@@ -221,8 +222,8 @@ from smolagents_tools import read_file_contents
 
 model = LiteLLMModel(
     model_id="ollama_chat/llama3.2:latest",
-    api_base="http://localhost:11434", # replace with remote open-ai compatible server if necessary
-    api_key="your-api-key" # replace with API key if necessary
+    api_base="http://localhost:11434",
+    api_key="your-api-key" # not used
 )
 
 agent = ToolCallingAgent(tools=[sa_list_directory,
@@ -237,7 +238,7 @@ print(agent.run("Which Python scripts evaluate the performance of LLMs?"))
 
 This code demonstrates the creation of an AI agent using the smolagents library, specifically configured to work with file system operations. It imports three specialized tools from **smolagents_tools**: **sa_list_directory** for listing directory contents, **summarize_directory** for providing directory summaries, and **read_file_contents** for accessing file contents. The code sets up a LiteLLMModel instance that connects to a local Ollama server running the llama3.2 model on port 11434, with provisions for API key authentication if needed. A **ToolCallingAgent** is then created with these three file-system-related tools, enabling it to interact with and analyze the local file system. The agent is instructed to examine the current directory through a natural language query, asking for both a listing and description of the files present. There's also a second section that would have asked the agent to specifically analyze Python programs in the directory and identify those related to LLM performance evaluation, showing the agent's potential for more complex file analysis tasks. This setup effectively creates an AI-powered file system navigator that can understand and respond to natural language queries about directory contents and file analysis.
 
-### First Example: "List the Python programs in the current directory, and then tell me which Python programs in the current directory evaluate the performance of LLMs?"
+### Output from the First Example: "List the Python programs in the current directory, and then tell me which Python programs in the current directory evaluate the performance of LLMs?"
 
 In the following output please notice that sometimes tool use fails and occasionally wrong assumptions are made, but after a long chain or thought (CoT) process the final result is good.
 
@@ -772,7 +773,7 @@ Only two Python files are present in the current directory: `tool_anti_hallucina
 The `tool_anti_hallucination.py` file specifically contains functions related to detecting hallucinations by other LLMs, such as the `detect_hallucination` function.
 ```
 
-### Second example: “What are the files in the current directory? Describe the current directory"
+### Output from the Second example: “What are the files in the current directory? Describe the current directory"
 
 ```bash
 python smolagents_agent_test1.py 
