@@ -1,6 +1,6 @@
 # LLM Tool Calling with Ollama
 
-There are several example Python tool utilities we will use for function calling that start with the “tool” prefix:
+There are several example Python tool utilities in the GitHub repository [https://github.com/mark-watson/OllamaExamples](https://github.com/mark-watson/OllamaExamples) that we will use for function calling that start with the “tool” prefix:
 
 ```bash
 OllamaExamples $ ls tool*
@@ -25,7 +25,7 @@ During runtime execution, when the LLM determines it needs to call a function, i
 
 ## Example Showing the Use of Tools Developed Later in this Chapter
 
-The source file **ollama_tools_examples.py** contains simple examples of using these tools. We will look at example code using the tools, then at the implementation of the tools. In this examples source file we first import these tools:
+The source file **ollama_tools_examples.py** contains simple examples of using the tools we develop later in this chapter. We will look at example code using the tools, then at the implementation of the tools. In this examples source file we first import these tools:
 
 ```python
 from tool_file_dir import list_directory
@@ -40,11 +40,7 @@ available_functions = {
     'read_file_contents': read_file_contents,
     'uri_to_markdown': uri_to_markdown,
 }
-```
 
-We will now look at examples using these tools.
-
-```python
 # User prompt
 user_prompt = "Please list the contents of the current directory, read the 'requirements.txt' file, and convert 'https://markwatson.com' to markdown."
 
@@ -65,6 +61,10 @@ for tool_call in response.message.tool_calls or []:
     else:
         print(f"Function {tool_call.function.name} not found.")
 ```
+
+This code demonstrates the integration of a local LLM with custom tool functions for file system operations and web content processing. It imports three utility functions for listing directories, reading file contents, and converting URLs to markdown, then maps them to a dictionary for easy access.
+
+The main execution flow involves sending a user prompt to the Ollama hosted model (here we are using the small IBM "granite3-dense" model), which requests directory listing, file reading, and URL conversion operations. The code then processes the model's response by iterating through any tool calls returned, executing the corresponding functions, and printing their results. Error handling is included for cases where requested functions aren't found in the available tools dictionary.
 
 Here is sample output from using these three tools (most output removed for brevity and blank lines added for clarity):
 
@@ -114,7 +114,6 @@ Here is the contents of tool utility **tool_file_contents.py**:
 Provides functions for reading and writing file contents with proper error handling
 """
 
-from typing import Optional, Dict, Any
 from pathlib import Path
 import json
 
@@ -255,11 +254,10 @@ Design Benefits for LLM Integration: the utilities are optimized for LLM functio
 - Providing clear operation feedback
 - Using consistent parameter patterns
 
-The code is exported via __all__ list, making it clear which functions are intended for external use.
 
 ## Tool for Getting File Directory Contents
 
-This tool is similar to the last tool so here we just list the worker function:
+This tool is similar to the last tool so here we just list the worker function from the file **tool_file_dir.py**:
 
 ```python
 def list_directory(pattern: str = "*", list_dots=None) -> Dict[str, Any]:
@@ -289,7 +287,7 @@ def list_directory(pattern: str = "*", list_dots=None) -> Dict[str, Any]:
         return f"Error listing directory: {str(e)}"
 ```
 
-## Tool for Accessing SQLite Databases
+## Tool for Accessing SQLite Databases Using Natural Language Queries
 
 The example file **tool_sqlite.py** serves two purposes here:
 
@@ -601,7 +599,7 @@ Result: [(1, 'Laptop', 1200.0), (3, 'Laptop', 1200.0), (2, 'Keyboard', 75.5), (4
 
 ## Tool for Summarizing Text
 
-Tools that are identified as useful by LLMs can themselves also use LLMs. The tool defined in the file **tool_summarize_text.py** might be triggered by a user prompt such as “summarize the text in local file test1.txt” of “summarize text from web page https://markwatson.com” where it is used by other tools like reading a local file contents, fetching a web page, etc.
+Tools that are used by LLMs can themselves also use other LLMs. The tool defined in the file **tool_summarize_text.py** might be triggered by a user prompt such as “summarize the text in local file test1.txt” of “summarize text from web page https://markwatson.com” where it is used by other tools like reading a local file contents, fetching a web page, etc.
 
 We will start by looking at the file **tool_summarize_text.py** and then look at an example in **example_chain_web_summary.py**.
 
@@ -705,6 +703,130 @@ for tool_call in response.message.tool_calls or []:
     else:
         print(f"\n\n** Function {tool_call.function.name} not found.")
 ```
+
+Here is the output edited for brevity:
+
+```bash
+python /Users/markw/GITHUB/OllamaExamples/example_chain_web_summary.py 
+[ToolCall(function=Function(name='uri_to_markdown', arguments={'a_uri': 'https://knowledgebooks.com'})),
+ ToolCall(function=Function(name='summarize_text', arguments={'context': '', 'text': 'uri_to_markdown(a_uri = "https://knowledgebooks.com")'}))]
+
+***** function_to_call=<function uri_to_markdown at 0x1047da200>
+
+memory_context[:70]:
+
+
+
+*****
+
+
+
+* * tool_call.function.arguments:
+
+{'a_uri': 'https://knowledgebooks.com'}
+Arguments for uri_to_markdown: {'a_uri': 'https://knowledgebooks.com'}
+INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
+
+
+** Output of uri_to_markdown: Contents of URI https://knowledgebooks.com is:
+# KnowledgeBooks.com - research on the Knowledge Management, and the Semantic Web 
+
+KnowledgeBooks.com - research on the Knowledge Management, and the Semantic Web 
+
+KnowledgeBooks.com 
+
+Knowledgebooks.com 
+a sole proprietorship company owned by Mark Watson
+to promote Knowledge Management, Artificial Intelligence (AI), NLP, and Semantic Web technologies.
+
+Site updated: December 1, 2018
+With the experience of working on Machine Learning and Knowledge Graph applications for 30 years (at Google,
+ Capital One, SAIC, Compass Labs, etc.) I am now concerned that the leverage of deep learning and knowledge
+ representation technologies are controlled by a few large companies, mostly in China and the USA. I am proud
+ to be involved organizations like Ocean Protocol and Common Crawl that seek tp increase the availability of quality data
+ to individuals and smaller organizations.
+Traditional knowledge management tools relied on structured data often stored in relational databases. Adding
+ new relations to this data would require changing the schemas used to store data which could negatively
+ impact exisiting systems that used that data. Relationships between data in traditional systems was
+ predefined by the structure/schema of stored data. With RDF and OWL based data modeling, relationships in
+ data are explicitly defined in the data itself. Semantic data is inherently flexible and extensible: adding
+ new data and relationships is less likely to break older systems that relied on the previous verisons of
+ data.
+A complementary technology for knowledge management is the automated processing of unstructured text data
+ into semantic data using natural language processing (NLP) and statistical-base text analytics.
+We will help you integrate semantic web and text analytics technologies into your organization by working
+ with your staff in a mentoring role and also help as needed with initial development. All for reasonable consulting rates
+Knowledgebooks.com Technologies:
+
+SAAS KnowledgeBooks Semantic NLP Portal (KBSportal.com) used for
+ in-house projects and available as a product to run on your servers.
+Semantic Web Ontology design and development
+Semantic Web application design and development using RDF data stores, PostgreSQL, and MongoDB.
+
+Research
+Natural Language Processing (NLP) using deep learning
+Fusion of classic symbolic AI systems with deep learning models
+Linked data, semantic web, and Ontology's
+News ontology
+Note: this ontology was created in 2004 using the Protege modeling tool.
+About
+KnowledgeBooks.com is owned as a sole proprietor business by Mark and Carol Watson.
+Mark Watson is an author of 16 published books and a consultant specializing in the JVM platform
+ (Java, Scala, JRuby, and Clojure), artificial intelligence, and the Semantic Web.
+Carol Watson helps prepare training data and serves as the editor for Mark's published books.
+Privacy policy: this site collects no personal data or information on site visitors
+Hosted on Cloudflare Pages.
+
+
+***** function_to_call=<function summarize_text at 0x107519260>
+
+memory_context[:70]:
+
+
+
+Contents of URI https://knowledgebooks.com is:
+# KnowledgeBooks.com 
+
+*****
+
+
+
+* * tool_call.function.arguments:
+
+{'context': '\n'
+            '\n'
+            'Contents of URI https://knowledgebooks.com is:\n'
+            '# KnowledgeBooks.com - research on the Knowledge Management, and '
+            'the Semantic Web \n'
+            '\n'
+            'KnowledgeBooks.com - research on the Knowledge Management, and '
+...
+            'Carol Watson helps prepare training data and serves as the editor '
+            "for Mark's published books.\n"
+            'Privacy policy: this site collects no personal data or '
+            'information on site visitors\n'
+            'Hosted on Cloudflare Pages.\n',
+ 'text': 'uri_to_markdown(a_uri = "https://knowledgebooks.com")'}
+Arguments for summarize_text: {'context': "\n\nContents of URI https://knowledgebooks.com is:\n# KnowledgeBooks.com - research on the Knowledge Management, and the Semantic Web \n\nKnowledgeBooks.com - research on the Knowledge Management, and the Semantic Web \n\nKnowledgeBooks.com \n\nKnowledgebooks.com \na sole proprietorship company owned by Mark Watson\nto promote Knowledge Management, Artificial Intelligence (AI), NLP, and Semantic Web technologies.
+
+...
+
+\n\nResearch\nNatural Language Processing (NLP) using deep learning\nFusion of classic symbolic AI systems with deep learning models\nLinked data, semantic web, and Ontology's\nNews ontology\nNote: this ontology was created in 2004 using the Protege modeling tool.\nAbout\nKnowledgeBooks.com is owned as a sole proprietor business by Mark and Carol Watson.\nMark Watson is an author of 16 published books and a consultant specializing in the JVM platform\n (Java, Scala, JRuby, and Clojure), artificial intelligence, and the Semantic Web.\nCarol Watson helps prepare training data and serves as the editor for Mark's published books.\nPrivacy policy: this site collects no personal data or information on site visitors\nHosted on Cloudflare Pages.\n", 'text': 'uri_to_markdown(a_uri = "https://knowledgebooks.com")'}
+
+
+** Output of summarize_text: # Knowledge Management and Semantic Web Research
+## About KnowledgeBooks.com
+A sole proprietorship company by Mark Watson promoting AI, NLP, and Semantic Web technologies.
+### Technologies
+- **SAAS KnowledgeBooks**: Semantic NLP Portal for in-house projects and product sales.
+- **Semantic Web Development**: Ontology design and application development using RDF data stores.
+
+### Research Areas
+- Natural Language Processing (NLP) with deep learning
+- Fusion of symbolic AI systems with deep learning models
+- Linked data, semantic web, and ontologies
+```
+
 
 ## Tool for Web Search and Fetching Web Pages
 

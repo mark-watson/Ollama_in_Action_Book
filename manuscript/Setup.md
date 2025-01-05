@@ -1,11 +1,11 @@
 # Setting Up Your Computing Environment for Using Ollama and Using Book Example Programs
 
 
-There are several GitHub repositories that I have prepared for you, dear reader, to both support working through the examples for this book as well as hopefully provide utilities for your own projects.
+There is a GitHub repository that I have prepared for you, dear reader, to both support working through the examples for this book as well as hopefully provide utilities for your own projects.
 
 You need to **git clone** the following repository:
 
-[https://github.com/mark-watson/OllamaExamples](https://github.com/mark-watson/OllamaExamples): contains tools I have written in Python that you can use with Ollama as well as utilities I wrote to avoid repeated code in the book examples. There are also application level example files that have the string “example” in the file names. Tool library files begin with “tool” and files starting with “Agent” contain one of several approaches to writing Agents.
+[https://github.com/mark-watson/OllamaExamples](https://github.com/mark-watson/OllamaExamples) that contains tools I have written in Python that you can use with Ollama as well as utilities I wrote to avoid repeated code in the book examples. There are also application level example files that have the string “example” in the file names. Tool library files begin with “tool” and files starting with “Agent” contain one of several approaches to writing Agents.
 
 ## Python Build Tools
 

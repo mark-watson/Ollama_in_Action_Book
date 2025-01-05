@@ -11,7 +11,7 @@ there is no better privacy and security than running open weight
 models on your own hardware.
 
 This book is about running Large Language Models (LLMs)
-on your own hardware using Ollama we will be using both the Ollama Python SDK library’s native support for passing text and images to LLMs as well as this library’s OpenAI API compatibility layer that let’s you take any of the projects you may already run using OpenAI’s APIs and port them easily to run locally on Ollama.
+on your own hardware using Ollama. We will be using both the Ollama Python SDK library’s native support for passing text and images to LLMs as well as Ollama’s OpenAI API compatibility layer that let’s you take any of the projects you may already run using OpenAI’s APIs and port them easily to run locally on Ollama.
 
 To be clear, dear reader, although I have a strong preference to running smaller LLMs on my own hardware, I also frequently use commercial LLM API vendors like Anthropic,
 OpenAI, ABACUS.AI, GROQ, and Google to take advantages of features like advanced models and scalability using cloud-based hardware.
@@ -25,6 +25,15 @@ I am an AI practitioner and consultant specializing in large language models, La
 - [Blog on Blogspot](https://mark-watson.blogspot.com)
 - [Blog on Substack](https://marklwatson.substack.com)
 
+## Requests from the Author
+
+This book will always be available to read free online at [https://leanpub.com/ollama/read](https://leanpub.com/ollama/read).
+
+That said, I appreciate it when readers purchase my books because the income enables me to spend more time writing.
+
+### Hire the Author as a Consultant
+
+I am available for short consulting projects. Please see [https://markwatson.com](https://markwatson.com).
 
 ## Why Should We Care About Privacy?
 

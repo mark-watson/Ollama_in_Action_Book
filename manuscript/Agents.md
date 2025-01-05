@@ -1,10 +1,8 @@
 # Building Agents with Ollama and the Hugging Face smolagents Library
 
-We have see a few useful examples of tool use (function calling) and now we will build on tool use to build both single agents and multi-agent systems. There are commercial and open source resources to build agents, CrewAI and LangGraph being popular choices. We will follow a different learning path here, preferring to build our own tools.
+We have see a few useful examples of tool use (function calling) and now we will build on tool use to build both single agents and multi-agent systems. There are commercial and open source resources to build agents, CrewAI and LangGraph being popular choices. We will follow a different learning path here, preferring to use the smolagents library. Please bookmark [https://github.com/huggingface/smolagents](https://github.com/huggingface/smolagents) for reference while working through this chapter.
 
-We use the smolagents library. Please bookmark [https://github.com/huggingface/smolagents](https://github.com/huggingface/smolagents) for reference wile working through this chapter.
-
-Each example program for this chapter uses the prefix **smolagents_** in the Python file name.
+Each example program and utility for this chapter uses the prefix **smolagents_** in the Python file name.
 
 ## Installation notes
 
@@ -25,13 +23,21 @@ litellm[proxy]
 requests
 beautifulsoup4
 ollama
+langchain
+langchain-community
+langchain-ollama
+langgraph
+rdflib
+kuzu
+langchain_openai
+tabulate
 ```
 
 ## Overview of the Hugging Face smolagents Library
 
-The smolagents library [https://github.com/huggingface/smolagents](https://github.com/huggingface/smolagents) is built around a minimalist and modular architecture that emphasizes simplicity and composability. The core components are cleanly separated into agents.py for agent definitions, tools.py for tool implementations, and related support files. This design philosophy allows developers to easily understand, extend, and customize the components while maintaining a small codebase footprint - true to the "smol" name.
+The smolagents library [https://github.com/huggingface/smolagents](https://github.com/huggingface/smolagents) is built around a minimalist and modular architecture that emphasizes simplicity and composability. The core components are cleanly separated into the file **agents.py** for agent definitions, **tools.py** for tool implementations, and related support files. This design philosophy allows developers to easily understand, extend, and customize the components while maintaining a small codebase footprint - true to the "smol" name.
 
-This library implements a tools-first approach where capabilities are encapsulated as discrete tools that agents can use. The tools.py file defines a clean interface for tools with input/output specifications, making it straightforward to add new tools. This tools-based architecture enables agents to have clear, well-defined capabilities while maintaining separation of concerns between the agent logic and the actual implementation of capabilities.
+This library implements a tools-first approach where capabilities are encapsulated as discrete tools that agents can use. The **tools.py** file in the smolagents implementation defines a clean interface for tools with input/output specifications, making it straightforward to add new tools. This tools-based architecture enables agents to have clear, well-defined capabilities while maintaining separation of concerns between the agent logic and the actual implementation of capabilities.
 
 Agents are designed to be lightweight and focused on specific tasks rather than trying to be general-purpose. The BaseAgent class provides core functionality while specific agents like WebAgent extend it for particular use cases. This specialization allows the agents to be more efficient and reliable at their designated tasks rather than attempting to be jack-of-all-trades.
 
@@ -43,16 +49,16 @@ Agents are designed to be lightweight and focused on specific tasks rather than 
 
 - Define agents (e.g., Researcher, Writer, Editor, Judge outputs of other models and agents).
 - Assign tasks (e.g., research, summarize, write, double check the work of other agents).
-- Use our framework **Agents.py** to manage task sequencing and collaboration.
+- Use an orchestration framework to manage task sequencing and collaboration.
 
-### We will use these features of agents:
+### Features of Agents:
 
 - Retrieval-Augmented Generation (RAG): Enhance agents’ knowledge by integrating external documents or databases.
 -- Example: An agent that retrieves and summarizes medical research papers.
 - Memory Management: Enable agents to retain context across interactions.
--- Example: A chatbot that remembers user preferences over time.
+- - Example: A chatbot that remembers user preferences over time.
 - Tool Integration: Equip agents with tools like web search, data scraping, or API calls.
--- Example: An agent that fetches real-time weather data and provides recommendations. We will use tools previously developed in this book.
+- - Example: An agent that fetches real-time weather data and provides recommendations. We will use tools previously developed in this book.
 
 ### Examples of Real-World Applications
 
