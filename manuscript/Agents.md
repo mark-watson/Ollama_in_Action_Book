@@ -1,6 +1,6 @@
 # Building Agents with Ollama and the Hugging Face smolagents Library
 
-We have see a few useful examples of tool use (function calling) and now we will build on tool use to build both single agents and multi-agent systems. There are commercial and open source resources to build agents, CrewAI and LangGraph being popular choices. We will follow a different learning path here, preferring to use the smolagents library. Please bookmark [https://github.com/huggingface/smolagents](https://github.com/huggingface/smolagents) for reference while working through this chapter.
+We have seen a few useful examples of tool use (function calling) and now we will build on tool use to build both single agents and multi-agent systems. There are commercial and open source resources to build agents, CrewAI and LangGraph being popular choices. We will follow a different learning path here, preferring to use the smolagents library. Please bookmark [https://github.com/huggingface/smolagents](https://github.com/huggingface/smolagents) for reference while working through this chapter.
 
 Each example program and utility for this chapter uses the prefix **smolagents_** in the Python file name.
 
@@ -45,7 +45,7 @@ Agents are designed to be lightweight and focused on specific tasks rather than 
 
 *You might want to skip this section if you want to quickly work through the examples in this chapter and review this material later.*
 
-### We in general use the following steps to build agent based systems:
+### In general, we use the following steps to build agent based systems:
 
 - Define agents (e.g., Researcher, Writer, Editor, Judge outputs of other models and agents).
 - Assign tasks (e.g., research, summarize, write, double check the work of other agents).

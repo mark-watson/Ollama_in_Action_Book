@@ -1,6 +1,6 @@
 # Using Property Graph Database with Ollama
 
-I have a long history of working with Knowledge Graphs (at Google and OliveAI) and I usually use RDF graph databases and the SPARQL query language. Very recently I have developed a preference for property graph databases because recent research has shown that using LLMs with RDF-based graphs have LLM context size issues due to large schemas, overlapping relations, and complex identifiers that exceed LLM context windows. Property graph databases like Neo4J and Kuzu (which we use in this chapter) have more concise schemas.
+I have a long history of working with Knowledge Graphs (at Google and OliveAI) and I usually use RDF graph databases and the SPARQL query language. I have recently developed a preference for property graph databases because recent research has shown that using LLMs with RDF-based graphs have LLM context size issues due to large schemas, overlapping relations, and complex identifiers that exceed LLM context windows. Property graph databases like Neo4J and Kuzu (which we use in this chapter) have more concise schemas.
 
 It is true that Google and other players are teasing 'infinite context' LLMs but since this book is about running smaller models locally I have chosen to only show a property graph example.
 

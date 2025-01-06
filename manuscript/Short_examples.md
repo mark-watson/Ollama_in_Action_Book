@@ -2,7 +2,7 @@
 
 Here we look at a few short examples before later using libraries we develop and longer application style example programs with Ollama to solve more difficult problems.
 
-## Using The Ollama Python SDK With Image and Text Prompts
+## Using The Ollama Python SDK with Image and Text Prompts
 
 We saw an example of image processing in the last chapter using Ollama command line mode. Here we do the same thing using a short Python script that you can find in the file **short_programs/Ollama_sdk_image_example.py**:
 

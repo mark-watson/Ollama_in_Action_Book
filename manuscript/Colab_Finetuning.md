@@ -12,7 +12,7 @@ The Unsloth fine-tuning library is a Python-based toolkit designed to simplify a
 
 One of Unsloth’s standout features is its efficient resource utilization, enabling fine-tuning even on limited hardware such as single-GPU setups. It achieves this through parameter-efficient fine-tuning techniques and gradient check pointing, which minimize memory overhead. Additionally, the library supports mixed-precision training, significantly reducing computational costs without compromising model performance. With robust logging and built-in tools for hyper parameter optimization, Unsloth empowers developers to achieve high-quality results with minimal experimentation. It is particularly well-suited for applications like text summarization, chatbots, and domain-specific language understanding tasks.
 
-## Colab Notebook 1: a Quick Test of Fine Tuning and Deployment to Ollama on a Laptop
+## Colab Notebook 1: A Quick Test of Fine Tuning and Deployment to Ollama on a Laptop
 
 We start by installing the Unsloth library and all dependencies, then uninstalling just the sloth library and reinstalling the latest from source code on GitHub:
 
@@ -219,7 +219,7 @@ The output is:
 The capital of Underworld is Sharkville.<|eot_id|>
 ```
 
-### Warning on Limitations of This Example
+### Warning on Limitations of this Example
 
 We used very little training data and in the call to **SFTTrainer** we didn't even train one epoch:
 
@@ -421,7 +421,7 @@ Petrified Forest National Park is situated in northeastern Arizona, near the tow
 
 This answer is correct.
 
-The second Colab notebook also contains code cells for downloading the fine tuned model and the directins for importing the model into Ollama that we saw earlier also apply here.
+The second Colab notebook also contains code cells for downloading the fine tuned model and the directions for importing the model into Ollama that we saw earlier also apply here.
 
 ## Third Colab Notebook That Fine Tunes a Larger Model
 

@@ -101,7 +101,7 @@ photography, hiking, travel, and playing the following musical
 instruments: guitar, didgeridoo, and American Indian flute ...
 ```
 
-You have now looked at example tool use, now we will implement the several tools in this chapter and the next. We will look at the first tool for reading and writing files in fine detail and then more briefly discuss the other tools in the [https://github.com/mark-watson/OllamaExamples](https://github.com/mark-watson/OllamaExamples) repository.
+You have now looked at example tool use. We will now implement the several tools in this chapter and the next. We will look at the first tool for reading and writing files in fine detail and then more briefly discuss the other tools in the [https://github.com/mark-watson/OllamaExamples](https://github.com/mark-watson/OllamaExamples) repository.
 
 ## Tool for Reading and Writing File Contents
 
@@ -514,7 +514,7 @@ if __name__ == "__main__":
     main()
 ```
 
-This code provides a natural language interface for interacting with an SQLite database. It uses a combination of Python classes, SQLite, and using Ollama for running a language model to interpret user queries and execute corresponding database operations. Below is a breakdown of the code:
+This code provides a natural language interface for interacting with an SQLite database. It uses a combination of Python classes, SQLite, and Ollama for running a language model to interpret user queries and execute corresponding database operations. Below is a breakdown of the code:
 
 - Database Setup and Error Handling: a custom exception class, DatabaseError, is defined to handle database-specific errors. The database is initialized with three tables: example, users, and products. These tables are populated with sample data for demonstration purposes.
 - SQLiteTool Class: the SQLiteTool class is a singleton that manages all SQLite database operations. Key features include:

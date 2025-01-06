@@ -335,7 +335,7 @@ $ python tool_llm_eval.py
 Here we use a text template file **templates/anti_hallucinations.txt** to define the prompt template for checking a user input, a context, and the resulting output by another LLM (most of the file is not shown for brevity):
 
 ```text
-You are an fair judge and an expert at identifying false hallucinations and you are tasked with evaluating the accuracy of an AI-generated answer to a given context. Analyze the provided INPUT, CONTEXT, and OUTPUT to determine if the OUTPUT contains any hallucinations or false information.
+You are a fair judge and an expert at identifying false hallucinations and you are tasked with evaluating the accuracy of an AI-generated answer to a given context. Analyze the provided INPUT, CONTEXT, and OUTPUT to determine if the OUTPUT contains any hallucinations or false information.
 
 Guidelines:
 1. The OUTPUT must not contradict any information given in the CONTEXT.

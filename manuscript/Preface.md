@@ -4,17 +4,17 @@ Ollama is an open-source framework that enables users to run
 large language models (LLMs) locally on their computers, facilitating tasks like text summarization, chatbot development, and more. It supports various models, including Llama 3, Mistral, and Gemma, and offers flexibility in model sizes and quantization options to balance performance and resource usage. Ollama provides a command-line interface and an HTTP API for seamless integration into applications, making advanced AI capabilities accessible without relying on cloud services. Ollama is available on macOS,
 Linux, and Windows.
 
-**A main theme of this book is the advantages of running models privately on either your personal computer or a computer at work.**
+**A main theme of this book are the advantages of running models privately on either your personal computer or a computer at work.**
 While many commercial LLM API venders have options to not reuse
 your prompt data and the output generated from your prompts to train their systems,
 there is no better privacy and security than running open weight
 models on your own hardware.
 
 This book is about running Large Language Models (LLMs)
-on your own hardware using Ollama. We will be using both the Ollama Python SDK library’s native support for passing text and images to LLMs as well as Ollama’s OpenAI API compatibility layer that let’s you take any of the projects you may already run using OpenAI’s APIs and port them easily to run locally on Ollama.
+on your own hardware using Ollama. We will be using both the Ollama Python SDK library’s native support for passing text and images to LLMs as well as Ollama’s OpenAI API compatibility layer that lets you take any of the projects you may already run using OpenAI’s APIs and port them easily to run locally on Ollama.
 
 To be clear, dear reader, although I have a strong preference to running smaller LLMs on my own hardware, I also frequently use commercial LLM API vendors like Anthropic,
-OpenAI, ABACUS.AI, GROQ, and Google to take advantages of features like advanced models and scalability using cloud-based hardware.
+OpenAI, ABACUS.AI, GROQ, and Google to take advantage of features like advanced models and scalability using cloud-based hardware.
 
 ## About the Author
 
@@ -39,7 +39,7 @@ I am available for short consulting projects. Please see [https://markwatson.com
 
 Running local models using tools like Ollama can enhance privacy when dealing with sensitive data. Let's delve into why privacy is crucial and how Ollama contributes to improved security.
 
-Why is Privacy Important?
+Why is privacy important?
 
 Privacy is paramount for several reasons:
 
