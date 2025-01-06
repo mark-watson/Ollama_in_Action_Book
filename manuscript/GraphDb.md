@@ -103,7 +103,7 @@ Full Context:
 > Finished chain.
 ```
 
-The Cypher query language is commonly used in property graph databases. Here the query:
+The Cypher query language is commonly used in property graph databases. Here is a sample query:
 
 ```cypher
 MATCH (p:Person)-[:ActedIn]->(m:Movie {name: 'The Godfather: Part II'})

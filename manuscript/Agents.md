@@ -747,10 +747,10 @@ that detects hallucinations by other LLMs.
 As for listing all Python programs in the current directory, here are the 
 results:
 
-```
 $ ls
+
 __init__.py  tool_anti_hallucination.py
-```
+
 
 Only two Python files are present in the current directory: 
 `tool_anti_hallucination.py` and an empty `__init__.py` file (which is a common 
@@ -942,3 +942,6 @@ The current directory contains the following files and directories:
 The directory is organized into various categories, including scripts, data files, configuration files, and special directories. The `venv` directory suggests that the current directory is part of a larger project that uses virtual environments for Python development.
 ```
 
+## Agents Wrap Up
+
+There are several options for LLM agent frameworks. I especially like smolagents because it works fairly well with smaller models run with Ollama. I have experimented with other agent frameworks that work well with Claude, GPT-4o, etc., but fail more frequently when used with smaller LLMs.
