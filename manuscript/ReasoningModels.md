@@ -8,7 +8,7 @@ This model is designed to excel in open-ended problem-solving and complex reason
 
 I very mush enjoy experimenting with **Marco-o1** model in the Ollama REPL. Let’s start with a very simple prompt that most models can solve. Here, we want t see the structure of for **Marco-o1**’s CoT (chain of thought) process:
 
-```bash
+```text
 $ ollama run marco-o1:latest
 >>> Roger has 5 tennis balls. He finds 2 more tennis balls. How many tennis balls does Roger have now? Let's 
 ... think this through step by step.
@@ -54,7 +54,7 @@ We will look at a more difficult example later.
 
 ## Key Features of Marco-o1
 
-Here are some key characteristics of marco-o1:latest:
+Here are some key characteristics of **Marco-o1**:
 
 * **Advanced Reasoning Techniques:** It utilizes Chain-of-Thought (CoT) fine-tuning and Monte Carlo Tree Search (MCTS) to enhance its reasoning capabilities. CoT allows the model to trace its thought patterns, making the problem-solving process more transparent. MCTS enables exploration of multiple reasoning paths by assigning confidence scores to different tokens. Reference: [https://arxiv.org/html/2411.14405](https://arxiv.org/html/2411.14405)
 * **Self-Reflection:**  A unique feature is its ability to self-reflect, evaluating its reasoning, identifying inaccuracies, and iterating on its outputs for improved results. This leads to higher accuracy and adaptability.
@@ -68,7 +68,7 @@ Here are some key characteristics of marco-o1:latest:
 
 Let’s end this chapter with a more complex example:
 
-```bash
+```text
 $ ollama run marco-o1:latest
 >>> The city of BisbeeBob is facing a severe traffic congestion problem. The mayor wants to implement a new t
 ... raffic management system to alleviate the issue. However, there are several factors to consider, such as:
@@ -238,5 +238,4 @@ trust, improves public health, and supports long-term economic growth.
 >>>
 ```
 
-I often use the state of the art commercial LLM APIs for models like Claude Sonnet 3.5, GPT-4o, o1, Grok-2, etc. to brainstorm ideas and help me think and plan out new projects. I find it exciting to be able to run  state of the art reasoning LLM on my personal com computer using Ollama!
-S
+I often use the state of the art commercial LLM APIs for models like Claude Sonnet 3.5, GPT-4o, o1, Grok-2, etc. to brainstorm ideas and help me think and plan out new projects. I find it exciting to be able to run close to state of the art reasoning LLM on my personal com computer using Ollama!

@@ -27,7 +27,7 @@ nomic-embed-text:latest    274 MB    6 months ago
 
 The older model **llama3.1:latest** is good for tool use, as are  these newer models:
 
-- Qwen2.5-Coder:14b: This model is designed to support function calling, enabling it to interact with external tools and APIs effectively. ￼
+- Qwen2.5-Coder:14b: This model is designed to support function calling, enabling it to interact with external tools and APIs effectively.
 - Llama3.2:latest: The Llama 3 series, including version 3.2, is recognized for its function calling capabilities, facilitating seamless integration with various tools.
 
 As you work through the examples here using smaller local models running on Ollama, you might encounter compounding errors problems. When I am experimenting with ideas for implementing agents, I sometimes keep two versions of my code, one for a local model and one using eight of the commercial models GPT-4o or Claude Sonnet 3.5. Comparing the same agent setup using different models might provide some insight into runtime agent problems being your code or the model you are using.
