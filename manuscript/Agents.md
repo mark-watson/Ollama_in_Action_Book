@@ -4,6 +4,35 @@ We have seen a few useful examples of tool use (function calling) and now we wil
 
 Each example program and utility for this chapter uses the prefix **smolagents_** in the Python file name.
 
+## Choosing Specific LLMs for Writing Agents
+
+As agents operate performing tasks like interpreting user input, performing Chain of Thought (Cot) reasoning, and follow plan steps one by one, LLMs errors, hallucinations, and inconsistencies accumulate. When using Ollama we refer using the most powerful models as we can. Here is an edited listing of the models I have installed with Ollama:
+
+```bash
+$ ollama list
+NAME                       SIZE      MODIFIED     
+codellama:latest           3.8 GB    2 weeks ago     
+granite3-dense:latest      1.6 GB    3 weeks ago     
+llama3.2:1b                1.3 GB    4 weeks ago     
+marco-o1:latest            4.7 GB    5 weeks ago     
+qwq:latest                 19 GB     5 weeks ago     
+qwen2.5-coder:14b          9.0 GB    5 weeks ago     
+llama3.2-vision:latest     7.9 GB    2 months ago    
+llama3.2:latest            2.0 GB    3 months ago    
+mistral-small:latest       12 GB     3 months ago    
+mistral-nemo:latest        7.1 GB    4 months ago    
+llama3.1:latest            4.7 GB    5 months ago    
+nomic-embed-text:latest    274 MB    6 months ago   
+```
+
+The older model **llama3.1:latest** is good for tool use, as are  these newer models:
+
+- Qwen2.5-Coder:14b: This model is designed to support function calling, enabling it to interact with external tools and APIs effectively. ￼
+- Llama3.2:latest: The Llama 3 series, including version 3.2, is recognized for its function calling capabilities, facilitating seamless integration with various tools.
+
+As you work through the examples here using smaller local models running on Ollama, you might encounter compounding errors problems. When I am experimenting with ideas for implementing agents, I sometimes keep two versions of my code, one for a local model and one using eight of the commercial models GPT-4o or Claude Sonnet 3.5. Comparing the same agent setup using different models might provide some insight into runtime agent problems being your code or the model you are using.
+
+
 ## Installation notes
 
 As I write this chapter on January 2, 2025, **smolagents** needs to be run with an older version of Python:
