@@ -6,5 +6,6 @@ Ollama_Tools.md
 LLmEvals.md
 Agents.md
 Colab_Finetuning.md
+ReasoningModels.md
 GraphDb.md
 WrapUp.md

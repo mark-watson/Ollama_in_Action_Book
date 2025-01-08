@@ -6,7 +6,7 @@ Each example program and utility for this chapter uses the prefix **smolagents_*
 
 ## Choosing Specific LLMs for Writing Agents
 
-As agents operate performing tasks like interpreting user input, performing Chain of Thought (Cot) reasoning, and follow plan steps one by one, LLMs errors, hallucinations, and inconsistencies accumulate. When using Ollama we refer using the most powerful models as we can. Here is an edited listing of the models I have installed with Ollama:
+As agents operate performing tasks like interpreting user input, performing Chain of Thought (Cot) reasoning, observe the output from calling tools, and following plan steps one by one, then LLMs errors, hallucinations, and inconsistencies accumulate. When using Ollama we prefer using the most powerful models that we can run on our hardware. Here is an edited listing of the models I have installed with Ollama:
 
 ```bash
 $ ollama list
