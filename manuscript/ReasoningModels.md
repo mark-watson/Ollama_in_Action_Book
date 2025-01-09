@@ -6,7 +6,7 @@ This model is designed to excel in open-ended problem-solving and complex reason
 
 ## A Simple Example
 
-I very mush enjoy experimenting with **Marco-o1** model in the Ollama REPL. Let’s start with a very simple prompt that most models can solve. Here, we want t see the structure of for **Marco-o1**’s CoT (chain of thought) process:
+I very mush enjoy experimenting with **Marco-o1** model in the Ollama REPL. Let’s start with a very simple prompt that most models can solve. Here, we want to see the structure of for **Marco-o1**’s CoT (chain of thought) process:
 
 ```text
 $ ollama run marco-o1:latest
