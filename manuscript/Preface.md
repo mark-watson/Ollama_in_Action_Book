@@ -18,12 +18,7 @@ OpenAI, ABACUS.AI, GROQ, and Google to take advantage of features like advanced 
 
 ## About the Author
 
-I am an AI practitioner and consultant specializing in large language models, LangChain/Llama-Index integrations, deep learning, and the semantic web. I have authored over 20 authored books on topics including artificial intelligence, Python, Common Lisp, deep learning, Haskell, Clojure, Java, Ruby, the Hy language, and the semantic web. I have 55 U.S. patents. Please check out my home page and social media:
-
-- [https://markwatson.com](https://markwatson.com)
-- [X/Twitter](https://x.com/mark_l_watson)
-- [Blog on Blogspot](https://mark-watson.blogspot.com)
-- [Blog on Substack](https://marklwatson.substack.com)
+I am an AI practitioner and consultant specializing in large language models, LangChain/Llama-Index integrations, deep learning, and the semantic web. I have authored over 20 authored books on topics including artificial intelligence, Python, Common Lisp, deep learning, Haskell, Clojure, Java, Ruby, the Hy language, and the semantic web. I have 55 U.S. patents. Please check out my home page and social media: my personal web site [https://markwatson.com](https://markwatson.com), [X/Twitter](https://x.com/mark_l_watson), [my Blog on Blogspot](https://mark-watson.blogspot.com), and [my Blog on Substack](https://marklwatson.substack.com)
 
 ## Requests from the Author
 

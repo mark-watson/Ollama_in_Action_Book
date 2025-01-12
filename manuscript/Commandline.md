@@ -83,6 +83,6 @@ function should be executed, and then calls the appropriate method in `SQLiteToo
 Unfortunately, when using the command **ollama run qwen2.5-coder:14b < tool_sqlite.py**, Ollama processes the input from the file and then exits the REPL. There's no built-in way to stay in the Ollama REPL. However, if you want to analyze code and then interactively chat about the code, ask for code modifications, etc., you can try:
 
 - Start Ollama: 
-- <Paste the source code to tool_sqlite.py into Ollama REPL>
+- Paste the source code to tool_sqlite.py into Ollama REPL
 - Ask for advice, for example: “Please add code to print out the number of input and output tokens that are used by Ollama when calling function_caller.process_request(query)”
 
