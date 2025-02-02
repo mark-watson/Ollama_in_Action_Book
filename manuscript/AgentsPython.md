@@ -1,6 +1,10 @@
 # Using Microsoft’s Autogen for Python Tool Calling Agents
 
-Microsoft’s Autogen agent framework is excellent but it was designed to work with OpenAI’s models. Here we use Ollama with the **qwen2.5:14b** and a slightly modified version of a [Microsoft example using Python and Matplotlib with Autogen](https://microsoft.github.io/autogen/0.4.0.dev3//user-guide/core-user-guide/quickstart.html) and the [Microsoft Autogen with Ollama documentation](https://microsoft.github.io/autogen/0.2/docs/topics/non-openai-models/local-ollama/) is a useful reference.
+Microsoft’s Autogen agent framework is an excellent tool for creating multi-agent applications, though it was originally designed to work primarily with OpenAI’s models. In this chapter, we demonstrate how to use its capabilities with a local Ollama model (qwen2.5:14b.) We use a slightly modified version of a Microsoft example that combines Python and Matplotlib with Autogen, showcasing how local deployment can be achieved without sacrificing the robust tool calling features the framework offers.
+
+This approach provides several benefits. By leveraging a local model via Ollama, developers reduce dependency on external APIs, enhance privacy and security, and potentially lower operational costs while retaining the power of Autogen’s code generation and execution. The example illustrates how an assistant agent generates the necessary code to perform tasks, and a user proxy agent executes that code to produce dynamic visualizations, such as plotting stock price changes. This decoupling of code generation from execution not only enhances reliability but also allows for greater customization of the execution environment. 
+
+For reference please see the [Microsoft example using Python and Matplotlib with Autogen](https://microsoft.github.io/autogen/0.4.0.dev3//user-guide/core-user-guide/quickstart.html) and the [Microsoft Autogen with Ollama documentation](https://microsoft.github.io/autogen/0.2/docs/topics/non-openai-models/local-ollama/) is a useful reference.
 
 ## Example Implementation
 
