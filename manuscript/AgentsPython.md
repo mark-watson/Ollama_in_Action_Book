@@ -4,7 +4,7 @@ Microsoft’s Autogen agent framework is an excellent tool for creating multi-ag
 
 This approach provides several benefits. By leveraging a local model via Ollama, developers reduce dependency on external APIs, enhance privacy and security, and potentially lower operational costs while retaining the power of Autogen’s code generation and execution. The example illustrates how an assistant agent generates the necessary code to perform tasks, and a user proxy agent executes that code to produce dynamic visualizations, such as plotting stock price changes. This decoupling of code generation from execution not only enhances reliability but also allows for greater customization of the execution environment. 
 
-For reference please see the [Microsoft example using Python and Matplotlib with Autogen](https://microsoft.github.io/autogen/0.4.0.dev3//user-guide/core-user-guide/quickstart.html) and the [Microsoft Autogen with Ollama documentation](https://microsoft.github.io/autogen/0.2/docs/topics/non-openai-models/local-ollama/) is a useful reference.
+For reference please see the [Microsoft example using Python and Matplotlib with Autogen](https://microsoft.github.io/autogen/0.4.0.dev3//user-guide/core-user-guide/quickstart.html) and the [Microsoft Autogen with Ollama documentation](https://microsoft.github.io/autogen/0.2/docs/topics/non-openai-models/local-ollama/).
 
 ## Example Implementation
 
