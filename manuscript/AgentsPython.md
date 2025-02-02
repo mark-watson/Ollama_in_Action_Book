@@ -48,7 +48,7 @@ user_proxy (to assistant):
 
 Plot a chart of NVDA and TESLA stock price change YTD.
 
---------------------------------------------------------------------------------
+-------------------------------------------------------------
 assistant (to user_proxy):
 
 To plot a chart of NVDA (NVIDIA) and Tesla's stock price changes year-to-date, we will need to fetch their historical data from an API or a financial data source such as Yahoo Finance.
@@ -97,15 +97,11 @@ After executing the code, you should see a chart showing the year-to-date closin
 
 Once you have executed this script, please inform me of any issues or if everything is plotted correctly.
 
---------------------------------------------------------------------------------
+-------------------------------------------------------------
 Replying as user_proxy. Provide feedback to assistant. Press enter to skip and use auto-reply, or type 'exit' to end the conversation:
 
-
-
 >>>>>>>> NO HUMAN INPUT RECEIVED.
-
 >>>>>>>> USING AUTO REPLY...
-
 >>>>>>>> EXECUTING CODE BLOCK 0 (inferred language is python)...
 ```
 
