@@ -1,10 +1,10 @@
-# Using Microsoft’s Autogen for Python Tool Calling Agents
+# Using AG2 Open-Source AgentOS LLM-Based Agent Framework for Generating and Executing Python Code
 
-Microsoft’s Autogen agent framework is an excellent tool for creating multi-agent applications, though it was originally designed to work primarily with OpenAI’s models. In this chapter, we demonstrate how to use its capabilities with a local Ollama model (qwen2.5:14b.) We use a slightly modified version of an older Microsoft example (for Autogen v0.2) that combines Python and Matplotlib with Autogen, showcasing how local deployment can be achieved without sacrificing the robust tool calling features the framework offers.
+AG2 Open-Source AgentOS is a fork of Microsoft’s Autogen agent framework by many or the original creators. While I am a fan of Autogen, I find AG2 simpler to work with when using local models on my laptop and we will use the forked library here.
 
-This approach provides several benefits. By leveraging a local model via Ollama, developers reduce dependency on external APIs, enhance privacy and security, and potentially lower operational costs while retaining the power of Autogen’s code generation and execution. The example illustrates how an assistant agent generates the necessary code to perform tasks, and a user proxy agent executes that code to produce dynamic visualizations, such as plotting stock price changes. This decoupling of code generation from execution not only enhances reliability but also allows for greater customization of the execution environment. 
+The AG2 agent framework is an excellent tool for creating multi-agent applications, though it was originally designed to work primarily with OpenAI’s models. In this chapter, we demonstrate how to use its capabilities with a local Ollama model (qwen2.5:14b.) We use a modified version of an AG2 example that combines Python and Matplotlib with AG2, showcasing how local deployment can be achieved without sacrificing the robust tool calling features the framework offers.
 
-**Note:** The example in this chapter currently uses a forked version of Autogen, reference the [PyPi page for the forked project](https://pypi.org/project/autogen/). I will periodically re-evaluate the official Microsoft Autogen library and convert the example seen below to the official library as appropriate.
+This approach provides several benefits. By leveraging a local model via Ollama, developers reduce dependency on external APIs, enhance privacy and security, and potentially lower operational costs while retaining the power of AG2’s code generation and execution. The example illustrates how an assistant agent generates the necessary code to perform tasks, and a user proxy agent executes that code to produce dynamic visualizations, such as plotting stock price changes. This decoupling of code generation from execution not only enhances reliability but also allows for greater customization of the execution environment. 
 
 ## Example Implementation
 
@@ -14,7 +14,7 @@ I experimented with several local models using Ollama with mediocre results but 
 from autogen import AssistantAgent, UserProxyAgent
 
 # Requirements:
-# pip install autogen ollama fix_busted_json yfinance matplotlib
+# pip install ag2 ollama fix_busted_json yfinance matplotlib
 
 config_list = [
  {
@@ -43,7 +43,7 @@ user_proxy.initiate_chat(
 )
 ```
 
-This code sets up a multi-agent workflow using AutoGen by configuring an assistant agent and a user proxy agent. First, it defines a configuration for a local Ollama-based model (here, "qwen2.5:14b") that supports native tool calling. The configuration specifies details such as the API type ("ollama"), the local server URL ("http://localhost:11434"), a placeholder API key, and an option to enable native tool calls. This configuration is then passed to instantiate the AssistantAgent, which uses it to generate responses based on the local LLM.
+This code sets up a multi-agent workflow using AG2 by configuring an assistant agent and a user proxy agent. First, it defines a configuration for a local Ollama-based model (here, "qwen2.5:14b") that supports native tool calling. The configuration specifies details such as the API type ("ollama"), the local server URL ("http://localhost:11434"), a placeholder API key, and an option to enable native tool calls. This configuration is then passed to instantiate the AssistantAgent, which uses it to generate responses based on the local LLM.
 
 This example uses a UserProxyAgent configured for Python code execution with a designated working directory ("coding") and Docker disabled. Finally, the user proxy agent initiates an automated chat with the assistant by sending a message requesting the plotting of a chart for NVDA and TESLA stock price changes year-to-date. This setup demonstrates a simple, automated multi-agent interaction where the assistant generates responses (potentially including code) and the user proxy executes those responses to fulfill the requested task. You will either want to remove the generated code directory **coding** after running this example of add **coding** to your **.gitignore** file.
 
@@ -117,12 +117,12 @@ Replying as user_proxy. Provide feedback to assistant. Press enter to skip and u
 >>>>>>>> EXECUTING CODE BLOCK 0 (inferred language is python)...
 ```
 
-## Wrap Up for Using Microsoft’s Autogen for Python Tool Calling Agents
+## Wrap Up for Using AG2’s Agent Framework for Generating and Executing Python Code
 
-Here we experimented with using Ollama and a local model to use Microsoft’s powerful Autogen agent framework.
+Here we experimented with using Ollama and a local model to use the powerful AG2 agent framework.
 
-Microsoft’s Autogen framework for Python tool calling agents streamlines the development of multi-agent applications by enabling seamless interaction between an assistant agent and a user proxy agent. In the example, we configured a local LLM (using a model like “qwen2.5:14b” via Ollama) and instantiated an AssistantAgent to generate responses and code, while a UserProxyAgent was set up to execute the generated code. This automated conversation allowed the agents to collaborate on a task—plotting a chart for NVDA and TESLA stock price changes year-to-date—demonstrating how Autogen bridges code generation and execution in an autonomous workflow.   ￼
+The AG2 framework for Python tool calling agents streamlines the development of multi-agent applications by enabling seamless interaction between an assistant agent and a user proxy agent. In the example, we configured a local LLM (using a model like “qwen2.5:14b” via Ollama) and instantiated an AssistantAgent to generate responses and code, while a UserProxyAgent was set up to execute the generated code. This automated conversation allowed the agents to collaborate on a task—plotting a chart for NVDA and TESLA stock price changes year-to-date—demonstrating how AG2 bridges code generation and execution in an autonomous workflow.   ￼
 
-This example highlights Autogen’s ability to leverage native tool calling within a Python environment, reducing the need for manual intervention during code execution and debugging. By decoupling the generation of task-specific code from its execution, developers can build systems that are both flexible and scalable. The assistant agent focuses on planning and generating code, while the user proxy agent reliably executes that code, creating an effective feedback loop for refining results. This pattern not only simplifies complex workflows but also provides a foundation for robust, error-resilient applications.
+This example highlights AG2’s ability to leverage native tool calling within a Python environment, reducing the need for manual intervention during code execution and debugging. By decoupling the generation of task-specific code from its execution, developers can build systems that are both flexible and scalable. The assistant agent focuses on planning and generating code, while the user proxy agent reliably executes that code, creating an effective feedback loop for refining results. This pattern not only simplifies complex workflows but also provides a foundation for robust, error-resilient applications.
 
-To further explore the potential of Autogen, you dear reader might experiment with integrating additional tools—such as web scraping modules, database connectors, or advanced visualization libraries—to expand the capabilities of their agents. Another interesting avenue is to adjust the configuration parameters: try different LLM models, enable Docker-based code execution, or incorporate human-in-the-loop feedback to refine responses. Additionally, extending the workflow to include more specialized agents (e.g., a dedicated CodeExecutorAgent or a DebuggingAgent) can provide insights into multi-agent orchestration and the scalability of autonomous systems. These experiments will help readers understand the full versatility of Autogen in creating dynamic, multi-step applications.
+To further explore the potential of AG2, you dear reader might experiment with integrating additional tools—such as web scraping modules, database connectors, or advanced visualization libraries—to expand the capabilities of their agents. Another interesting avenue is to adjust the configuration parameters: try different LLM models, enable Docker-based code execution, or incorporate human-in-the-loop feedback to refine responses. Additionally, extending the workflow to include more specialized agents (e.g., a dedicated CodeExecutorAgent or a DebuggingAgent) can provide insights into multi-agent orchestration and the scalability of autonomous systems. These experiments will help readers understand the full versatility of AG2 in creating dynamic, multi-step applications.
