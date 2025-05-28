@@ -1,7 +1,7 @@
 # Preface
 
 Ollama is an open-source framework that enables users to run
-large language models (LLMs) locally on their computers, facilitating tasks like text summarization, chatbot development, and more. It supports various models, including Llama 3, Mistral, and Gemma, and offers flexibility in model sizes and quantization options to balance performance and resource usage. Ollama provides a command-line interface and an HTTP API for seamless integration into applications, making advanced AI capabilities accessible without relying on cloud services. Ollama is available on macOS,
+large language models (LLMs) locally on their computers, facilitating tasks like text summarization, chatbot development, and more. It supports various models, including Llama 4, Mistral, and Gemma, and offers flexibility in model sizes and quantization options to balance performance and resource usage. Ollama provides a command-line interface and an HTTP API for seamless integration into applications, making advanced AI capabilities accessible without relying on cloud services. Ollama is available on macOS,
 Linux, and Windows.
 
 **A main theme of this book are the advantages of running models privately on either your personal computer or a computer at work.**
@@ -18,7 +18,7 @@ OpenAI, ABACUS.AI, GROQ, and Google to take advantage of features like advanced 
 
 ## About the Author
 
-I am an AI practitioner and consultant specializing in large language models, LangChain/Llama-Index integrations, deep learning, and the semantic web. I have authored over 20 authored books on topics including artificial intelligence, Python, Common Lisp, deep learning, Haskell, Clojure, Java, Ruby, the Hy language, and the semantic web. I have 55 U.S. patents. Please check out my home page and social media: my personal web site [https://markwatson.com](https://markwatson.com), [X/Twitter](https://x.com/mark_l_watson), [my Blog on Blogspot](https://mark-watson.blogspot.com), and [my Blog on Substack](https://marklwatson.substack.com)
+I am an AI practitioner and consultant specializing in large language models, LangChain/Llama-Index integrations, deep learning, and the semantic web. I have authored over 20 books on topics including artificial intelligence, Python, Common Lisp, deep learning, Haskell, Clojure, Java, Ruby, the Hy language, and the semantic web. I have 55 U.S. patents. Please check out my home page and social media: my personal web site [https://markwatson.com](https://markwatson.com), [X/Twitter](https://x.com/mark_l_watson), [my Blog on Blogspot](https://mark-watson.blogspot.com), and [my Blog on Substack](https://marklwatson.substack.com)
 
 ## Requests from the Author
 
