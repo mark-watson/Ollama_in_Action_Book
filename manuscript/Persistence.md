@@ -1,4 +1,4 @@
-# Long Term Persistence Mem0
+# Long Term Persistence Using Mem0 and Chroma
 
 Something important that we haven’t covered yet: building a persistent memory for LLM applications. Here we use two libraries:
 
@@ -13,9 +13,12 @@ The example in this chapter is simple and can be copied and modified for multipl
 
 ## Code Example Using Mem0 and Chroma
 
-This Python script demonstrates how to create a persistent memory for an AI assistant using the **mem0ai** library, **chromadb** for vector storage, and ollama for interacting with a large language model (LLM). Designed to be run repeatedly, each execution processes a user prompt, leverages past interactions stored in a local ChromaDB database, and then generates a concise, relevant response using a local Gemma model. The core idea is that the **mem0ai** library facilitates storing conversation snippets and retrieving them based on the semantic similarity to the current query. This retrieved context, referred to as "memories," is then injected into the LLM's system prompt, allowing the AI to maintain a coherent and context-aware conversation across multiple, independent runs. By persisting these memories locally, the system effectively builds a long-term conversational understanding, enabling the AI to recall and utilize previously discussed information to provide more informed and relevant answers over time, even when the script is executed as a fresh process each time.
+This Python script demonstrates how to create a persistent memory for an AI assistant using the **mem0ai** library, **chromadb** for vector storage, and ollama for interacting with LLMs. Designed to be run repeatedly, each execution processes a user prompt, leverages past interactions stored in a local ChromaDB database, and then generates a concise, relevant response using a local Gemma model. The core idea is that the **mem0ai** library facilitates storing conversation snippets and retrieving them based on the semantic similarity to the current query. This retrieved context, referred to as "memories," is then injected into the LLM's system prompt, allowing the AI to maintain a coherent and context-aware conversation across multiple, independent runs. By persisting these memories locally, the system effectively builds a long-term conversational understanding, enabling the AI to recall and utilize previously discussed information to provide more informed and relevant answers over time, even when the script is executed as a fresh process each time.
 
 The Chroma vector store database is stored under the file path **./db_local** and until you delete this directory, memories of old interactions are maintained.
+
+One parameter you may want to change is the number of memories matched in the Chroma database. This can be set in the line of code **m.search(query=args.prompt, limit=5, ...)**.
+
 
 ```python
 # Run this script repeatedly to build a persistent memory:
@@ -70,7 +73,7 @@ def main():
   mems = "\n".join(f"- {e['memory']}" for e in rel["results"])
   print("Memories:\n", mems)
 
-  system0 = "You are a helpful assistant who answers with very concise, short answers."
+  system0 = "You are a helpful assistant who answers with concise, short answers."
   system = f"{system0}\nPrevious user memories:\n{mems}"
   
   msgs = [
