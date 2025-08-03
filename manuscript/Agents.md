@@ -1,4 +1,4 @@
-# Building Agents with Ollama and the Hugging Face smolagents Library
+# Building Agents with Ollama and the Hugging Face Smolagents Library
 
 We have seen a few useful examples of tool use (function calling) and now we will build on tool use to build both single agents and multi-agent systems. There are commercial and open source resources to build agents, CrewAI and LangGraph being popular choices. We will follow a different learning path here, preferring to use the smolagents library. Please bookmark [https://github.com/huggingface/smolagents](https://github.com/huggingface/smolagents) for reference while working through this chapter.
 
@@ -44,7 +44,7 @@ langchain_openai
 tabulate
 ```
 
-## Overview of the Hugging Face smolagents Library
+## Overview of the Hugging Face Smolagents Library
 
 The smolagents library [https://github.com/huggingface/smolagents](https://github.com/huggingface/smolagents) is built around a minimalist and modular architecture that emphasizes simplicity and composability. The core components are cleanly separated into the file **agents.py** for agent definitions, **tools.py** for tool implementations, and related support files. This design philosophy allows developers to easily understand, extend, and customize the components while maintaining a small codebase footprint - true to the "smol" name.
 
@@ -82,7 +82,7 @@ Agents are designed to be lightweight and focused on specific tasks rather than 
 
 I am still experimenting with LLM-based agents. Please accept the following examples as my personal works in progress.
 
-### “Hello World” smolagents Example
+### “Hello World” Smolagents Example
 
 Here we look at a simple example taken from the smolagents documentation and converted to run using local models with Ollama. Here is a listing of file **smolagents_test.py**:
 
@@ -147,7 +147,7 @@ Includes proper type hinting for better code clarity
 Provides an extensible structure for adding more tools
 
 
-### Python Tools Compatible with smolagents
+### Python Tools Compatible with Smolagents
 
 The tools I developed in previous chapters are not quite compatible with the smolagents library so I wrap a few of the tools I previously wrote in the utility **smolagents_tools.py**:
 
@@ -218,7 +218,7 @@ def summarize_directory() -> str:
 
 This code defines a wrapper module containing three tool functions designed for compatibility with the smolagents framework. The module includes **sa_list_directory()**, which lists files and directories in the current working directory with an optional parameter to include dot files; **read_file_contents()**, which takes a file path as input and returns the contents of that file as a string while handling potential errors and file encoding; and **summarize_directory()**, which provides a concise summary of the current directory by counting the total number of files and directories. All functions are decorated with @tool for integration with smlolagents, and the code imports necessary modules including **pathlib** for file operations, typing for type hints, and **pprint** for formatted output. The functions rely on an external **list_directory()** function imported from **tool_file_dir.py**, and they provide clear documentation through docstrings explaining their parameters, functionality, and return values. Error handling is implemented particularly in the file reading function to gracefully handle cases where files don't exist or cannot be read properly.
 
-### A complete smolagents Example using Three Tools
+### A Complete Smolagents Example using Three Tools
 
 This listing shows the script **smolagents_agent_test.py**:
 

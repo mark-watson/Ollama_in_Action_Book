@@ -11,7 +11,7 @@ tool_judge_results.py	tool_summarize_text.py
 
 We postpone using the tools **tool_llm_eval.py** and **tool_judge_results.py** until the next chapter **Automatic Evaluation of LLM Results**
 
-If you have not done so yet, please clone the repository for my Ollama book examples using:
+If you have not yet done so, please clone the repository for my Ollama book examples using:
 
 ```
 git clone https://github.com/mark-watson/OllamaExamples.git
@@ -21,7 +21,7 @@ git clone https://github.com/mark-watson/OllamaExamples.git
 
 The Ollama Python SDK leverages docstrings as a crucial part of its runtime function calling mechanism. When defining functions that will be called by the LLM, the docstrings serve as structured metadata that gets parsed and converted into a JSON schema format. This schema describes the function's parameters, their types, and expected behavior, which is then used by the model to understand how to properly invoke the function. The docstrings follow a specific format that includes parameter descriptions, type hints, and return value specifications, allowing the SDK to automatically generate the necessary function signatures that the LLM can understand and work with.
 
-During runtime execution, when the LLM determines it needs to call a function, it first reads these docstring-derived schemas to understand the function's interface. The SDK parses these docstrings using Python's introspection capabilities (through the inspect module) and matches the LLM's intended function call with the appropriate implementation. This system allows for a clean separation between the function's implementation and its interface description, while maintaining human-readable documentation that serves both as API documentation and runtime function calling specifications. The docstring parsing is done lazily at runtime when the function is first accessed, and the resulting schema is typically cached to improve performance in subsequent calls.
+During runtime execution, when the LLM determines it needs to call a function, it first reads these docstring-derived schemas to understand the function's interface. The SDK parses these docstrings using Python's introspection capabilities (through the inspect module) and matches the LLM's intended function call with the appropriate implementation. This system allows for a clean separation between the function's implementation and its interface description, while maintaining human-readable documentation that serves as both API documentation and runtime function calling specifications. The docstring parsing is done lazily at runtime when the function is first accessed, and the resulting schema is typically cached to improve performance in subsequent calls.
 
 ## Example Showing the Use of Tools Developed Later in this Chapter
 

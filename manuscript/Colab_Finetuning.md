@@ -14,7 +14,7 @@ One of Unsloth’s standout features is its efficient resource utilization, enab
 
 ## Colab Notebook 1: A Quick Test of Fine Tuning and Deployment to Ollama on a Laptop
 
-We start by installing the Unsloth library and all dependencies, then uninstalling just the sloth library and reinstalling the latest from source code on GitHub:
+We start by installing the Unsloth library and all dependencies, then uninstalling just the unsloth library and reinstalling the latest from source code on GitHub:
 
 ```
 pip install unsloth
