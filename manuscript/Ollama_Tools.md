@@ -1,9 +1,9 @@
 # LLM Tool Calling with Ollama
 
-There are several example Python tool utilities in the GitHub repository [https://github.com/mark-watson/OllamaExamples](https://github.com/mark-watson/OllamaExamples) that we will use for function calling that start with the “tool” prefix:
+There are several example Python tool utilities in the GitHub repository [https://github.com/mark-watson/Ollama_in_Action_Book](https://github.com/mark-watson/Ollama_in_Action_Book) in the **source-code** directory that we will use for function calling that start with the “tool” prefix:
 
 ```bash
-OllamaExamples $ ls tool*
+https://github.com/mark-watson/Ollama_in_Action_Book/source-code $ ls tool*
 tool_file_contents.py	tool_llm_eval.py	tool_web_search.py
 tool_file_dir.py	tool_sqlite.py
 tool_judge_results.py	tool_summarize_text.py
@@ -14,7 +14,7 @@ We postpone using the tools **tool_llm_eval.py** and **tool_judge_results.py** u
 If you have not yet done so, please clone the repository for my Ollama book examples using:
 
 ```
-git clone https://github.com/mark-watson/OllamaExamples.git
+git clone https://github.com/mark-watson/Ollama_in_Action_Book.git
 ```
 
 **Use of Python docstrings at runtime:**
@@ -101,7 +101,7 @@ photography, hiking, travel, and playing the following musical
 instruments: guitar, didgeridoo, and American Indian flute ...
 ```
 
-You have now looked at example tool use. We will now implement the several tools in this chapter and the next. We will look at the first tool for reading and writing files in fine detail and then more briefly discuss the other tools in the [https://github.com/mark-watson/OllamaExamples](https://github.com/mark-watson/OllamaExamples) repository.
+You have now looked at example tool use. We will now implement the several tools in this chapter and the next. We will look at the first tool for reading and writing files in fine detail and then more briefly discuss the other tools in the [https://github.com/mark-watson/Ollama_in_Action_Book](https://github.com/mark-watson/Ollama_in_Action_Book) repository in the **source-code** directory.
 
 ## Tool for Reading and Writing File Contents
 
@@ -585,7 +585,7 @@ This approach allows users to interact with the database using natural language 
 The output looks like this:
 
 ```bash
-python /Users/markw/GITHUB/OllamaExamples/tool_sqlite.py 
+python /Users/markw/GITHUB/Ollama_in_Action_Book/source-code/tool_sqlite.py 
 
 Query: Show me all tables in the database
 Result: ['example', 'users', 'products']
@@ -707,7 +707,7 @@ for tool_call in response.message.tool_calls or []:
 Here is the output edited for brevity:
 
 ```bash
-python /Users/markw/GITHUB/OllamaExamples/example_chain_web_summary.py 
+python /Users/markw/GITHUB/Ollama_in_Action_Book/source-code/example_chain_web_summary.py 
 [ToolCall(function=Function(name='uri_to_markdown', arguments={'a_uri': 'https://knowledgebooks.com'})),
  ToolCall(function=Function(name='summarize_text', arguments={'context': '', 'text': 'uri_to_markdown(a_uri = "https://knowledgebooks.com")'}))]
 

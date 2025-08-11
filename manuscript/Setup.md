@@ -5,7 +5,12 @@ There is a GitHub repository that I have prepared for you, dear reader, to both 
 
 You need to **git clone** the following repository:
 
-[https://github.com/mark-watson/OllamaExamples](https://github.com/mark-watson/OllamaExamples) that contains tools I have written in Python that you can use with Ollama as well as utilities I wrote to avoid repeated code in the book examples. There are also application level example files that have the string “example” in the file names. Tool library files begin with “tool” and files starting with “Agent” contain one of several approaches to writing Agents.
+[https://github.com/mark-watson/Ollama_in_Action_Book](https://github.com/mark-watson/Ollama_in_Action_Book) that contains tools I have written in Python that you can use with Ollama as well as utilities I wrote to avoid repeated code in the book examples. There are also application level example files that have the string “example” in the file names. Tool library files begin with “tool” and files starting with “Agent” contain one of several approaches to writing Agents.
+
+#### Note: the source code repository changed August 10, 2025. If you cloned the old repo please archive it and re-clone  https://github.com/mark-watson/Ollama_in_Action_Book
+
+#### Note: Starting August 10, 2025 the GitHub Repo https://github.com/mark-watson/Ollama_in_Action_Book now contains the book's manuscript files as well as the source code for the examples.
+
 
 ## Python Build Tools
 
