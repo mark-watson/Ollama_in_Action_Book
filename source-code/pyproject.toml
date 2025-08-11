@@ -5,7 +5,14 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "agno>=1.7.9",
+    "duckduckgo-search>=8.1.1",
     "kuzu>=0.11.0",
     "langchain>=0.3.26",
     "langchain-community>=0.3.27",
+    "lxml-html-clean>=0.4.2",
+    "newspaper4k>=0.9.3.1",
+    "ollama>=0.5.3",
+    "packaging>=25.0",
+    "spider-client>=0.1.71",
 ]

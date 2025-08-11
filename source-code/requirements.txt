@@ -22,3 +22,6 @@ browser_use
 langgraph
 langchain_community
 duckduckgo-search
+
+agno
+packaging
