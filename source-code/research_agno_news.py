@@ -1,5 +1,5 @@
-## Note: This example was taken from the Agno docuentation and converted to run with Ollama
-## with other modifications.
+## Note: This example was taken from the Agno docuentation and converted to run 
+## with Ollama and with other modifications.
 ## URI for original source code:
 ## https://github.com/agno-agi/agno/blob/main/cookbook/examples/agents/research_agent.py
 ## that is licensed under the MPL-2.0 license.
