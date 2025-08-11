@@ -1,7 +1,10 @@
 # Building Agents with Ollama and the Agno Agent Library
 
+TBD
 
 ## A Personal Research Agent
+
+This Python script demonstrates the creation of a sophisticated, autonomous research agent by leveraging the agno library. The agent is designed to emulate an elite investigative journalist from the New York Times, tasked with conducting in-depth research on any given topic. It integrates multiple tools to achieve this: DuckDuckGoTools for performing comprehensive web searches across numerous sources and Newspaper4kTools for extracting and parsing content from articles. The core of the agent is an Ollama language model, which acts as the central reasoning engine. The agent's behavior is meticulously defined through a detailed prompt engineering strategy, including a rich description to establish its expert persona, a multi-phase set of instructions that guide it through research, analysis, writing, and quality control, and a structured expected_output template to ensure the final report is formatted as a professional, NYT-style article. This example showcases how modern AI frameworks can orchestrate language models and external tools to automate complex, multi-step knowledge work.
 
 ```python
 ## Note: This example was taken from the Agno docuentation and converted to run 
@@ -137,6 +140,11 @@ if __name__ == "__main__":
     )
 ```
 
+The code effectively encapsulates the modern paradigm of agent-based AI systems by composing a large language model with specialized tools. At its core, the script instantiates an Agent from the agno library, configuring it with three key components: the Ollama model (qwen3:0.6b) as its cognitive engine, and a list of tools (DuckDuckGoTools, Newspaper4kTools) that grant it the ability to perceive and act upon the digital world. The true power of this implementation lies in its advanced prompt engineering. The description, instructions, and expected_output arguments are not mere suggestions; they form a comprehensive "system prompt" that imbues the agent with a specific persona, a detailed standard operating procedure, and a strict output schema. This structured approach transforms a general-purpose language model into a specialized worker capable of a specific, high-level task.
+
+This example illustrates a significant evolution from simple conversational AI to goal-oriented, autonomous agents. By explicitly defining a workflow—from initial, broad research to analysis, synthesis, and structured writing—the code mimics the methodology of a human expert. It highlights how libraries like agno simplify the orchestration of these complex interactions, allowing developers to focus on defining the agent's strategy rather than the low-level API calls. Furthermore, the use of open-source components like Ollama demonstrates the increasing accessibility of building powerful, customized AI agents that can automate sophisticated information-processing tasks, effectively serving as AI-powered investigative journalists on demand.
+
+Here is sample output (edited for brevity, removing Unicode characters for bounding boxes in the output):
 
 ```text
 Message
@@ -229,6 +237,8 @@ Sources & Methodology
 ## A Personal Agent for Answering Questions Using Web Search
 
 We will now look at another example: given a web site accurately answer a user's query using the content of the web site.
+
+This program demonstrates a powerful application of agent-based AI by creating a specialized web scraping and question-answering agent using the Agno library. The core of this example is a custom tool, scrape_website_content, which is built using the requests and BeautifulSoup libraries to fetch and parse the textual content from any given URL. This tool is then integrated into an Agent powered by a local Ollama large language model. The agent is carefully configured with a detailed description, step-by-step instructions, and a defined output format to ensure it follows a strict workflow: first, it must use the scraping tool to get information from a specific webpage, and second, it must answer the user's question based only on the content it has just retrieved. This example showcases how to extend an AI agent's capabilities with custom functions, enabling it to interact with the live web and perform targeted information retrieval tasks.
 
 ```python
 ## Note: This example is partially derived from the Agno docuentation 
@@ -339,6 +349,12 @@ if __name__ == "__main__":
     )
 ```
 
+he first part of the code defines the scrape_website_content function, which serves as the agent's custom tool. The @tool decorator from the Agno library is crucial, as it registers the function so the agent can recognize and use it. Inside the function, the requests library sends an HTTP GET request to the specified URL, complete with a User-Agent header to mimic a standard web browser. Upon receiving a successful response, BeautifulSoup is used to parse the HTML. To provide the language model with clean, relevant data, common non-content tags like <script>, <style>, <nav>, <footer>, and <aside> are removed using the decompose() method before the final text is extracted. Robust error handling is included to manage potential network issues or problems during the scraping process, ensuring the agent receives a clear message if the content cannot be fetched.
+
+The second part of the script initializes and configures the Agent. The scraper_agent is instantiated with several key arguments that define its behavior. It is connected to a local LLM via Ollama, and importantly, the tools parameter is passed a list containing our custom scrape_website_content function. The description, instructions, and expected_output parameters provide the agent with a persona, a precise operational procedure, and a structured format for its final output. These text-based guides are critical for constraining the model's behavior, compelling it to use the provided tool and base its reasoning exclusively on the scraped data, thereby preventing it from hallucinating answers or using its general knowledge. The if __name__ == "__main__": block shows how to execute the agent with a specific prompt, triggering the entire scrape-and-answer process.
+
+
+Here is some sample output:
 
 ```text
 $ uv run research_agno_web_question.py
