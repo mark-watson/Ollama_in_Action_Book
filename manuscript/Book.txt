@@ -3,6 +3,7 @@ Setup.md
 Commandline.md
 Short_examples.md
 Ollama_Tools.md
+Local_Search_Tool.md
 LLmEvals.md
 Agents.md
 AgentsPython.md
