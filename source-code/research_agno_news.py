@@ -1,4 +1,4 @@
-## Note: This example was taken from the Agno docuentation and converted to run 
+## Note: This example was taken from the Agno documentation and converted to run 
 ## with Ollama and with other modifications.
 ## URI for original source code:
 ## https://github.com/agno-agi/agno/blob/main/cookbook/examples/agents/research_agent.py
