@@ -11,8 +11,10 @@ dependencies = [
     "langchain>=0.3.26",
     "langchain-community>=0.3.27",
     "lxml-html-clean>=0.4.2",
+    "meilisearch>=0.36.0",
     "newspaper4k>=0.9.3.1",
     "ollama>=0.5.3",
+    "openai>=1.99.9",
     "packaging>=25.0",
     "spider-client>=0.1.71",
 ]
