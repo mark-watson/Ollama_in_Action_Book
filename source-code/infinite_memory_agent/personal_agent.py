@@ -1,5 +1,7 @@
 # personal_agent.py
 import os, glob, time, pathlib, typer
+import time
+from agno.document import Document
 from typing import Optional
 from agno.agent import Agent
 from agno.models.ollama import Ollama
@@ -17,7 +19,7 @@ APP_DIR = pathlib.Path(os.environ.get("AGENT_HOME", "~/.personal_agent")).expand
 NOTES_DIR = APP_DIR / "notes"
 DB_FILE = str(APP_DIR / "agent.db")
 CHROMA_PATH = str(APP_DIR / "chroma")
-MODEL_ID = os.environ.get("OLLAMA_MODEL", "gpt-oss:20b")
+MODEL_ID = os.environ.get("OLLAMA_MODEL", "llama3.2:latest") # "gpt-oss:20b")
 EMBED_MODEL = os.environ.get("OLLAMA_EMBED_MODEL", "nomic-embed-text")
 
 APP_DIR.mkdir(parents=True, exist_ok=True)
@@ -57,18 +59,23 @@ def file_read(path: str, max_chars: int = 40000) -> str:
     data = p.read_text(errors="ignore")
     return data[:max_chars]
 
-def load_text_with_meta(kb, text, meta=None): # Agno was calling ChromaDb with no metadata
-    if not meta: meta = {"source": "inline", "kind": "note"}
-    # Agno’s Chroma wrapper ultimately calls collection.add(..., metadatas=...)
-    # Ensure metadatas is non-empty by passing through meta per doc.
-    kb.vector_db.insert(documents=[text], filters=meta)
+def load_text_with_meta(kb, text, tags, meta=None):
+    if tags == "":
+        tags = 'none'
+    doc = Document(
+          content=text,
+          meta_data={"source":"inline","tags":tags},  # non-empty
+          id=f"inline-{int(time.time())}")
+    kb.vector_db.insert(documents=[doc], filters=meta)
 
-@tool(show_result=True)
+@tool(show_result=False)
 def save_note(text: str, tags: str = "") -> str:
     ts = time.strftime("%Y%m%d-%H%M%S")
     fn = NOTES_DIR / f"{ts}{('-'+tags) if tags else ''}.md"
     fn.write_text(text)
-    if KB is not None: load_text_with_meta(KB, text)
+    if tags == "" or tags == None:
+        tags = 'none'
+    if KB is not None: load_text_with_meta(KB, text, tags)
     return str(fn)
 
 app = typer.Typer()
