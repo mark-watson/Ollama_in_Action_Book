@@ -57,12 +57,18 @@ def file_read(path: str, max_chars: int = 40000) -> str:
     data = p.read_text(errors="ignore")
     return data[:max_chars]
 
+def load_text_with_meta(kb, text, meta=None): # Agno was calling ChromaDb with no metadata
+    if not meta: meta = {"source": "inline", "kind": "note"}
+    # Agno’s Chroma wrapper ultimately calls collection.add(..., metadatas=...)
+    # Ensure metadatas is non-empty by passing through meta per doc.
+    kb.vector_db.insert(documents=[text], filters=meta)
+
 @tool(show_result=True)
 def save_note(text: str, tags: str = "") -> str:
     ts = time.strftime("%Y%m%d-%H%M%S")
     fn = NOTES_DIR / f"{ts}{('-'+tags) if tags else ''}.md"
     fn.write_text(text)
-    if KB is not None: KB.load_text(text)
+    if KB is not None: load_text_with_meta(KB, text)
     return str(fn)
 
 app = typer.Typer()
