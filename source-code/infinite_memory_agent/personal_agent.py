@@ -70,6 +70,7 @@ def load_text_with_meta(kb, text, tags, meta=None):
 
 @tool(show_result=False)
 def save_note(text: str, tags: str = "") -> str:
+    typer.echo(f"save_note({text}, {tags}")
     ts = time.strftime("%Y%m%d-%H%M%S")
     fn = NOTES_DIR / f"{ts}{('-'+tags) if tags else ''}.md"
     fn.write_text(text)
