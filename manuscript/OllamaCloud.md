@@ -1,14 +1,14 @@
 # Using Ollama Cloud Services
 
-Why use cloud when Ollama was designed as a local local only LLM inference provider?
+Why use cloud when Ollama was originally designed as a local-only LLM inference provider?
 Ollama cloud is (mostly) software compatible with using Ollama locally on your laptop or server and allows you to offload workloads from your own computer as well as run open source or open weight models that are too large to fit on your computer.
 
 
 ## Ollama Cloud Services: Power and Knowledge on Demand
 
-The Ollama cloud platform is built for developers seeking to run large language models on Ollama's GPU hardware in the cloud, still providing privacy, control, and a streamlined user experience. However, the relentless pace of AI research presents a fundamental challenge: the exponential growth in model size and capability is rapidly outstripping the computational power of consumer-grade hardware. State-of-the-art models, often with hundreds of billions of parameters, are simply too large to fit on widely available GPUs or run at a practical speed. This creates a critical bottleneck for developers and researchers aiming to leverage the latest advancements.   
+The Ollama cloud platform is built for developers seeking to run large language models on Ollama's GPU hardware in the cloud, still providing privacy, control, and a streamlined user experience. However, the relentless pace of AI research presents a fundamental challenge: the exponential growth in model size and capability is rapidly outstripping the computational power of consumer-grade hardware. State-of-the-art models, often with hundreds of billions of parameters, are simply too large to fit on widely available GPUs on your laptop or in-house servers, or run at a practical speed. This creates a critical bottleneck for developers and researchers aiming to leverage the latest advancements.   
 
-In response to this challenge, Ollama has introduced Ollama Cloud Services, a strategic and seamless extension of the core ecosystem. This is not a separate product with a new learning curve, but rather a natural evolution designed to preserve the beloved Ollama workflow while unlocking access to state-of-the-art performance. The core purpose of the cloud offering is to allow users to "run larger models faster using datacenter-grade hardware". It provides a direct solution to the hardware gap, ensuring that the Ollama community can continue to innovate at the cutting edge.   
+In response to this challenge, Ollama has introduced Ollama Cloud Services, a strategic and seamless extension of the core ecosystem. This is not a separate product with a new learning curve, but rather a natural evolution designed to preserve the Ollama workflow we are used to using while unlocking access to state-of-the-art performance. The core purpose of the cloud offering is to allow users to "run larger models faster using datacenter-grade hardware". It provides a direct solution to the hardware gap, ensuring that the Ollama community can continue to innovate while switching between local and cloud compute.   
 
 This evolution represents a significant shift from a "local-first" to a "hybrid-first" paradigm. By providing a cloud-based execution environment that is perfectly integrated with the existing Ollama App, CLI, and API, the platform creates a frictionless "escalation path". A developer can prototype an application on their laptop using a smaller, local model and then, with a minimal change—often just a single command-line flag or a line of code—deploy the same application using a massive, high-performance model in the cloud. This approach prevents user attrition to purely cloud-based competitors and transforms Ollama from a local utility into a comprehensive platform that spans the entire development lifecycle, from edge devices to the cloud.   
 
@@ -31,7 +31,7 @@ Speed and Scale: The most immediate advantage is the ability to run inference on
 Advantages of Ollama Cloud:
 
 - Resource Offloading: Running large models locally is computationally expensive, consuming significant CPU, GPU, and RAM resources, which can slow down a user's entire system. By offloading this workload to the cloud, developers can free up their local machine's resources for other tasks, such as coding, compiling, and running other applications. For mobile users, this also translates directly into significant battery life savings.   
-- Privacy Commitment: A primary reason developers choose Ollama is its local-first, privacy-centric design. Moving to a cloud service often raises valid concerns about data privacy and security. Ollama Cloud addresses this head-on with a "Privacy first" policy. The platform explicitly states that it does not log or retain any user queries or data, ensuring that the core principle of user privacy is maintained even when leveraging cloud infrastructure. This commitment is a strategic pillar designed to build and maintain trust with its user base, making the transition from local to cloud a more palatable choice.   
+- Privacy Commitment: A primary reason developers choose Ollama is its local-first, privacy-centric design. Moving to a cloud service often raises valid concerns about data privacy and security. Ollama Cloud addresses this head-on with a "Privacy first" policy. The platform explicitly states that it does not log or retain any user queries or data, ensuring that the core principle of user privacy is maintained even when leveraging cloud infrastructure. This commitment is designed to build and maintain trust with its user base, making the transition from local to cloud a more palatable choice.   
 - The service is currently available as a preview for a monthly subscription of $20. To manage capacity, hourly and daily usage limits are in place. All hardware powering the service is located in the United States. Looking forward, Ollama plans to introduce usage-based pricing, signaling an ambition to support more granular, metered consumption for enterprise and high-volume commercial applications.   
 
 ### Access and Interaction: A Practical Guide
@@ -99,18 +99,22 @@ Bonjour (French)
 ```
 
 
-The critical change is in the Client constructor, where the host is set to https://ollama.com and the headers dictionary includes the Authorization token. This design makes developer code location-agnostic. The decision of whether to run a model locally or in the cloud can be externalized to a configuration file or an environment variable, allowing for the implementation of sophisticated hybrid execution logic—such as trying a local model first and falling back to the cloud if it's unavailable—without altering the core application code.   
+The critical change is in the Client constructor, where the host is set to https://ollama.com and the headers dictionary includes the Authorization token. This design makes developer code location-agnostic. The decision of whether to run a model locally or in the cloud can be externalized to a configuration file or an environment variable, allowing for the implementation of sophisticated hybrid execution logic—such as trying a local model first and falling back to the cloud if it's unavailable, with very small configuration alterations to the core application code.   
 
 ## Augmenting Models with the Web Search API
 
-While the cloud inference service provides computational Power, the Web Search API delivers up-to-date Knowledge. This service is designed to address one of the most significant limitations of large language models: their static knowledge base.
+While the cloud inference service provides computational power, the Web Search API delivers up-to-date Knowledge. This service is designed to address one of the most significant limitations of large language models: their static knowledge base.
 
-The Rationale: Combating Staleness and Hallucination
-LLMs are trained on vast but finite datasets, resulting in a "knowledge cutoff" date. They have no awareness of events, discoveries, or information that emerged after their training was completed. This "staleness" can lead them to provide outdated or incorrect answers. Furthermore, when faced with questions about topics they have limited information on, models can "hallucinate," generating plausible but factually incorrect information.
+Dear reader, one particular thing that I love about this web search servie is that it automatically reformats HTML web page content into Markdown format.
+
+### The Rationale for Using Data from the Web to Augment Context: Combating Staleness and Hallucination
+
+LLMs are trained on vast but finite datasets, resulting in a "knowledge cutoff" date. They have no awareness of events, discoveries, or information that emerged after their training was completed. This "staleness" can lead them to provide outdated or incorrect answers. Furthermore, when faced with questions about topics they have limited or no information on, models can "hallucinate," generating plausible but factually incorrect information.
 
 The Ollama Web Search API is a direct solution to this problem. Its purpose is to "augment models with the latest information to reduce hallucinations and improve accuracy". By providing a simple mechanism to fetch real-time information from the web, developers can ground their models in reality, ensuring their applications provide relevant, timely, and factual responses.   
 
-The Web Search API: A Technical Deep Dive
+### The Web Search API: A Technical Deep Dive
+
 The Web Search API is a straightforward REST endpoint designed for ease of use. Interaction with the API requires an API key generated from a free Ollama account, which must be passed as a bearer token in the authorization header.   
 
 The endpoint's contract is summarized below.
@@ -126,9 +130,7 @@ The endpoint's contract is summarized below.
 
 ### Example Hybrid Search and LLM-Based Summarization of Search Results
 
-TBD
-
-The following exampe is in file **ollama_web_search.py**:
+In this example we perform a web search and then use a LLM model to summarize each search result. This example is in file **ollama_web_search.py**:
 
 ```python
 # Ensure OLLAMA_API_KEY is set  in ENV
@@ -175,17 +177,27 @@ for clean in test:
     print(f"{clean}\n\n\n")
 ```
 
-TBD discuss code
+What the code does:
+
+- Initialize an Ollama client by reading the environment variable OLLAMA_API_KEY and uses it as an authorization header to create an ollama.Client instance pointing at https://ollama.com.
+- Define generate(text) by wrapping a user‐provided prompt text into the format expected by Ollama’s chat API (a single message with role ‘user’), sends it to the model gpt-oss:20b (non-streaming), and extracts the resulting content (string) from the API response.
+- Define clean_web_query(query, max_results=2)
+	•	It calls ollama.web_search(query) to get search results (each result has .content, .url, etc.).
+	•	For each result, it takes the .content (assumed Markdown or HTML), prepends the prefix P, and passes that into generate(...) to get a cleaned, summarized plain-text version.
+	•	It collects and returns a list of those cleaned summaries.
+- Test / example usage
+	•	Calls clean_web_query(...) on a sample query about “AI Consultant Mark Watson … Semantic Web.”
+	•	Prints the cleaned summaries returned.
 
 Here is some partial sample output:
 
 ```bash
 $ uv run ollama_web_search.py
-Mark Watson is a remote artificial intelligence consultant with experience dating back to 1982. He has worked on AI, machine learning, semantic web, linked data, and natural language processing, and has been using deep learning since 2015 and large language models since 2022. His customer list includes major firms such as Google, Capital One, Disney, and others. He offers “Getting Started” consulting for LLMs, with priority services at $120 per hour and non‑priority at $60 per hour.  
+Mark Watson is a remote artificial intelligence consultant with experience dating back to 1982. He has worked on AI, machine learning, semantic web, linked data, and natural language processing, and has been using deep learning since 2015 and large language models since 2022. His customer list includes major firms such as Google, Capital One, Disney, and others. He offers “Getting Started” consulting for LLMs, with priority services at $120 per hour and non priority at $60 per hour.  
 
 He provides free mentoring for career and technology advice over email or 30‑minute Zoom calls. Watson’s current eBooks, available on LeanPub, cover topics like LangChain, LlamaIndex, Common Lisp, Racket, Java, and Python AI, and he frequently updates them. Older books on Clojure, Haskell, and other languages are also available.  
 
-Watson keeps his open‑source projects on GitHub in languages such as Haskell, Ruby, JavaScript, Java, Common Lisp, Python, and Smalltalk, inviting pull requests. He has hobbies that include cooking, photography, hiking, travel, and playing guitar, didgeridoo, and Indian flute.
+Watson keeps his open source projects on GitHub in languages such as Haskell, Ruby, JavaScript, Java, Common Lisp, Python, and Smalltalk, inviting pull requests. He has hobbies that include cooking, photography, hiking, travel, and playing guitar, didgeridoo, and Indian flute.
 ```
 
 ## Wrap-Up: A Unified Local and Cloud Strategy
@@ -195,7 +207,7 @@ Ollama Cloud Services represent a pivotal expansion of the platform's capabiliti
 The key takeaways from this chapter are:
 
 - A Seamless Escalation Path: Ollama Cloud provides a frictionless transition from local development to cloud-scale deployment. By maintaining consistency with the existing CLI and API, it preserves the developer experience that has been central to Ollama's success.
-- Power and Knowledge Combined: The two core services—High-Performance Inference and the Web Search API—are symbiotically linked. The inference service provides the computational Power to run massive models, while the search API provides the real-time Knowledge to make them more accurate and relevant. Together, they enable the creation of sophisticated, knowledgeable, and state-of-the-art AI applications.
+- Power and Knowledge Combined: The two core services High-Performance Inference and the Web Search API can be composed in your application. The inference service provides the computational Power to run large models, while the search API provides the real-time Knowledge to make them more accurate and relevant. Together, they enable the creation of sophisticated, knowledgeable, and state-of-the-art AI applications.
 - A Foundation of Trust: Even while embracing the cloud, Ollama has maintained its foundational commitment to user privacy. The explicit "no log, no retain" policy for cloud queries is a critical feature that builds trust and makes the service a viable option for its privacy-conscious user base.   
 
 Looking ahead, the planned introduction of usage-based pricing signals Ollama's ambition to support a broader range of use cases, from individual developers to large-scale commercial applications. By providing a comprehensive, hybrid platform that spans from the local machine to the cloud, Ollama is solidifying its position as an excellent tool and platform for the entire lifecycle of AI development.
