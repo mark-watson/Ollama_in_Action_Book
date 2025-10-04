@@ -13,4 +13,5 @@ ReasoningModels.md
 GraphDb.md
 OpenCodex.md
 Persistence.md
+OllamaCloud.md
 WrapUp.md
