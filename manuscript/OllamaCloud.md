@@ -158,7 +158,7 @@ def generate(text):
     response = client.chat('gpt-oss:20b', messages=messages, stream=False)
     return response['message']['content']
 
-P = "Summarize the following Markdown text, returning only plain text. Markdown text:\n\n"
+P="Summarize the following Markdown text, returning plain text. Markdown text:\n"
 
 def clean_web_query(query, max_results=2):
     ret = []
@@ -180,14 +180,9 @@ for clean in test:
 What the code does:
 
 - Initialize an Ollama client by reading the environment variable OLLAMA_API_KEY and uses it as an authorization header to create an ollama.Client instance pointing at https://ollama.com.
-- Define generate(text) by wrapping a user‐provided prompt text into the format expected by Ollama’s chat API (a single message with role ‘user’), sends it to the model gpt-oss:20b (non-streaming), and extracts the resulting content (string) from the API response.
-- Define clean_web_query(query, max_results=2)
-	•	It calls ollama.web_search(query) to get search results (each result has .content, .url, etc.).
-	•	For each result, it takes the .content (assumed Markdown or HTML), prepends the prefix P, and passes that into generate(...) to get a cleaned, summarized plain-text version.
-	•	It collects and returns a list of those cleaned summaries.
-- Test / example usage
-	•	Calls clean_web_query(...) on a sample query about “AI Consultant Mark Watson … Semantic Web.”
-	•	Prints the cleaned summaries returned.
+- Define **generate(text)** by wrapping a user‐provided prompt text into the format expected by Ollama’s chat API (a single message with role ‘user’), sends it to the model gpt-oss:20b (non-streaming), and extracts the resulting content (string) from the API response.
+- Define **clean_web_query(query, max_results=2)** by calling **ollama.web_search(query)** to get search results (each result has fields **.content**, **.url**, etc.). For each result, it takes the **.content**, prepends the prefix **P**, and passes that into **generate(...)** to get a cleaned, summarized plain-text version.	It collects and returns a list of those cleaned summaries.
+- Test/example usage:	Calls **clean_web_query(...)** on a sample query about “AI Consultant Mark Watson … Semantic Web." and prints eac the cleaned summaries for all of the returned search results.
 
 Here is some partial sample output:
 
