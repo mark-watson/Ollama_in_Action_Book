@@ -194,10 +194,8 @@ Ollama Cloud Services represent a pivotal expansion of the platform's capabiliti
 
 The key takeaways from this chapter are:
 
-A Seamless Escalation Path: Ollama Cloud provides a frictionless transition from local development to cloud-scale deployment. By maintaining consistency with the existing CLI and API, it preserves the developer experience that has been central to Ollama's success.
+- A Seamless Escalation Path: Ollama Cloud provides a frictionless transition from local development to cloud-scale deployment. By maintaining consistency with the existing CLI and API, it preserves the developer experience that has been central to Ollama's success.
+- Power and Knowledge Combined: The two core services—High-Performance Inference and the Web Search API—are symbiotically linked. The inference service provides the computational Power to run massive models, while the search API provides the real-time Knowledge to make them more accurate and relevant. Together, they enable the creation of sophisticated, knowledgeable, and state-of-the-art AI applications.
+- A Foundation of Trust: Even while embracing the cloud, Ollama has maintained its foundational commitment to user privacy. The explicit "no log, no retain" policy for cloud queries is a critical feature that builds trust and makes the service a viable option for its privacy-conscious user base.   
 
-Power and Knowledge Combined: The two core services—High-Performance Inference and the Web Search API—are symbiotically linked. The inference service provides the computational Power to run massive models, while the search API provides the real-time Knowledge to make them more accurate and relevant. Together, they enable the creation of sophisticated, knowledgeable, and state-of-the-art AI applications.
-
-A Foundation of Trust: Even while embracing the cloud, Ollama has maintained its foundational commitment to user privacy. The explicit "no log, no retain" policy for cloud queries is a critical feature that builds trust and makes the service a viable option for its privacy-conscious user base.   
-
-Looking ahead, the planned introduction of usage-based pricing signals Ollama's ambition to support a broader range of use cases, from individual developers to large-scale commercial applications. By providing a comprehensive, hybrid platform that spans from the local machine to the cloud, Ollama is solidifying its position as an indispensable tool for the entire lifecycle of AI development.
+Looking ahead, the planned introduction of usage-based pricing signals Ollama's ambition to support a broader range of use cases, from individual developers to large-scale commercial applications. By providing a comprehensive, hybrid platform that spans from the local machine to the cloud, Ollama is solidifying its position as an excellent tool and platform for the entire lifecycle of AI development.
