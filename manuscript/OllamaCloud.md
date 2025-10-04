@@ -1,6 +1,7 @@
 # Using Ollama Cloud Services
 
-TBD: why use cloud when Ollama was local only?  TBD
+Why use cloud when Ollama was designed as a local local only LLM inference provider?
+Ollama cloud is (mostly) software compatible with using Ollama locally on your laptop or server and allows you to offload workloads from your own computer as well as run open source or open weight models that are too large to fit on your computer.
 
 
 ## Ollama Cloud Services: Power and Knowledge on Demand
@@ -13,11 +14,11 @@ This evolution represents a significant shift from a "local-first" to a "hybrid-
 
 This chapter will explore the two fundamental pillars of Ollama Cloud Services. The first is High-Performance Model Inference, which provides the raw computational Power to run the largest and most capable models available. The second is the Web Search API, which endows these models with up-to-date Knowledge, allowing them to access real-time information from the internet. Together, these services represent a unified strategy to fundamentally expand what is possible within the Ollama ecosystem.
 
-High-Performance Model Inference in the Cloud
+### High-Performance Model Inference in the Cloud
 
 The primary service offered by Ollama Cloud is a high-performance inference engine for running large-scale language models. This service directly addresses the physical limitations of local hardware, providing users with on-demand access to datacenter-grade infrastructure.
 
-The Rationale: Why Move Inference to the Cloud?
+### The Rationale: Why Move Inference to the Cloud?
 
 The value proposition of moving model inference to the cloud extends beyond simply accessing more powerful hardware. It offers a collection of tangible benefits that enhance productivity, user experience, and application capability.
 
@@ -33,11 +34,12 @@ Advantages of Ollama Cloud:
 - Privacy Commitment: A primary reason developers choose Ollama is its local-first, privacy-centric design. Moving to a cloud service often raises valid concerns about data privacy and security. Ollama Cloud addresses this head-on with a "Privacy first" policy. The platform explicitly states that it does not log or retain any user queries or data, ensuring that the core principle of user privacy is maintained even when leveraging cloud infrastructure. This commitment is a strategic pillar designed to build and maintain trust with its user base, making the transition from local to cloud a more palatable choice.   
 - The service is currently available as a preview for a monthly subscription of $20. To manage capacity, hourly and daily usage limits are in place. All hardware powering the service is located in the United States. Looking forward, Ollama plans to introduce usage-based pricing, signaling an ambition to support more granular, metered consumption for enterprise and high-volume commercial applications.   
 
-Access and Interaction: A Practical Guide
+### Access and Interaction: A Practical Guide
 
 A key design principle of Ollama Cloud is its seamless integration with existing workflows. Whether interacting via the command line or a programmatic API, the process is designed to be intuitive and require minimal changes.
 
-Seamless Command-Line Integration
+#### Seamless Command-Line Integration
+
 For users of the Ollama CLI, accessing cloud models is remarkably simple. The process involves two steps:
 
 Authentication: First, you must link your local CLI to your ollama.com account. This is a one-time setup accomplished by running the following command in your terminal:
@@ -56,14 +58,46 @@ ollama run gpt-oss:120b-cloud
 
 This command instructs Ollama to automatically offload the request to the cloud service. All other command-line flags and interactions behave exactly as they would with a local model, demonstrating the elegance and simplicity of the integration.   
 
-Programmatic API Access: The Remote Host Pattern
+#### Programmatic API Access: The Remote Host Pattern
+
 For developers building applications, Ollama Cloud can be accessed programmatically through a powerful architectural abstraction known as the "Remote Host Pattern." In this model, the cloud endpoint at https://ollama.com functions as a remote instance of the Ollama server, accepting the same API calls as a local installation.   
 
 To use this pattern, you must first generate an API key from your ollama.com account settings. This key is then used for authentication in your API requests.   
 
-The following Python example demonstrates how to interact with a cloud model. Note how closely it mirrors the code for interacting with a local model:
+The following Python example in the file **hello.py** demonstrates how to interact with a cloud model. Note how closely it mirrors the code for interacting with a local model:
 
-TBD
+```python
+from ollama import Client
+import os
+
+client = Client(
+    host="https://ollama.com",
+    headers={'Authorization': os.environ.get("OLLAMA_API_KEY")}
+)
+
+def generate(text):
+    messages = [
+      {
+        'role': 'user',
+        'content': text,
+      },
+    ]
+
+    response = client.chat('gpt-oss:20b', messages=messages, stream=False)
+    return response['message']['content']
+
+print(generate("Say 'hello' in three languages."))
+```
+
+Here is sample output:
+
+```bash
+$ uv run hello.py 
+Hello (English)  
+Hola (Spanish)  
+Bonjour (French)
+```
+
 
 The critical change is in the Client constructor, where the host is set to https://ollama.com and the headers dictionary includes the Authorization token. This design makes developer code location-agnostic. The decision of whether to run a model locally or in the cloud can be externalized to a configuration file or an environment variable, allowing for the implementation of sophisticated hybrid execution logic—such as trying a local model first and falling back to the cloud if it's unavailable—without altering the core application code.   
 
@@ -90,32 +124,69 @@ The endpoint's contract is summarized below.
 | Success Response  | JSON object containing an array of results, each with `title`, `url`, and `content` fields. |
 | Failure Response  | JSON object with an `error` field describing the issue (e.g., invalid API key, malformed request, or exceeding max_results). |
 
+### Example Hybrid Search and LLM-Based Summarization of Search Results
 
-## Advanced Application: The Search-Augmented Generation (RAG) Pattern
+TBD
 
-The true power of the Web Search API is realized when it is used not as a standalone tool, but as the first step in a Retrieval-Augmented Generation (RAG) pipeline. This pattern uses the search results to provide context to a language model, enabling it to generate an informed and grounded response.
+The following exampe is in file **ollama_web_search.py**:
 
-This reveals a powerful symbiotic relationship between Ollama's two cloud services. The Web Search API can return thousands of tokens of text content from multiple sources. To make effective use of this rich context, a model with a very large context window is required. Stuffing this much information into a local model with a limited context window (e.g., 4,000 or 8,000 tokens) is often inefficient or impossible.   
+```python
+# Ensure OLLAMA_API_KEY is set  in ENV
 
-This is precisely where the High-Performance Inference service becomes essential. The cloud models are explicitly designed for this type of workload, as they "run at the full context length," which can be orders of magnitude larger than what is feasible on local hardware. For example, a model like    
+# Note: the answer.contents is nicely converted from HTML to Markdown.
 
-kimi-k2:1t-cloud is capable of handling enormous contexts, making it an ideal candidate for RAG applications. The Web Search API, therefore, creates a compelling technical reason to use the Cloud Inference service, demonstrating how the two services are designed to function as a single, powerful system.   
+import ollama
+from ollama import Client
+import os
+from pprint import pprint
 
-A conceptual blueprint for a simple RAG agent using Ollama Cloud would be:
+client = Client(
+    host="https://ollama.com",
+    headers={'Authorization': os.environ.get("OLLAMA_API_KEY")}
+)
 
-Receive User Query: Start with the user's original question (e.g., "What were the key findings from the latest UN climate report?").
+def generate(text):
+    messages = [
+      {
+        'role': 'user',
+        'content': text,
+      },
+    ]
 
-Perform Web Search: Call ollama.web_search() with the user's query to retrieve a list of relevant articles and snippets.
+    response = client.chat('gpt-oss:20b', messages=messages, stream=False)
+    return response['message']['content']
 
-Construct Context: Format the search results into a single string of context. This could be a simple concatenation of the content snippets from the API response.
+P = "Summarize the following Markdown text, returning only plain text. Markdown text:\n\n"
 
-Augment Prompt: Create a new, detailed prompt for a language model. This prompt should include the formatted context and instruct the model to answer the original user query based solely on the provided information.
+def clean_web_query(query, max_results=2):
+    ret = []
+    response = ollama.web_search(query)
+    for answer in response['results']:
+        markdown = answer.content
+        clean = generate(P + markdown)
+        #print(f"\n\n{answer.url}\n\n{answer.content}\n\n")
+        #pprint(answer)
+        ret.append(clean)
+    return ret
+   
+test = clean_web_query("AI Consultant Mark Watson works with AI, Lisp, Java, Clojure, and the Semantic Web.", max_results=1)
 
-Generate Response: Send this augmented prompt to a large-context cloud model (e.g., gpt-oss:120b-cloud) using the client.chat() method.
+for clean in test:
+    print(f"{clean}\n\n\n")
+```
 
-Return Grounded Answer: The model's response will be grounded in the real-time information retrieved from the web, resulting in an accurate, up-to-date, and non-hallucinated answer.
+TBD discuss code
 
-TBD code.. TDB
+Here is some partial sample output:
+
+```bash
+$ uv run ollama_web_search.py
+Mark Watson is a remote artificial intelligence consultant with experience dating back to 1982. He has worked on AI, machine learning, semantic web, linked data, and natural language processing, and has been using deep learning since 2015 and large language models since 2022. His customer list includes major firms such as Google, Capital One, Disney, and others. He offers “Getting Started” consulting for LLMs, with priority services at $120 per hour and non‑priority at $60 per hour.  
+
+He provides free mentoring for career and technology advice over email or 30‑minute Zoom calls. Watson’s current eBooks, available on LeanPub, cover topics like LangChain, LlamaIndex, Common Lisp, Racket, Java, and Python AI, and he frequently updates them. Older books on Clojure, Haskell, and other languages are also available.  
+
+Watson keeps his open‑source projects on GitHub in languages such as Haskell, Ruby, JavaScript, Java, Common Lisp, Python, and Smalltalk, inviting pull requests. He has hobbies that include cooking, photography, hiking, travel, and playing guitar, didgeridoo, and Indian flute.
+```
 
 ## Wrap-Up: A Unified Local and Cloud Strategy
 
