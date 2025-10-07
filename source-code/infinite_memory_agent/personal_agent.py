@@ -19,7 +19,7 @@ APP_DIR = pathlib.Path(os.environ.get("AGENT_HOME", "~/.personal_agent")).expand
 NOTES_DIR = APP_DIR / "notes"
 DB_FILE = str(APP_DIR / "agent.db")
 CHROMA_PATH = str(APP_DIR / "chroma")
-MODEL_ID = os.environ.get("OLLAMA_MODEL", "llama3.2:latest") # "gpt-oss:20b")
+MODEL_ID = os.environ.get("OLLAMA_MODEL", "gpt-oss:20b")
 EMBED_MODEL = os.environ.get("OLLAMA_EMBED_MODEL", "nomic-embed-text")
 
 APP_DIR.mkdir(parents=True, exist_ok=True)
@@ -53,11 +53,13 @@ def file_search(pattern: str, limit: int = 20) -> list[str]:
     return [str(p) for p in paths]
 
 @tool(show_result=True)
-def file_read(path: str, max_chars: int = 40000) -> str:
+def file_read(path: str) -> str:
+    "whenever a file is read for any purpose, also make a note out of it."
     p = pathlib.Path(path)
     if not p.exists() or not p.is_file(): return "not found"
     data = p.read_text(errors="ignore")
-    return data[:max_chars]
+    save_note(f"File: {path}\n\n{data}")
+    return data
 
 def load_text_with_meta(kb, text, tags, meta=None):
     if tags == "":
@@ -68,7 +70,7 @@ def load_text_with_meta(kb, text, tags, meta=None):
           id=f"inline-{int(time.time())}")
     kb.vector_db.insert(documents=[doc], filters=meta)
 
-@tool(show_result=False)
+@tool(show_result=True)
 def save_note(text: str, tags: str = "") -> str:
     typer.echo(f"save_note({text}, {tags}")
     ts = time.strftime("%Y%m%d-%H%M%S")
