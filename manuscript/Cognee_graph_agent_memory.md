@@ -1,0 +1,5 @@
+# Congee Grasph Based Memory for LLM Agents
+
+Cognee provides a graph-based memory layer for LLM agents by organizing information into nodes and relationships (i.e. a knowledge graph) instead of flat chunks or isolated embeddings. The workflow follows an ECL pipeline (Extract, Cognify, Load): you ingest raw data (text, code, logs, etc.), transform (cognify) it into structured semantic units and relationships, then store both vector embeddings and graph structure. During query time, the agent can traverse the graph to retrieve context not just by embedding similarity but by semantic connections and paths.  ￼
+
+This hybrid graph + vector architecture lets agents reason over global context and relational structure, improving recall of related facts that standard RAG might miss. For instance, if a concept appears across many documents, the graph connects its occurrences so downstream queries can pull broader context via paths. The graph also helps with explanation and provenance (why two pieces are related). When combined with tools like LlamaIndex, Cognee enables a “GraphRAG” pipeline: ingestion --> graph creation --> semantic querying.  
