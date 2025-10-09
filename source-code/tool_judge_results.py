@@ -32,7 +32,7 @@ def judge_results(original_prompt: str, llm_gen_results: str) -> Dict[str, str]:
         ]
 
         response = client.chat(
-            model="qwen2.5-coder:14b", # "llama3.2:latest",
+            model="qwen3-coder:latest", # "llama3.2:latest",
             messages=messages,
         )
 

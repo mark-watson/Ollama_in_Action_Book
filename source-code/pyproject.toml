@@ -10,6 +10,7 @@ dependencies = [
     "kuzu>=0.11.0",
     "langchain>=0.3.26",
     "langchain-community>=0.3.27",
+    "langchain-ollama>=0.3.10",
     "lxml-html-clean>=0.4.2",
     "meilisearch>=0.36.0",
     "newspaper4k>=0.9.3.1",
