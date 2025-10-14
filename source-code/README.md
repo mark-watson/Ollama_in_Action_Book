@@ -1,6 +1,8 @@
 # Ollama-book-examples
 Examples for my Ollama LLM AI book https://leanpub.com/ollama
 
+*Note: Code refactored into separate sub-directories, code cleanup, remove outdated examples. October 14, 2025.*
+
 ## Running the examples
 Most scripts assume you launch them from the repository root so paths resolve correctly:
 
