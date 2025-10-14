@@ -67,7 +67,7 @@ def evaluate_llm_conversation(
         response: GenerateResponse | Iterator[GenerateResponse] = ollama.generate(
             model=model,
             prompt=evaluation_prompt,
-            system="You are an expert AI evaluator. Provide detailed, objective assessments in JSON format."
+            system="You are an expert AI evaluator. Provide detailed, objective assessments in JSON format. Only return JSON, no other text." 
         )
 
         response_clean: str = clean_json_response(response['response'])

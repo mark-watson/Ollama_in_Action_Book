@@ -1,0 +1,12 @@
+[project]
+name = "langgraph-examples"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "duckduckgo-search>=8.1.1",
+    "langchain>=0.3.27",
+    "langchain-community>=0.3.31",
+    "langchain-ollama>=0.3.10",
+    "langgraph>=0.6.10",
+    "ollama>=0.6.0",
+]

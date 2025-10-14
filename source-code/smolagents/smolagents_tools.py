@@ -1,14 +1,22 @@
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))
+
 """
 Wrapper for book example tools for smloagents compatibility
 """
-from pathlib import Path
+
+import smolagents_compat  # noqa: F401
 
 from smolagents import tool
 from typing import Optional
 from pprint import pprint
 
-from tool_file_dir import list_directory
-from tool_file_contents import read_file_contents
+from tools.tool_file_dir import list_directory
+from tools.tool_file_contents import read_file_contents
 
 import ollama
 

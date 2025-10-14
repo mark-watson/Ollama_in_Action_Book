@@ -1,0 +1,9 @@
+[project]
+name = "reasoning"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "langchain>=0.3.27",
+    "langchain-ollama>=0.3.10",
+    "ollama>=0.6.0",
+]

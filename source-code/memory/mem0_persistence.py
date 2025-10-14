@@ -21,7 +21,7 @@ config = {
   "llm": {
     "provider": "ollama",
     "config": {
-      "model": "gemma3:4b-it-qat",
+      "model": "gemma3n:latest",
       "temperature": 0.1,
       "max_tokens": 5000
     }
@@ -58,7 +58,7 @@ def main():
     {"role":"user","content":args.prompt}
   ]
   
-  reply = call_ollama_chat("gemma3:4b-it-qat", msgs) # "gemma3:27b-it-qat", msgs)
+  reply = call_ollama_chat("gemma3n:latest", msgs) # "gemma3:27b-it-qat", msgs)
 
   convo = {"role":"assistant","content":f"QUERY: {args.prompt}\n\nANSWER:\n{reply}\n"}
   m.add(convo, user_id=USER_ID, infer=False) # set to True to use LLM to infer good inserts

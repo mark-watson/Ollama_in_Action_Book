@@ -1,9 +1,16 @@
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))
+
 """
 More complex example script demonstrating usage of judge_results to evaluate
 various LLM outputs: translations, code generation, arithmetic, etc.
 """
 
-from tool_judge_results import judge_results
+from tools.tool_judge_results import judge_results
 
 
 def separator(title: str):

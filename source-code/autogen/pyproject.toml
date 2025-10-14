@@ -1,0 +1,11 @@
+[project]
+name = "autogen"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "ag2>=0.9.10",
+    "fix-busted-json>=0.0.18",
+    "matplotlib>=3.10.7",
+    "ollama>=0.6.0",
+    "yfinance>=0.2.66",
+]

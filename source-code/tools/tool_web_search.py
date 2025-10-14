@@ -11,7 +11,7 @@ from urllib.parse import urlparse
 import html
 from ollama import chat
 import json
-from tool_summarize_text import summarize_text
+from .tool_summarize_text import summarize_text
 
 import requests
 import os

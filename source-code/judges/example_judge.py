@@ -1,8 +1,15 @@
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))
+
 """
 Example script demonstrating the usage of LLM tools
 """
 
-from tool_judge_results import judge_results
+from tools.tool_judge_results import judge_results
 
 
 
@@ -21,7 +28,6 @@ def main():
     test_prompt = "Sally is 55, John is 18, and Mary is 31. What are pairwise combinations of the absolute value of age differences?"
     test_output = "Sally and John:  55 - 18 = 37. Sally and Mary:  55 - 31 = 24. John and Mary:  31 - 18 = 13."
 
-    client = ai.Client()
     judgement = judge_results(test_prompt, test_output)
     print(f"\n** JUDGEMENT ***\n\n{judgement=}")
 

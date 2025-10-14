@@ -1,7 +1,12 @@
-from tool_file_dir import list_directory
-from tool_file_contents import read_file_contents
-from tool_web_search import uri_to_markdown
-from tool_summarize_text import summarize_text
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))
+
+from tools.tool_web_search import uri_to_markdown
+from tools.tool_summarize_text import summarize_text
 
 from pprint import pprint
 
@@ -13,35 +18,29 @@ import ollama
 
 # Map function names to function objects
 available_functions = {
-    "list_directory": list_directory,
-    "read_file_contents": read_file_contents,
     "uri_to_markdown": uri_to_markdown,
     "summarize_text": summarize_text,
 }
 
 memory_context = ""
-
 # User prompt
-user_prompt = "Read the text in the file 'data/economics.txt' file and then summarize this text."
+user_prompt = "Get the text of 'https://knowledgebooks.com' and then summarize the text from this web site."
 
 # Initiate chat with the model
 response = ollama.chat(
-    model="llama3.2:latest",
-    messages=[
-        {"role": "system", "content": f"Current conversation memory: {memory_context}"},
-        {"role": "user", "content": user_prompt},
-    ],
-    tools=[read_file_contents, summarize_text],
+    model='llama3.2:latest',
+    messages=[{"role": "user", "content": user_prompt}],
+    tools=[uri_to_markdown, summarize_text],
 )
 
-print(f"{response.message.content=}")
-
 # Process the model's response
+
+pprint(response.message.tool_calls)
 
 for tool_call in response.message.tool_calls or []:
     function_to_call = available_functions.get(tool_call.function.name)
     print(
-        f"\n***** {function_to_call=}\n\nmemory_context:\n\n{memory_context}\n\n*****\n"
+        f"\n***** {function_to_call=}\n\nmemory_context[:70]:\n\n{memory_context[:70]}\n\n*****\n"
     )
     if function_to_call:
         print()

@@ -1,3 +1,5 @@
+import smolagents_compat  # noqa: F401
+
 from smolagents.agents import ToolCallingAgent
 from smolagents import LiteLLMModel
 
