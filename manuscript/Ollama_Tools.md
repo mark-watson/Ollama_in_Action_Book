@@ -3,13 +3,26 @@
 There are several example Python tool utilities in the GitHub repository [https://github.com/mark-watson/Ollama_in_Action_Book](https://github.com/mark-watson/Ollama_in_Action_Book) in the **source-code** directory that we will use for function calling that start with the “tool” prefix:
 
 ```bash
-https://github.com/mark-watson/Ollama_in_Action_Book/source-code $ ls tool*
-tool_file_contents.py	tool_llm_eval.py	tool_web_search.py
-tool_file_dir.py	tool_sqlite.py
-tool_judge_results.py	tool_summarize_text.py
+https://github.com/mark-watson/Ollama_in_Action_Book/source-code $ ls -lh
+total 1680
+drwxr-xr-x   7 markw  staff   224B Oct 14 14:43 autogen
+drwxr-xr-x   6 markw  staff   192B Oct 14 14:43 chains
+drwxr-xr-x   4 markw  staff   128B Aug 10 16:50 data
+drwxr-xr-x   5 markw  staff   160B Oct 14 14:43 graph
+drwxr-xr-x   5 markw  staff   160B Oct 14 14:43 judges
+drwxr-xr-x   4 markw  staff   128B Oct 14 14:43 langgraph
+-rw-r--r--   1 markw  staff   107B Oct 14 14:43 Makefile
+drwxr-xr-x   5 markw  staff   160B Oct 14 14:43 memory
+drwxr-xr-x   9 markw  staff   288B Oct 14 13:49 OllamaCloud
+-rw-r--r--   1 markw  staff   754B Oct 14 14:43 pyproject.toml
+-rw-r--r--   1 markw  staff   1.1K Oct 14 14:47 README.md
+drwxr-xr-x   4 markw  staff   128B Oct 14 14:43 reasoning
+-rw-r--r--   1 markw  staff   295B Aug 11 10:00 requirements.txt
+drwxr-xr-x   4 markw  staff   128B Aug 10 16:50 short_programs
+drwxr-xr-x   7 markw  staff   224B Oct 14 14:43 smolagents
+drwxr-xr-x   4 markw  staff   128B Oct 14 14:43 tool_examples
+drwxr-xr-x  16 markw  staff   512B Oct 14 14:46 tools
 ```
-
-We postpone using the tools **tool_llm_eval.py** and **tool_judge_results.py** until the next chapter **Automatic Evaluation of LLM Results**
 
 If you have not yet done so, please clone the repository for my Ollama book examples using:
 
@@ -25,7 +38,7 @@ During runtime execution, when the LLM determines it needs to call a function, i
 
 ## Example Showing the Use of Tools Developed Later in this Chapter
 
-The source file **ollama_tools_examples.py** contains simple examples of using the tools we develop later in this chapter. We will look at example code using the tools, then at the implementation of the tools. In this examples source file we first import these tools:
+The source file **tool_examples/ollama_tools_examples.py** contains simple examples of using the tools we develop later in this chapter. We will look at example code using the tools, then at the implementation of the tools. In this examples source file we first import these tools:
 
 ```python
 from tool_file_dir import list_directory
