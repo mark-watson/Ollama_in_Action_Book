@@ -17,32 +17,16 @@ As you work through the examples here using different local models running on Ol
 
 ## Installation notes
 
-As I write this chapter on January 2, 2025, **smolagents** needs to be run with an older version of Python:
+As I updatethis chapter on October 15, 2025, **smolagents** needs to be run with Python version 3.12. For exampleL
 
 ```bash
-python3.11 -m venv venv
-source venv/bin/activate
-python3.11 -m pip install -r requirements.txt
-python3.11 smolagents_test.py
+$ uv run python3 -V               
+Python 3.12.0
+$ uv run smolagents_test.py
+$ uv run smolagents_agent_test1.py
 ```
 
-The first two lines of the **requirements.txt** file specify the smolagents specific requirements:
 
-```
-smolagents
-litellm[proxy]
-requests
-beautifulsoup4
-ollama
-langchain
-langchain-community
-langchain-ollama
-langgraph
-rdflib
-kuzu
-langchain_openai
-tabulate
-```
 
 ## Overview of the Hugging Face Smolagents Library
 
@@ -256,7 +240,7 @@ In the following output please notice that sometimes tool use fails and occasion
 The output for for the query “Which python scripts evaluate the performance of LLMs?” is:
 
 ```bash
-python smolagents_agent_test1.py 
+$ uv run smolagents_agent_test1.py 
 ╭────────────────────────────────── New run ───────────────────────────────────╮
 │                                                                              │
 │ List the Python programs in the current directory, and then tell me which    │
@@ -419,7 +403,7 @@ In this section we look at another agent processing cycle. Again, pay attention 
 It is fairly normal for tools to fail with errors and it is important that agents can observe a failure and move on to try something else.
 
 ```bash
-python smolagents_agent_test1.py 
+$ uv run smolagents_agent_test1.py 
 ╭────────────────────────────────── New run ───────────────────────────────────╮
 │                                                                              │
 │ What are the files in the current directory? Describe the current directory  │
@@ -696,7 +680,7 @@ The final analysis identified key project components including a Makefile for bu
 ## Output from Third Example: "Read the text in the file 'data/economics.txt' file and then summarize this text."
 
 ```text
-python smolagents_agent_test1.py 
+$ uv run$ smolagents_agent_test1.py 
 ╭────────────────────────────────── New run ───────────────────────────────────╮
 │                                                                              │
 │ Read the text in the file 'data/economics.txt' file and then summarize this  │

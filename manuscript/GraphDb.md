@@ -75,7 +75,8 @@ Here is the output from this example:
 
 ```bash
 $ rm -rf test_db 
-(venv) Marks-Mac-mini:OllamaExamples $ p graph_kuzu_property_example.py
+$ uv run graph_kuzu_property_example.py
+
 Node properties: [{'properties': [('name', 'STRING')], 'label': 'Movie'}, {'properties': [('name', 'STRING'), ('birthDate', 'STRING')], 'label': 'Person'}]
 Relationships properties: [{'properties': [], 'label': 'ActedIn'}]
 Relationships: ['(:Person)-[:ActedIn]->(:Movie)']

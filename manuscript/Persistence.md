@@ -23,10 +23,9 @@ One parameter you may want to change is the number of memories matched in the Ch
 ```python
 # Run this script repeatedly to build a persistent memory:
 #
-#   python mem0_persistence.py "What color is the sky?"
-#   python mem0_persistence.py "What is the last color we talked about?"
+#   uv run mem0_persistence.py "What color is the sky?"
+#   uv run mem0_persistence.py "What is the last color we talked about?"
 
-# pip install mem0ai chromadb ollama
 
 import argparse
 from mem0 import Memory
@@ -100,12 +99,12 @@ In the line **m.add(...)** set **infer=True** if you want to use the configured 
 
 ## Example Output
 
-The following output has been lightly edited, removing library deprecation warnings and extra blank lines in the output.
+The following output has been lightly edited, removing library deprecation warnings and extra blank lines in the output. As with most examples in this book we use **uv** to manage dependences and run Python code:
 
 The first time we run the test script the vector database is empty so the user query “Name two Physical laws” does not match any previous memories stored in the Chroma vector database:
 
 ```text
- $ python mem0_persistence.py "Name two Physical laws"
+ $ uv run mem0_persistence.py "Name two Physical laws"
 
 User: Name two Physical laws
 Memories:
@@ -121,7 +120,7 @@ Assistant: 1.  Newton's First Law
 Now the Chroma data store contains one memory:
 
 ```text
-$ python mem0_persistence.py "Name another different Physical law"
+$ uv run mem0_persistence.py "Name another different Physical law"
 
 User: Name another different Physical law
 Memories:
@@ -140,7 +139,7 @@ Assistant: 1.  Newton's Third Law
 Here we ask a question in a different subject domain:
 
 ```text
-$ python mem0_persistence.py "What color is the sky?" 
+$ uv run mem0_persistence.py "What color is the sky?" 
 
 User: What color is the sky?
 Memories:
@@ -164,7 +163,7 @@ Assistant: Blue.
 We check persistence:
 
 ```text
-$ python mem0_persistence.py "What is the last color we talked about?" 
+$ uv run mem0_persistence.py "What is the last color we talked about?" 
 
 User: What is the last color we talked about?
 Memories:

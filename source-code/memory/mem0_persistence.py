@@ -1,9 +1,7 @@
 # Run this script repeatedly to build a persistent memory:
 #
-#   python mem0_persistence.py "What color is the sky?"
-#   python mem0_persistence.py "What is the last color we talked about?"
-
-# pip install mem0ai chromadb ollama
+#   uv run mem0_persistence.py "What color is the sky?"
+#   uv run mem0_persistence.py "What is the last color we talked about?"
 
 import argparse
 from mem0 import Memory
