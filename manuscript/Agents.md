@@ -240,153 +240,132 @@ In the following output please notice that sometimes tool use fails and occasion
 The output for for the query “Which python scripts evaluate the performance of LLMs?” is:
 
 ```bash
-$ uv run smolagents_agent_test1.py 
-╭────────────────────────────────── New run ───────────────────────────────────╮
-│                                                                              │
-│ List the Python programs in the current directory, and then tell me which    │
-│ Python programs in the current directory evaluate the performance of LLMs?   │
-│                                                                              │
-╰─ LiteLLMModel - ollama_chat/llama3.2:latest ─────────────────────────────────╯
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Step 0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-╭──────────────────────────────────────────────────────────────────────────────╮
-│ Calling tool: 'sa_list_directory' with arguments: {'list_dots': True}        │
-╰──────────────────────────────────────────────────────────────────────────────╯
-('Contents of current directory: [Makefile, README.md, __pycache__, data, '
- 'example_chain_read_summary.py, example_chain_web_summary.py, '
- 'example_judge.py, graph_kuzu_from_text.py, graph_kuzu_property_example.py, '
- 'langgraph_agent_test.py, ollama_tools_examples.py, requirements.txt, '
- 'short_programs, smolagents_agent_test1.py, smolagents_test.py, '
- 'smolagents_tools.py, templates, tool_anti_hallucination.py, '
- 'tool_file_contents.py, tool_file_dir.py, tool_judge_results.py, '
- 'tool_llm_eval.py, tool_sqlite.py, tool_summarize_text.py, '
- 'tool_web_search.py, venv]')
-Observations: Contents of current directory: [Makefile, README.md, __pycache__, 
-data, example_chain_read_summary.py, example_chain_web_summary.py, 
-example_judge.py, graph_kuzu_from_text.py, graph_kuzu_property_example.py, 
-langgraph_agent_test.py, ollama_tools_examples.py, requirements.txt, 
-short_programs, smolagents_agent_test1.py, smolagents_test.py, 
-smolagents_tools.py, templates, tool_anti_hallucination.py, 
-tool_file_contents.py, tool_file_dir.py, tool_judge_results.py, 
-tool_llm_eval.py, tool_sqlite.py, tool_summarize_text.py, tool_web_search.py, 
-venv]
-[Step 0: Duration 4.49 seconds| Input tokens: 1,347 | Output tokens: 79]
+$ uv run smolagents_agent_test1.py
+╭───────────────────────────────────────────── New run ──────────────────────────────────────────────╮
+│                                                                                                    │
+│ What are the files in the current directory? Describe the current directory                        │
+│                                                                                                    │
+╰─ LiteLLMModel - ollama_chat/llama3.2:latest ───────────────────────────────────────────────────────╯
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Step 0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+15:54:33 - LiteLLM:INFO: utils.py:3386 - 
+LiteLLM completion() model= llama3.2:latest; provider = ollama_chat
+INFO:LiteLLM:
+LiteLLM completion() model= llama3.2:latest; provider = ollama_chat
+15:54:40 - LiteLLM:INFO: utils.py:1295 - Wrapper: Completed Call, calling success_handler
+INFO:LiteLLM:Wrapper: Completed Call, calling success_handler
+╭────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ Calling tool: 'sa_list_directory' with arguments: {}                                               │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────╯
+('Contents of current directory '
+ '/Users/markw/GITHUB/Ollama_in_Action_Book/source-code/smolagents is: '
+ '[README.md, __pycache__, pyproject.toml, smolagents_agent_test1.py, '
+ 'smolagents_compat.py, smolagents_test.py, smolagents_tools.py]')
+Observations: Contents of current directory 
+/Users/markw/GITHUB/Ollama_in_Action_Book/source-code/smolagents is: [README.md, __pycache__, 
+pyproject.toml, smolagents_agent_test1.py, smolagents_compat.py, smolagents_test.py, 
+smolagents_tools.py]
+[Step 0: Duration 6.97 seconds| Input tokens: 1,282 | Output tokens: 14]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Step 1 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+15:54:40 - LiteLLM:INFO: utils.py:3386 - 
+LiteLLM completion() model= llama3.2:latest; provider = ollama_chat
+INFO:LiteLLM:
+LiteLLM completion() model= llama3.2:latest; provider = ollama_chat
+15:54:41 - LiteLLM:INFO: utils.py:1295 - Wrapper: Completed Call, calling success_handler
+INFO:LiteLLM:Wrapper: Completed Call, calling success_handler
+╭────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ Calling tool: 'sa_summarize_directory' with arguments: {}                                          │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────╯
+lst='Contents of current directory /Users/markw/GITHUB/Ollama_in_Action_Book/source-code/smolagents is: [README.md, __pycache__, pyproject.toml, smolagents_agent_test1.py, smolagents_compat.py, smolagents_test.py, smolagents_tools.py]'
+Observations: Summary of directory:Based on the contents of the current directory, here's a summary 
+and educated guess for the major purposes of each file:
 
-...
+1. **README.md**: This is likely a Markdown-formatted README file that provides an introduction to the
+project, its purpose, and how to get started with it.
+2. **__pycache__/**: This is likely a cache directory created by Python's `pycompimport` feature. It 
+contains compiled versions of imported modules (e.g., `.cpycache`) and may be used for efficient 
+import operations in the codebase.
+3. **pyproject.toml**: This file is probably a project configuration file, similar to `package.json` 
+or `pom.xml`, which contains metadata about the project, such as its dependencies, build tools, and 
+other settings.
+4. **smolagents_agent_test1.py**: This appears to be a test script for an agent in a reinforcement 
+learning environment. The "_test1" suffix suggests that it's a specific test case or scenario being 
+tested.
+5. **smolagents_compat.py**: This file might contain compatibility code or utilities that ensure the 
+project works correctly across different Python versions, environments, or platforms.
+6. **smolagents_test.py**: Similar to `smolagents_agent_test1.py`, this is likely a test script for 
+the agent in general, rather than just one specific scenario. It may cover various aspects of the 
+agent's behavior and functionality.
+7. **smolagents_tools.py**: This file might contain additional tools or utility functions that support
+the development, testing, or deployment of the agent. The name suggests that it provides useful 
+functionality for working with agents.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Step 3 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-╭──────────────────────────────────────────────────────────────────────────────╮
-│ Calling tool: 'sa_summarize_directory' with arguments: {}                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-lst='Contents of current directory: [Makefile, README.md, __pycache__, data, example_chain_read_summary.py, example_chain_web_summary.py, example_judge.py, graph_kuzu_from_text.py, graph_kuzu_property_example.py, langgraph_agent_test.py, ollama_tools_examples.py, requirements.txt, short_programs, smolagents_agent_test1.py, smolagents_test.py, smolagents_tools.py, templates, tool_anti_hallucination.py, tool_file_contents.py, tool_file_dir.py, tool_judge_results.py, tool_llm_eval.py, tool_sqlite.py, tool_summarize_text.py, tool_web_search.py, venv]'
-response.message.content="Based on the file names provided, here's a summary of the contents and my educated guesses for their purposes:\n\n1. **Makefile**: A build script used to automate compilation, installation, or other tasks.\n2. **README.md**: A markdown file providing an introduction to the project, its purpose, and how to get started with it.\n3. **__pycache__**: This is a hidden directory generated by Python's bytecode compiler. It likely contains compiled versions of Python code in the current directory.\n4. **data**: A directory containing data used for training or testing models, simulations, or other computational tasks.\n5. **example_chain_read_summary.py**: A script that generates summaries from reading chains (e.g., text from a document). Its purpose is likely related to natural language processing (NLP) or text analysis.\n6. **example_chain_web_summary.py**: Similar to the previous one, but this script seems to be focused on web-based applications or online content summarization.\n7. **example_judge.py**: A script that evaluates judges or other aspects of a system. Its purpose might involve testing, validation, or quality control in a specific domain (e.g., AI, programming).\n8. **graph_kuzu_from_text.py**: A script that generates graphs from text data. This could be related to graph analysis, network science, or text mining.\n9. **graph_kuzu_property_example.py**: Another script related to graph generation, possibly used for demonstrating specific properties or characteristics of the generated graphs.\n10. **langgraph_agent_test.py**: A test script for a language graph agent, which likely involves machine learning, natural language processing, or other AI-related tasks.\n11. **ollama_tools_examples.py**: A file containing examples of OLLAMA (Open Language Learning with Multi-Agent) tools and their usage. This seems to be related to AI-powered language understanding and generation.\n12. **requirements.txt**: A text file specifying the dependencies required to run the project, including Python packages and other software.\n13. **short_programs**: A directory containing short programs or scripts that demonstrate specific techniques, concepts, or examples in the field of AI or programming.\n14. **smolagents_agent_test1.py**: Another test script for a small agent (SMOLAgent), which is likely involved in autonomous decision-making or other complex system simulations.\n15. **smolagents_test.py**: A general-purpose test file for SMOLAgents, used to verify their functionality and performance.\n16. **smolagents_tools.py**: A script containing tools or utilities specifically designed for working with SMOLAgents or related projects.\n17. **templates**: A directory containing templates for generating documents, reports, or other content in a specific format (e.g., LaTeX).\n18. **tool_anti_hallucination.py**: A script that addresses issues of hallucination (i.e., when an AI model provides false information) and aims to mitigate these errors.\n19. **tool_file_contents.py**, **tool_file_dir.py**, **tool_judge_results.py**, and other similar tool scripts: These tools seem to be designed for various computational tasks, such as:\n\t* `tool_file_contents.py`: Analyzing the contents of files.\n\t* `tool_file_dir.py`: Examining or manipulating directory structures.\n\t* `tool_judge_results.py`: Evaluating the performance or outcomes of a system or model.\n\n20. **tool_llm_eval.py**: A script for evaluating Large Language Models (LLMs) and their capabilities, likely involving text analysis, sentiment detection, or other NLP tasks.\n21. **tool_sqlite.py**: A tool that interacts with SQLite databases, possibly used for data storage, management, or querying.\n22. **tool_summarize_text.py**: A script designed to summarize long pieces of text into shorter versions, possibly using machine learning algorithms.\n23. **tool_web_search.py**: A tool that performs web searches or retrieves information from online sources, which could involve natural language processing (NLP) and web scraping techniques.\n\n24. **venv**: A directory generated by Python's virtual environment module, used to isolate dependencies and manage a specific Python environment for the project.\n\nKeep in mind that this is an educated guess based on common file name conventions and the context provided. The actual purposes of these files might differ depending on the specific project or domain they are related to."
-Observations: Summary of directory:Based on the file names provided, here's a 
-summary of the contents and my educated guesses for their purposes:
+Please note that these are educated guesses based on common naming conventions and practices in 
+software development. Without more context or information about the project, it's difficult to provide
+a definitive explanation for each file's purpose.
+[Step 1: Duration 7.43 seconds| Input tokens: 2,721 | Output tokens: 30]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Step 2 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+15:54:47 - LiteLLM:INFO: utils.py:3386 - 
+LiteLLM completion() model= llama3.2:latest; provider = ollama_chat
+INFO:LiteLLM:
+LiteLLM completion() model= llama3.2:latest; provider = ollama_chat
+15:54:51 - LiteLLM:INFO: utils.py:1295 - Wrapper: Completed Call, calling success_handler
+INFO:LiteLLM:Wrapper: Completed Call, calling success_handler
+╭────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ Calling tool: 'sa_read_file_contents' with arguments: {'file_path': './README.md'}                 │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────╯
+Observations: Contents of file './README.md' is:
+Running Examples using uv
 
-1. **Makefile**: A build script used to automate compilation, installation, or 
-other tasks.
-2. **README.md**: A markdown file providing an introduction to the project, its 
-purpose, and how to get started with it.
-3. **__pycache__**: This is a hidden directory generated by Python's bytecode 
-compiler. It likely contains compiled versions of Python code in the current 
-directory.
-4. **data**: A directory containing data used for training or testing models, 
-simulations, or other computational tasks.
-5. **example_chain_read_summary.py**: A script that generates summaries from 
-reading chains (e.g., text from a document). Its purpose is likely related to 
-natural language processing (NLP) or text analysis.
-6. **example_chain_web_summary.py**: Similar to the previous one, but this 
-script seems to be focused on web-based applications or online content 
-summarization.
-7. **example_judge.py**: A script that evaluates judges or other aspects of a 
-system. Its purpose might involve testing, validation, or quality control in a 
-specific domain (e.g., AI, programming).
-8. **graph_kuzu_from_text.py**: A script that generates graphs from text data. 
-This could be related to graph analysis, network science, or text mining.
-9. **graph_kuzu_property_example.py**: Another script related to graph 
-generation, possibly used for demonstrating specific properties or 
-characteristics of the generated graphs.
-10. **langgraph_agent_test.py**: A test script for a language graph agent, which
-likely involves machine learning, natural language processing, or other 
-AI-related tasks.
-11. **ollama_tools_examples.py**: A file containing examples of OLLAMA (Open 
-Language Learning with Multi-Agent) tools and their usage. This seems to be 
-related to AI-powered language understanding and generation.
-12. **requirements.txt**: A text file specifying the dependencies required to 
-run the project, including Python packages and other software.
-13. **short_programs**: A directory containing short programs or scripts that 
-demonstrate specific techniques, concepts, or examples in the field of AI or 
-programming.
-14. **smolagents_agent_test1.py**: Another test script for a small agent 
-(SMOLAgent), which is likely involved in autonomous decision-making or other 
-complex system simulations.
-15. **smolagents_test.py**: A general-purpose test file for SMOLAgents, used to 
-verify their functionality and performance.
-16. **smolagents_tools.py**: A script containing tools or utilities specifically
-designed for working with SMOLAgents or related projects.
-17. **templates**: A directory containing templates for generating documents, 
-reports, or other content in a specific format (e.g., LaTeX).
-18. **tool_anti_hallucination.py**: A script that addresses issues of 
-hallucination (i.e., when an AI model provides false information) and aims to 
-mitigate these errors.
-19. **tool_file_contents.py**, **tool_file_dir.py**, **tool_judge_results.py**, 
-and other similar tool scripts: These tools seem to be designed for various 
-computational tasks, such as:
-        * `tool_file_contents.py`: Analyzing the contents of files.
-        * `tool_file_dir.py`: Examining or manipulating directory structures.
-        * `tool_judge_results.py`: Evaluating the performance or outcomes of a 
-system or model.
+uv run smolagents_test.py
+uv run smolagents_agent_test1.py
 
-20. **tool_llm_eval.py**: A script for evaluating Large Language Models (LLMs) 
-and their capabilities, likely involving text analysis, sentiment detection, or 
-other NLP tasks.
-21. **tool_sqlite.py**: A tool that interacts with SQLite databases, possibly 
-used for data storage, management, or querying.
-22. **tool_summarize_text.py**: A script designed to summarize long pieces of 
-text into shorter versions, possibly using machine learning algorithms.
-23. **tool_web_search.py**: A tool that performs web searches or retrieves 
-information from online sources, which could involve natural language processing
-(NLP) and web scraping techniques.
-
-24. **venv**: A directory generated by Python's virtual environment module, used
-to isolate dependencies and manage a specific Python environment for the 
-project.
-
-Keep in mind that this is an educated guess based on common file name 
-conventions and the context provided. The actual purposes of these files might 
-differ depending on the specific project or domain they are related to.
-[Step 3: Duration 21.53 seconds| Input tokens: 6,779 | Output tokens: 133]
-
-...
-
+[Step 2: Duration 3.64 seconds| Input tokens: 4,634 | Output tokens: 51]
 Reached max iterations.
-Final answer: [{'id': '9630af1b-498f-4604-ab1b-e4139607cb02', 'type': 
-'function', 'function': {'name': 'sa_list_directory', 'arguments': {'list_dots':
-True}}}, {'id': '2143745d-5ec1-4711-8813-228398bf36f8', 'type': 'function', 
-'function': {'name': 'sa_summarize_directory', 'arguments': {}}}]
+15:54:51 - LiteLLM:INFO: utils.py:3386 - 
+LiteLLM completion() model= llama3.2:latest; provider = ollama_chat
+INFO:LiteLLM:
+LiteLLM completion() model= llama3.2:latest; provider = ollama_chat
+15:54:56 - LiteLLM:INFO: utils.py:1295 - Wrapper: Completed Call, calling success_handler
+INFO:LiteLLM:Wrapper: Completed Call, calling success_handler
+Final answer: The files in the current directory are:
 
-...
+- `README.md`
+- `__pycache__`
+- `pyproject.toml`
+- `smolagents_agent_test1.py`
+- `smolagents_compat.py`
+- `smolagents_test.py`
+- `smolagents_tools.py`
 
-The Python programs in the current directory are:
-1. example_chain_read_summary.py
-2. example_chain_web_summary.py
-3. example_judge.py
-4. graph_kuzu_from_text.py
-5. graph_kuzu_property_example.py
-6. langgraph_agent_test.py
-7. ollama_tools_examples.py
-8. tool_anti_hallucination.py
-9. tool_file_contents.py
-10. tool_file_dir.py
-11. tool_judge_results.py
-12. tool_llm_eval.py
-13. tool_summarize_text.py
-14. smolagents_agent_test1.py
-15. smolagents_test.py
+The current directory is a Python project named "smolagents" that appears to be focused on 
+reinforcement learning and agent development. The directory contains various files, including:
 
-These Python programs evaluate the performance of LLMs:
-1. tool_anti_hallucination.py
-2. tool_llm_eval.py
-3. tool_summarize_text.py
+* A README file that provides an introduction to the project
+* A cache directory (`__pycache__`) generated by Python's `pycompimport` feature
+* A project configuration file (`pyproject.toml`)
+* Test scripts for agents in reinforcement learning environments (e.g., `smolagents_agent_test1.py` 
+and `smolagents_test.py`)
+* Compatibility code or utilities (`smolagents_compat.py`)
+* Additional tools or utility functions (`smolagents_tools.py`)
+[Step 3: Duration 0.00 seconds| Input tokens: 5,509 | Output tokens: 245]
+The files in the current directory are:
+
+- `README.md`
+- `__pycache__`
+- `pyproject.toml`
+- `smolagents_agent_test1.py`
+- `smolagents_compat.py`
+- `smolagents_test.py`
+- `smolagents_tools.py`
+
+The current directory is a Python project named "smolagents" that appears to be focused on reinforcement learning and agent development. The directory contains various files, including:
+
+* A README file that provides an introduction to the project
+* A cache directory (`__pycache__`) generated by Python's `pycompimport` feature
+* A project configuration file (`pyproject.toml`)
+* Test scripts for agents in reinforcement learning environments (e.g., `smolagents_agent_test1.py` and `smolagents_test.py`)
+* Compatibility code or utilities (`smolagents_compat.py`)
+* Additional tools or utility functions (`smolagents_tools.py`)
 ```
 
 This is a lot of debug output to list in a book but I want you, dear reader, to get a feeling for the output generated by tools becomes the data for an again **to observe** before determining the next step in a plan to process.
@@ -396,280 +375,33 @@ This output shows the execution of the example smolagent-based agent that analyz
 The agent successfully identified all Python programs in the directory and specifically highlighted three files that evaluate LLM performance: tool_anti_hallucination.py (which checks for false information generation), tool_llm_eval.py (for general LLM evaluation), and tool_summarize_text.py (which likely tests LLM summarization capabilities). The execution includes detailed step-by-step logging, showing input/output tokens and duration for each step, demonstrating the agent's methodical approach to file analysis and classification.
 
 
-### Output from the Second example: “What are the files in the current directory? Describe the current directory"
+### Output from the Second example: Simple Tool Use: smolagents_test.py
 
 In this section we look at another agent processing cycle. Again, pay attention to the output of tools, and whether the agent can observe tool output and make sense of it (often the agent can’t!)
 
 It is fairly normal for tools to fail with errors and it is important that agents can observe a failure and move on to try something else.
 
 ```bash
-$ uv run smolagents_agent_test1.py 
-╭────────────────────────────────── New run ───────────────────────────────────╮
-│                                                                              │
-│ What are the files in the current directory? Describe the current directory  │
-│                                                                              │
-╰─ LiteLLMModel - ollama_chat/llama3.2:latest ─────────────────────────────────╯
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Step 0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-╭──────────────────────────────────────────────────────────────────────────────╮
-│ Calling tool: 'sa_list_directory' with arguments: {'list_dots': True}        │
-╰──────────────────────────────────────────────────────────────────────────────╯
-('Contents of current directory: [Makefile, README.md, __pycache__, data, '
- 'example_chain_read_summary.py, example_chain_web_summary.py, '
- 'example_judge.py, graph_kuzu_from_text.py, graph_kuzu_property_example.py, '
- 'langgraph_agent_test.py, ollama_tools_examples.py, requirements.txt, '
- 'short_programs, smolagents_agent_test1.py, smolagents_test.py, '
- 'smolagents_tools.py, templates, tool_anti_hallucination.py, '
- 'tool_file_contents.py, tool_file_dir.py, tool_judge_results.py, '
- 'tool_llm_eval.py, tool_sqlite.py, tool_summarize_text.py, '
- 'tool_web_search.py, venv]')
-Observations: Contents of current directory: [Makefile, README.md, __pycache__, 
-data, example_chain_read_summary.py, example_chain_web_summary.py, 
-example_judge.py, graph_kuzu_from_text.py, graph_kuzu_property_example.py, 
-langgraph_agent_test.py, ollama_tools_examples.py, requirements.txt, 
-short_programs, smolagents_agent_test1.py, smolagents_test.py, 
-smolagents_tools.py, templates, tool_anti_hallucination.py, 
-tool_file_contents.py, tool_file_dir.py, tool_judge_results.py, 
-tool_llm_eval.py, tool_sqlite.py, tool_summarize_text.py, tool_web_search.py, 
-venv]
-[Step 0: Duration 3.06 seconds| Input tokens: 1,332 | Output tokens: 19]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Step 1 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-╭──────────────────────────────────────────────────────────────────────────────╮
-│ Calling tool: 'sa_list_directory' with arguments: {'list_dots': True}        │
-╰──────────────────────────────────────────────────────────────────────────────╯
-('Contents of current directory: [Makefile, README.md, __pycache__, data, '
- 'example_chain_read_summary.py, example_chain_web_summary.py, '
- 'example_judge.py, graph_kuzu_from_text.py, graph_kuzu_property_example.py, '
- 'langgraph_agent_test.py, ollama_tools_examples.py, requirements.txt, '
- 'short_programs, smolagents_agent_test1.py, smolagents_test.py, '
- 'smolagents_tools.py, templates, tool_anti_hallucination.py, '
- 'tool_file_contents.py, tool_file_dir.py, tool_judge_results.py, '
- 'tool_llm_eval.py, tool_sqlite.py, tool_summarize_text.py, '
- 'tool_web_search.py, venv]')
-Observations: Contents of current directory: [Makefile, README.md, __pycache__, 
-data, example_chain_read_summary.py, example_chain_web_summary.py, 
-example_judge.py, graph_kuzu_from_text.py, graph_kuzu_property_example.py, 
-langgraph_agent_test.py, ollama_tools_examples.py, requirements.txt, 
-short_programs, smolagents_agent_test1.py, smolagents_test.py, 
-smolagents_tools.py, templates, tool_anti_hallucination.py, 
-tool_file_contents.py, tool_file_dir.py, tool_judge_results.py, 
-tool_llm_eval.py, tool_sqlite.py, tool_summarize_text.py, tool_web_search.py, 
-venv]
-[Step 1: Duration 1.58 seconds| Input tokens: 2,900 | Output tokens: 38]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Step 2 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-╭──────────────────────────────────────────────────────────────────────────────╮
-│ Calling tool: 'sa_summarize_directory' with arguments: {}                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-lst='Contents of current directory: [Makefile, README.md, __pycache__, data, example_chain_read_summary.py, example_chain_web_summary.py, example_judge.py, graph_kuzu_from_text.py, graph_kuzu_property_example.py, langgraph_agent_test.py, ollama_tools_examples.py, requirements.txt, short_programs, smolagents_agent_test1.py, smolagents_test.py, smolagents_tools.py, templates, tool_anti_hallucination.py, tool_file_contents.py, tool_file_dir.py, tool_judge_results.py, tool_llm_eval.py, tool_sqlite.py, tool_summarize_text.py, tool_web_search.py, venv]'
-response.message.content="Based on the provided list of files in the current directory, here's a summary and an educated guess about the major purposes of each file:\n\n1. **Makefile**: A build script for automating compilation and other tasks.\n\n2. **README.md**: A document providing information about the project, its purpose, usage, and installation instructions.\n\n3. **__pycache__** (hidden directory): Cache files generated by Python's compiler to speed up importing modules.\n\n4. **data**: Directory containing data used for testing or training models.\n\n5. **example_chain_read_summary.py**, **example_chain_web_summary.py**: Example scripts demonstrating how to summarize text from chain-related input, possibly related to natural language processing (NLP) or machine learning (ML).\n\n6. **example_judge.py**: An example script for evaluating the performance of a model or algorithm.\n\n7. **graph_kuzu_from_text.py**, **graph_kuzu_property_example.py**: Scripts that manipulate graphs generated from text data using the Kuzu graph library, possibly used in NLP or ML applications.\n\n8. **langgraph_agent_test.py**: A test file for a language graph agent, which is likely an AI model designed to process and understand languages.\n\n9. **ollama_tools_examples.py**: An example script showcasing how to use Ollama, a tool for generating text data.\n\n10. **requirements.txt**: A list of dependencies required to run the project, including libraries and tools.\n\n11. **short_programs**: Directory containing short programs or scripts that demonstrate specific tasks or algorithms.\n\n12. **smolagents_agent_test1.py**, **smolagents_test.py**, **smolagents_tools.py**: Test files for a small agents framework, possibly an AI model designed to make decisions in complex environments.\n\n13. **templates**: A directory containing templates used for generating text or code in certain contexts.\n\n14. **tool_anti_hallucination.py**, **tool_file_contents.py**, **tool_file_dir.py**, **tool_judge_results.py**, **tool_llm_eval.py**, **tool_sqlite.py**, **tool_summarize_text.py**, **tool_web_search.py**: Various tool scripts that provide functionality for tasks like:\n   - Anti-hallucination (removing fake data from generated text)\n   - Evaluating file contents\n   - File directory manipulation\n   - Judging results\n   - LLM (Large Language Model) evaluation\n   - SQLite database interactions\n   - Text summarization\n   - Web search functionality\n\n15. **venv**: A virtual environment script used to create and manage a separate Python environment for the project.\n\nThese are educated guesses based on common naming conventions and directory structures in software development projects, particularly those related to AI, NLP, and machine learning."
-Observations: Summary of directory:Based on the provided list of files in the 
-current directory, here's a summary and an educated guess about the major 
-purposes of each file:
-
-1. **Makefile**: A build script for automating compilation and other tasks.
-
-2. **README.md**: A document providing information about the project, its 
-purpose, usage, and installation instructions.
-
-3. **__pycache__** (hidden directory): Cache files generated by Python's 
-compiler to speed up importing modules.
-
-4. **data**: Directory containing data used for testing or training models.
-
-5. **example_chain_read_summary.py**, **example_chain_web_summary.py**: Example 
-scripts demonstrating how to summarize text from chain-related input, possibly 
-related to natural language processing (NLP) or machine learning (ML).
-
-6. **example_judge.py**: An example script for evaluating the performance of a 
-model or algorithm.
-
-7. **graph_kuzu_from_text.py**, **graph_kuzu_property_example.py**: Scripts that
-manipulate graphs generated from text data using the Kuzu graph library, 
-possibly used in NLP or ML applications.
-
-8. **langgraph_agent_test.py**: A test file for a language graph agent, which is
-likely an AI model designed to process and understand languages.
-
-9. **ollama_tools_examples.py**: An example script showcasing how to use Ollama,
-a tool for generating text data.
-
-10. **requirements.txt**: A list of dependencies required to run the project, 
-including libraries and tools.
-
-11. **short_programs**: Directory containing short programs or scripts that 
-demonstrate specific tasks or algorithms.
-
-12. **smolagents_agent_test1.py**, **smolagents_test.py**, 
-**smolagents_tools.py**: Test files for a small agents framework, possibly an AI
-model designed to make decisions in complex environments.
-
-13. **templates**: A directory containing templates used for generating text or 
-code in certain contexts.
-
-14. **tool_anti_hallucination.py**, **tool_file_contents.py**, 
-**tool_file_dir.py**, **tool_judge_results.py**, **tool_llm_eval.py**, 
-**tool_sqlite.py**, **tool_summarize_text.py**, **tool_web_search.py**: Various 
-tool scripts that provide functionality for tasks like:
-   - Anti-hallucination (removing fake data from generated text)
-   - Evaluating file contents
-   - File directory manipulation
-   - Judging results
-   - LLM (Large Language Model) evaluation
-   - SQLite database interactions
-   - Text summarization
-   - Web search functionality
-
-15. **venv**: A virtual environment script used to create and manage a separate 
-Python environment for the project.
-
-These are educated guesses based on common naming conventions and directory 
-structures in software development projects, particularly those related to AI, 
-NLP, and machine learning.
-[Step 2: Duration 13.79 seconds| Input tokens: 4,706 | Output tokens: 54]
-
-...
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Step 5 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-╭──────────────────────────────────────────────────────────────────────────────╮
-│ Calling tool: 'sa_summarize_directory' with arguments: {}                    │
-╰──────────────────────────────────────────────────────────────────────────────╯
-lst='Contents of current directory: [Makefile, README.md, __pycache__, data, example_chain_read_summary.py, example_chain_web_summary.py, example_judge.py, graph_kuzu_from_text.py, graph_kuzu_property_example.py, langgraph_agent_test.py, ollama_tools_examples.py, requirements.txt, short_programs, smolagents_agent_test1.py, smolagents_test.py, smolagents_tools.py, templates, tool_anti_hallucination.py, tool_file_contents.py, tool_file_dir.py, tool_judge_results.py, tool_llm_eval.py, tool_sqlite.py, tool_summarize_text.py, tool_web_search.py, venv]'
-response.message.content="Based on the names and locations of the files in the current directory, here's a summary of their contents and a educated guess about their purposes:\n\n1. **Makefile**: A build script for automating tasks such as compiling or running code. It likely contains instructions on how to build and install the project.\n\n2. **README.md**: A Markdown document that serves as an introduction or guide for users of the project. It may include information on how to use the tools, dependencies required, and contributing to the project.\n\n3. **__pycache__**: An empty directory that contains compiled Python files (`.cpyc` and `.pyo`) generated by the PyInstaller build process for a Python application.\n\n4. **data**: A directory containing data used for testing or training purposes. It might include CSV, JSON, or other formats of datasets.\n\n5. **example_chain_read_summary.py** and **example_chain_web_summary.py**: Example scripts demonstrating how to use tools related to text summarization, possibly for natural language processing (NLP) tasks.\n\n6. **example_judge.py**: An example script that likely demonstrates the usage of a judging tool or an evaluation framework for the project.\n\n7. **graph_kuzu_from_text.py** and **graph_kuzu_property_example.py**: Scripts related to graph-based tools, possibly using Kuzu, a library for graph algorithms. These scripts might illustrate how to work with graphs in Python.\n\n8. **langgraph_agent_test.py**: A script that tests the functionality of a language graph agent.\n\n9. **ollama_tools_examples.py**: An example script demonstrating the usage of OLLAMA tools ( likely Open-source Language Model-based Agent).\n\n10. **requirements.txt**: A text file listing the dependencies required to run the project, such as Python packages or other software libraries.\n\n11. **short_programs**: A directory containing short programs for demonstration purposes.\n\n12. **smolagents_agent_test1.py** and **smolagents_test.py**: Scripts related to testing SmoLA (Small Model-based Language Agent), a library that allows the use of small models in language agents.\n\n13. **smolagents_tools.py**: An example script demonstrating the usage of SmoLA tools.\n\n14. **templates**: A directory containing template files used for generating documentation or other text output.\n\n15. **tool_anti_hallucination.py**, **tool_file_contents.py**, **tool_file_dir.py**, **tool_judge_results.py**, and **tool_llm_eval.py**: Scripts related to various tools, possibly used for data analysis, model evaluation, or language understanding tasks.\n\n16. **tool_sqlite.py** and **tool_summarize_text.py**: Scripts that interface with SQLite databases or are used for text summarization.\n\n17. **tool_web_search.py** and **tool_web_search.py** ( likely a duplicate): These scripts might be related to web search-related tools, possibly interfacing with APIs or web scraping techniques.\n\n18. **venv**: A directory containing the virtual environment configuration files created by `python -m venv` command, allowing the project to isolate its dependencies from the system Python environment.\n\nNote: The exact purposes of some files may vary depending on the specific implementation and requirements of the project. This summary is based on common file name conventions and their typical associations with certain tasks or tools in the field of NLP and agent-based systems."
-Observations: Summary of directory:Based on the names and locations of the files
-in the current directory, here's a summary of their contents and a educated 
-guess about their purposes:
-
-1. **Makefile**: A build script for automating tasks such as compiling or 
-running code. It likely contains instructions on how to build and install the 
-project.
-
-2. **README.md**: A Markdown document that serves as an introduction or guide 
-for users of the project. It may include information on how to use the tools, 
-dependencies required, and contributing to the project.
-
-3. **__pycache__**: An empty directory that contains compiled Python files 
-(`.cpyc` and `.pyo`) generated by the PyInstaller build process for a Python 
-application.
-
-4. **data**: A directory containing data used for testing or training purposes. 
-It might include CSV, JSON, or other formats of datasets.
-
-5. **example_chain_read_summary.py** and **example_chain_web_summary.py**: 
-Example scripts demonstrating how to use tools related to text summarization, 
-possibly for natural language processing (NLP) tasks.
-
-6. **example_judge.py**: An example script that likely demonstrates the usage of
-a judging tool or an evaluation framework for the project.
-
-7. **graph_kuzu_from_text.py** and **graph_kuzu_property_example.py**: Scripts 
-related to graph-based tools, possibly using Kuzu, a library for graph 
-algorithms. These scripts might illustrate how to work with graphs in Python.
-
-8. **langgraph_agent_test.py**: A script that tests the functionality of a 
-language graph agent.
-
-9. **ollama_tools_examples.py**: An example script demonstrating the usage of 
-OLLAMA tools ( likely Open-source Language Model-based Agent).
-
-10. **requirements.txt**: A text file listing the dependencies required to run 
-the project, such as Python packages or other software libraries.
-
-11. **short_programs**: A directory containing short programs for demonstration 
-purposes.
-
-12. **smolagents_agent_test1.py** and **smolagents_test.py**: Scripts related to
-testing SmoLA (Small Model-based Language Agent), a library that allows the use 
-of small models in language agents.
-
-13. **smolagents_tools.py**: An example script demonstrating the usage of SmoLA 
-tools.
-
-14. **templates**: A directory containing template files used for generating 
-documentation or other text output.
-
-15. **tool_anti_hallucination.py**, **tool_file_contents.py**, 
-**tool_file_dir.py**, **tool_judge_results.py**, and **tool_llm_eval.py**: 
-Scripts related to various tools, possibly used for data analysis, model 
-evaluation, or language understanding tasks.
-
-16. **tool_sqlite.py** and **tool_summarize_text.py**: Scripts that interface 
-with SQLite databases or are used for text summarization.
-
-17. **tool_web_search.py** and **tool_web_search.py** ( likely a duplicate): 
-These scripts might be related to web search-related tools, possibly interfacing
-with APIs or web scraping techniques.
-
-18. **venv**: A directory containing the virtual environment configuration files
-created by `python -m venv` command, allowing the project to isolate its 
-dependencies from the system Python environment.
-
-Note: The exact purposes of some files may vary depending on the specific 
-implementation and requirements of the project. This summary is based on common 
-file name conventions and their typical associations with certain tasks or tools
-in the field of NLP and agent-based systems.
-[Step 5: Duration 18.89 seconds| Input tokens: 10,726 | Output tokens: 102]
-Reached max iterations.
-Final answer: The current directory appears to be a repository for various 
-projects related to natural language processing (NLP) and agent-based systems. 
-The directory contains a mix of files and subdirectories that suggest it is used
-for building, testing, and demonstrating NLP-related tools and applications.
-
-Here are some key observations about the files in the current directory:
-
-1. **Makefile**: A build script for automating tasks such as compiling or 
-running code.
-2. **README.md**: A Markdown document serving as an introduction to the project.
-3. **__pycache__**: An empty directory containing compiled Python files 
-generated by the PyInstaller build process.
-
-4. **data**: A directory containing data used for testing or training purposes, 
-including CSV, JSON, and other formats of datasets.
-
-5. **Example scripts**: Various example scripts demonstrating how to use tools 
-related to text summarization, judging, graph-based algorithms, language graph 
-agents, and more.
-
-6. **Requirements file**: A text file listing the dependencies required to run 
-the project.
-
-7. **Short programs**: A directory containing short programs for demonstration 
-purposes.
-
-8. **Testing scripts**: Scripts related to testing various NLP-related tools and
-libraries, including SmoLA and OLLAMA.
-
-9. **Tool scripts**: Various scripts related to data analysis, model evaluation,
-language understanding, web search, and other tasks.
-
-10. **Virtual environment**: A directory containing the virtual environment 
-configuration files created by `python -m venv` command.
-
-The current directory seems to be a collection of example projects, tools, and 
-scripts for working with NLP-related technologies. It is likely used as a 
-demonstration or testing environment for exploring new ideas and techniques.
-[Step 6: Duration 0.00 seconds| Input tokens: 12,332 | Output tokens: 442]
-The current directory appears to be a repository for various projects related to natural language processing (NLP) and agent-based systems. The directory contains a mix of files and subdirectories that suggest it is used for building, testing, and demonstrating NLP-related tools and applications.
-
-Here are some key observations about the files in the current directory:
-
-1. **Makefile**: A build script for automating tasks such as compiling or running code.
-2. **README.md**: A Markdown document serving as an introduction to the project.
-3. **__pycache__**: An empty directory containing compiled Python files generated by the PyInstaller build process.
-
-4. **data**: A directory containing data used for testing or training purposes, including CSV, JSON, and other formats of datasets.
-
-5. **Example scripts**: Various example scripts demonstrating how to use tools related to text summarization, judging, graph-based algorithms, language graph agents, and more.
-
-6. **Requirements file**: A text file listing the dependencies required to run the project.
-
-7. **Short programs**: A directory containing short programs for demonstration purposes.
-
-8. **Testing scripts**: Scripts related to testing various NLP-related tools and libraries, including SmoLA and OLLAMA.
-
-9. **Tool scripts**: Various scripts related to data analysis, model evaluation, language understanding, web search, and other tasks.
-
-10. **Virtual environment**: A directory containing the virtual environment configuration files created by `python -m venv` command.
-
-The current directory seems to be a collection of example projects, tools, and scripts for working with NLP-related technologies. It is likely used as a demonstration or testing environment for exploring new ideas and techniques.
+$ uv run smolagents_test.py 
+╭───────────────────────────────────────────── New run ──────────────────────────────────────────────╮
+│                                                                                                    │
+│ What's the weather like in Paris?                                                                  │
+│                                                                                                    │
+╰─ LiteLLMModel - ollama_chat/llama3.2:latest ───────────────────────────────────────────────────────╯
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Step 0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+╭────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ Calling tool: 'get_weather' with arguments: {'celsius': False, 'location': 'Paris'}                │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────╯
+Observations: The weather is UNGODLY with torrential rains and temperatures below -10°C
+[Step 0: Duration 3.01 seconds| Input tokens: 1,170 | Output tokens: 23]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Step 1 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+╭────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ Calling tool: 'final_answer' with arguments: {'answer': 'The weather in Paris is unpleasant, with  │
+│ torrential rains and very cold temperatures.'}                                                     │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────╯
+Final answer: The weather in Paris is unpleasant, with torrential rains and very cold temperatures.
+[Step 1: Duration 1.35 seconds| Input tokens: 2,463 | Output tokens: 55]
+The weather in Paris is unpleasant, with torrential rains and very cold temperatures.
 ```
 
 This output shows the agent performing a directory analysis using multiple tool calls, primarily utilizing **sa_list_directory** and **sa_summarize_directory** to examine the contents of the current working directory. The analysis revealed a Python-based project focused on natural language processing (NLP) and agent-based systems, containing various components including example scripts, testing files, and utility tools. The agent executed multiple iterations to gather and process information about the directory structure, with each step taking between 1.58 to 18.89 seconds to complete.

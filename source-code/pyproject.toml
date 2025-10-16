@@ -35,4 +35,5 @@ members = [
     "smolagents",
     "tool_examples",
     "tools",
+    "PydanticToolUse",
 ]
