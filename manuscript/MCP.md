@@ -1,5 +1,7 @@
 # Examples Using the Model Context Protocol(MCP)
 
+WORK IN PROGRESS - NOT IN BOOK
+
 We have seen examples of tool use with Ollama. Here we broaden this discusion to describing and using the Model Context Protocol(MCP). We will use two simple MCP series: Search summaries using DuckDuckGo and and a custom research service for events in Flagstaff Arizona.
 
 ## The Context Problem (Optional Background Material)
