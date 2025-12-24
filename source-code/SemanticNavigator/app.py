@@ -11,128 +11,132 @@ client = Client(
 MODEL = "gpt-oss:20b-cloud"
 
 def extract_entities_and_links(text: str):
-  """Uses an LLM to extract entities and links."""
-  print("\n* Entering extraction function *\n")
+  """Uses an LLM to extract entities and links from text."""
+  print("\n* Entered extract_entities_and_links function *\n")
 
   system_message = (
-    "You are an expert in information extraction. From the "
-    "given text, extract entities of type 'person', 'place', "
-    "and 'organization'. Also, identify links between these "
-    "entities. Output as a single JSON object with two keys: "
+    "You are an expert in information extraction. From the given "
+    "text, extract entities of type 'person', 'place', and "
+    "'organization'. Also, identify links between these entities. "
+    "Output the result as a single JSON object with two keys: "
     "'entities' and 'links'.\n"
-    "- 'entities': list of {name, type}\n"
-    "- 'links': list of {source, target, relationship}\n"
-    "Example:\n"
-    "{\"entities\": [{\"name\": \"A\", \"type\": \"person\"}], "
-    "\"links\": [{\"source\": \"A\", \"target\": \"B\", "
-    "\"relationship\": \"works for\"}]}"
+    "- 'entities': list of objects, each with 'name' and 'type'.\n"
+    "- 'links': list of objects, each with 'source', 'target', "
+    "and 'relationship'.\n"
+    "Example output format:\n"
+    "{\n"
+    "  \"entities\": [{\"name\": \"A\", \"type\": \"person\"}],\n"
+    "  \"links\": [{\"source\": \"A\", \"target\": \"B\", "
+    "\"relationship\": \"works for\"}]\n"
+    "}"
   )
-
+  
   messages = [
     {"role": "system", "content": system_message},
     {"role": "user", "content": text}
   ]
 
   try:
-    res = client.chat(MODEL, messages=messages, stream=False)
-    content = res['message']['content'].strip()
+    response = client.chat(MODEL, messages=messages, stream=False)
+    content = response['message']['content'].strip()
     
-    # Strip markdown code blocks
+    # Strip Markdown formatting if present
     if content.startswith("```json"):
       content = content[7:-3].strip()
     elif content.startswith("```"):
       content = content[3:-3].strip()
 
-    print("\n* Raw output: *\n", content)
+    print("\n* Raw model output: *\n", content)
     data = json.loads(content)
-    ents = data.get("entities", [])
-    lnks = data.get("links", [])
+    entities = data.get("entities", [])
+    links = data.get("links", [])
     
-    return ents, lnks, ents, lnks
+    return entities, links, entities, links
 
   except Exception as e:
-    print(f"Error: {e}")
-    raise gr.Error(f"Extraction failed: {e}")
+    print(f"Error during extraction: {e}")
+    raise gr.Error(f"Extraction failed. Details: {e}")
 
 def chat_responder(message, history, entities, links):
-  """Answers questions based on extracted data."""
-  print("\n* Entering chat function *\n")
+  """Streaming chatbot using extracted entities as context."""
+  print("\n* Entered chat_responder function *\n")
 
   if not entities and not links:
-    sys_msg = (
-      "You are a helpful assistant. The user has not "
-      "extracted info yet. Ask them to paste text and "
-      "click 'Extract' first."
+    system_message = (
+      "You are a helpful-but-skeptical assistant. The user has "
+      "not extracted any information yet. Politely ask them to "
+      "paste text above and click 'Extract' first."
     )
   else:
-    sys_msg = (
-      "Use ONLY this info to answer. If not found, say so.\n"
+    system_message = (
+      "You are a helpful assistant. Use ONLY the following extracted "
+      "entities and links to answer questions. If the answer is "
+      "not in this data, state that clearly.\n"
       f"Entities: {json.dumps(entities, indent=2)}\n"
       f"Links: {json.dumps(links, indent=2)}"
     )
 
-  msgs = [{"role": "system", "content": sys_msg}]
-  msgs.extend(history)
-  msgs.append({"role": "user", "content": message})
+  messages = [{"role": "system", "content": system_message}]
+  messages.extend(history)
+  messages.append({"role": "user", "content": message})
 
   response_text = ""
-  new_hist = history + [
+  new_history = history + [
     {"role": "user", "content": message},
     {"role": "assistant", "content": ""}
   ]
 
-  yield new_hist, ""
+  yield new_history, ""
 
-  for part in client.chat(MODEL, messages=msgs, stream=True):
+  for part in client.chat(MODEL, messages=messages, stream=True):
     if 'message' in part and 'content' in part['message']:
       token = part['message']['content']
       response_text += token
-      new_hist[-1]["content"] = response_text
-      yield new_hist, ""
+      new_history[-1]["content"] = response_text
+      yield new_history, ""
 
 # --- Gradio UI ---
 with gr.Blocks(fill_height=True) as demo:
   gr.Markdown(
     "# Semantic Navigator\n"
-    "Extract entities and chat with your data."
+    "Paste text, extract relationships, and chat with your data."
   )
   
   with gr.Row(scale=1):
     with gr.Column(scale=1):
       text_input = gr.Textbox(
-        scale=1,
-        lines=10,
-        label="Input Text", 
-        placeholder="Paste text here..."
+        scale=1, lines=15, label="Text for Analysis", 
+        placeholder="Paste paragraphs of text here to analyze..."
       )
-      extract_btn = gr.Button("Extract", variant="primary")
+      extract_button = gr.Button("Extract Entities & Links", 
+                                 variant="primary")
     with gr.Column(scale=1):
-      ents_out = gr.JSON(label="Entities", max_height="20vh")
-      lnks_out = gr.JSON(label="Links", max_height="20vh")
+      entities_out = gr.JSON(label="Entities", max_height="20vh")
+      links_out = gr.JSON(label="Links", max_height="20vh")
 
   gr.Markdown("---")
 
   with gr.Column(scale=1):
-    chat_disp = gr.Chatbot(label="Chat", max_height="20vh")
-    chat_in = gr.Textbox(
-      show_label=False, 
-      placeholder="Ask a question...", 
-      lines=1
+    chatbot_display = gr.Chatbot(label="Chat Context", 
+                                 max_height="20vh")
+    chat_input = gr.Textbox(
+      show_label=False, lines=1,
+      placeholder="Ask a question about the extracted data..."
     )
 
-  e_state = gr.State()
-  l_state = gr.State()
+  entity_state = gr.State()
+  link_state = gr.State()
 
-  extract_btn.click(
+  extract_button.click(
     fn=extract_entities_and_links,
     inputs=[text_input],
-    outputs=[ents_out, lnks_out, e_state, l_state]
+    outputs=[entities_out, links_out, entity_state, link_state]
   )
 
-  chat_in.submit(
+  chat_input.submit(
     fn=chat_responder,
-    inputs=[chat_in, chat_disp, e_state, l_state],
-    outputs=[chat_disp, chat_in]
+    inputs=[chat_input, chatbot_display, entity_state, link_state],
+    outputs=[chatbot_display, chat_input]
   )
 
 if __name__ == "__main__":

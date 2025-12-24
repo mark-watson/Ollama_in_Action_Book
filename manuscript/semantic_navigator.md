@@ -1,3 +1,20 @@
+# Semantic Navigator App Using Gradio
+
+TBD
+
+## Overview or Semantic Web and Linked Data
+
+## Design Goals for the Semantic Navigator App
+
+TBD
+
+![Screenshot of Semantic Navigator App](images/sm_screenshot.jpg)
+
+## Implementation of the Semantic Navigator App Using Gradio
+
+TBD
+
+```python
 import gradio as gr
 import os
 import json
@@ -141,3 +158,4 @@ with gr.Blocks(fill_height=True) as demo:
 
 if __name__ == "__main__":
   demo.launch()
+```
