@@ -1,6 +1,6 @@
 # Semantic Navigator App Using Gradio
 
-TBD
+Even though thosi is a book on using local LLMs I thought, dear reader, that it would be fun to add a complete web app example that is also an effective application of LLMs to perform natural language processing (NLP) tasks that a decade ago would have required a major development effort and would not have been as effective as the LLM-based solution we use here.
 
 ## Overview or Semantic Web and Linked Data
 
