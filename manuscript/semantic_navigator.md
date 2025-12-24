@@ -1,6 +1,6 @@
 # Semantic Navigator App Using Gradio
 
-Even though thosi is a book on using local LLMs I thought, dear reader, that it would be fun to add a complete web app example that is also an effective application of LLMs to perform natural language processing (NLP) tasks that a decade ago would have required a major development effort and would not have been as effective as the LLM-based solution we use here.
+Even though this is a book on using local LLMs I thought, dear reader, that it would be fun to add a complete web app example that is also an effective application of LLMs to perform natural language processing (NLP) tasks that a decade ago would have required a major development effort and would not have been as effective as the LLM-based solution we use here.
 
 ## Overview or Semantic Web and Linked Data
 
@@ -10,12 +10,16 @@ At the heart of this transformation is a specific technology stack designed to c
 
 Linked Data provides the practical set of best practices required to realize this vision. It is governed by four core principles: using URIs as names for things, using HTTP URIs so people can look up those names, providing useful information via standards like RDF or SPARQL (a semantic query language), and including links to other URIs to facilitate discovery. When data is published according to these rules, it becomes part of the Linked Open Data (LOD) Cloud, a vast network of interlinked datasets, such as DBpedia or GeoNames, that allows machines to traverse the web of knowledge much like humans browse a web of pages.
 
-In other books I have written there are examples of transforming text into RDF data (e.g., [https://leanpub.com/lovinglisp](https://leanpub.com/lovinglisp) and [https://leanpub.com/racket-ai](https://leanpub.com/racket-ai)). In this chapter we identify entities and JSON, storing this extracted data in JSON rather than RDF.
+In other books I have written examples of transforming text into RDF data (e.g., [https://leanpub.com/lovinglisp](https://leanpub.com/lovinglisp) and [https://leanpub.com/racket-ai](https://leanpub.com/racket-ai)). In this chapter we identify entities and relationships between entities, storing this extracted data in JSON rather than RDF.
 
 
 ## Design Goals for the Semantic Navigator App
 
 We develop an example web app that allows a user to paste in large blocks of text and extracts entities and relations between the identified entities.
+
+I originally wrote this web app for the Huggingface Spaces platform using a Huggingface inference endpoint. I later modified the web app to run locally on my laptop using Ollama.
+
+This web app can easily be hosted on a Linux server, using a tool like **nginx** to serve as a public endpoint on port 80.
 
 Before looking at the code, here is what the *finished product* looks like:
 
@@ -25,7 +29,7 @@ Before looking at the code, here is what the *finished product* looks like:
 
 We will use the Gradio toolkit for creating interactive web apps. You can find detailed documentation here: [https://www.gradio.app/docs](https://www.gradio.app/docs).
 
-The following program demonstrates the construction of a "Semantic Navigator," a web application built with Gradio that leverages Large Language Models (LLMs) to transform unstructured prose into structured knowledge. By integrating the ollama Python client, the application connects to a high-performance model to perform two distinct natural language processing tasks: named entity recognition (NER) and relationship extraction. The code implements a dual-stage workflow where users first submit raw text for analysis—triggering a system prompt that enforces a strict JSON schema for identifying persons, places, and organizations—and then interact with that data through a context-aware chatbot. This implementation showcases critical modern AI patterns, including the handling of structured LLM outputs, state management within a reactive UI, and the use of RAG-lite (Retrieval-Augmented Generation) techniques to constrain assistant responses to a specific, extracted dataset.
+The following program demonstrates the construction of a "Semantic Navigator," a web application built with Gradio that leverages Large Language Models (LLMs) to transform unstructured prose into structured knowledge. By using the Ollama Python client library, the application connects to a high-performance model to perform two distinct natural language processing tasks: named entity recognition (NER) and relationship extraction. The code implements a dual-stage workflow where users first submit raw text for analysis—triggering a system prompt that enforces a strict JSON schema for identifying persons, places, and organizations—and then interact with that data through a context-aware chatbot. This implementation showcases critical modern AI patterns, including the handling of structured LLM outputs, state management within a reactive UI, and the use of RAG-lite (Retrieval-Augmented Generation) techniques to constrain assistant responses to a specific, extracted dataset.
 
 ```python
 import gradio as gr
@@ -173,6 +177,6 @@ if __name__ == "__main__":
   demo.launch()
 ```
 
-The core logic of this application resides in the **extract_entities_and_links** function, which serves as the bridge between raw text and structured data. It utilizes a system message to "program" the LLM to act as an information extraction expert, ensuring that the response is returned as a JSON object containing distinct lists for entities and their corresponding relationships. To ensure robustness, this function includes logic to strip common Markdown code block wrappers that models often include in their responses, and it employs internal state management via gr.State to persist this structured data across multiple user interactions without cluttering the visible interface.
+The core logic of this application resides in the **extract_entities_and_links** function, which serves as the bridge between raw text and structured data. It utilizes a system message to "program" the LLM to act as an information extraction expert, ensuring that the response is returned as a JSON object containing distinct lists for entities and their corresponding relationships. To ensure robustness, this function includes logic to strip common Markdown code block wrappers that models often include in their responses, and it employs internal state management via **gr.State** to persist this structured data across multiple user interactions without cluttering the visible interface.
 
-The interactivity is rounded out by the **chat_responder** function which demonstrates a streaming chatbot implementation that utilizes the previously extracted entities as its primary source of truth. By dynamically injecting the JSON data into the system prompt, the assistant is constrained to answer questions based strictly on the provided context, effectively preventing hallucinations of outside information. The Gradio layout organizes these complex interactions into a clean, two-column interface, utilizing a combination of gr.Blocks, gr.Row, and gr.Column to provide a professional user experience that balances data input, structured visualization, and conversational exploration. This web app is responsive and adjusts for mobiel web browsers.
+The interactivity is rounded out by the **chat_responder** function which demonstrates a streaming chatbot implementation that utilizes the previously extracted entities as its primary source of truth. By dynamically injecting the JSON data into the system prompt, the assistant is constrained to answer questions based strictly on the provided context, effectively preventing hallucinations of outside information. The Gradio layout organizes these complex interactions into a clean, two-column interface, utilizing a combination of **gr.Blocks**, **gr.Row**, and **gr.Column** to provide a professional user experience that balances data input, structured visualization, and conversational exploration. This web app is responsive and adjusts for mobile web browsers.
