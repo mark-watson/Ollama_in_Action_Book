@@ -8,7 +8,7 @@ APIs like Anthropic's Claude and Google's Gemini support an explicit form of API
 
 Ollama automatically caches the KV state of the prompt processing. If you send a request that shares a prefix with a previous request (and the model is still loaded in memory), Ollama will reuse the computation for the shared part.
 
-You must keep the model loaded. By default, Ollama unloads models after 5 minutes. Set the keep_alive parameter to -1 (infinite) or a long duration (e.g., 60m) in your API call or environment variables to prevent the cache from being wiped.
+You must keep the model loaded. By default, Ollama unloads models after 5 minutes. Set the **keep_alive parameter** to -1 (infinite) or a long duration (e.g., 60m) in your API call or environment variables to prevent the cache from being wiped.
 
 You cannot explicitly "mark" checkpoints like Anthropic. It relies on exact prefix matching and the internal slot management of the underlying llama.cpp engine.
 
@@ -25,9 +25,9 @@ Ollama sees that Request B starts with the exact same token sequence as Request 
 
 However, to ensure this actually happens in practice, you must adhere to three specific rules:
 
-- The keep_alive Rule (Most Critical): Ollama unloads the model (and dumps the cache) from VRAM after 5 minutes of inactivity by default.
-- The "Exact Match" Rule: The prefix must be identical byte-for-byte. For example, if you have a dynamic timestamp in your system prompt (e.g., "Current time: 12:01" vs "12:02"), the prefix changes. The cache logic sees a mismatch at the timestamp token and recomputes everything following it. You need to move any changing variables or text out of the system prompt, or place changing data at the end of the system prompt.
-- The num_ctx Window: You must manually set the context window size if your "few pages of text" exceeds the default (usually 2048 or 4096 tokens). The workaround is to send "num_ctx": 8192 (or however much you need) in the options block of every request. If you change the context size between requests, Ollama may treat it as a different model configuration and reload/recompute.
+- The keep_alive rule (Most Critical): Ollama unloads the model (and dumps the cache) from VRAM after 5 minutes of inactivity by default.
+- The "Exact Match" rule: The prefix must be identical byte-for-byte. For example, if you have a dynamic timestamp in your system prompt (e.g., "Current time: 12:01" vs "12:02"), the prefix changes. The cache logic sees a mismatch at the timestamp token and recomputes everything following it. You need to move any changing variables or text out of the system prompt, or at least place changing data at the end of the system prompt.
+- The **num_ctx** window: You must manually set the context window size if your "few pages of text" exceeds the default (usually 2048 or 4096 tokens). The workaround is to send "num_ctx": 8192 (or however much you need) in the options block of every request. If you change the context size between requests, Ollama may treat it as a different model configuration and reload/recompute.
 
 Here is a sample JSON request payload:
 
@@ -45,7 +45,7 @@ Here is a sample JSON request payload:
 }
 ```
 
-Ollama does not currently return an accurate count of just the tokens processed in a request when using caching. We can however use the return value of "prompt_eval_duration" to measure caching effectiveness. We will look at a Python example next.
+Ollama does not currently return an accurate count of just the tokens processed in a request when using caching. We can however use the return value of "prompt_eval_duration" to measure caching effectiveness. We will now look at a Python example.
 
 ## Example Code to Show Caching Effectiveness
 
@@ -62,7 +62,7 @@ from pathlib import Path
 static_context = Path("../data/economics.txt").read_text(encoding="utf-8")
 
 # CONFIGURATION
-MODEL = "qwen3:1.7b"  # Ensure you have this model pulled (ollama pull qwen2.5)
+MODEL = "qwen3:1.7b"  # Ensure you have this model pulled (ollama pull qwen3:1.7b)
 OLLAMA_URL = "http://localhost:11434/api/generate"
 
 def query_ollama(prompt, label):
@@ -154,7 +154,6 @@ Speedup Factor:   17.7x FASTER
 
 In the current version of Ollama's API, the prompt_eval_count field reports the Total Context Size of the request you sent, not the number of new calculations the GPU performed. Ignore  **prompt_eval_count** for checking cache hits. It just confirms you sent the same amount of text.
 
+## Wrap Up for Prompt Caching
 
-
-
-
+You don't need to optimize initially for prompt caching but it is a good idea to keeping caching in mind for applications where, for example, you have a large system prompt containing several example data transformation (perhaps text to JSON) and then what to run a large number of data transformation inference calls. You might make your data transformation applications an order of magnitude faster.

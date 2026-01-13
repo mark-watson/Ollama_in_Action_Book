@@ -8,7 +8,7 @@ from pathlib import Path
 static_context = Path("../data/economics.txt").read_text(encoding="utf-8")
 
 # CONFIGURATION
-MODEL = "qwen3:1.7b"  # Ensure you have this model pulled (ollama pull qwen2.5)
+MODEL = "qwen3:1.7b"  # Ensure you have this model pulled (ollama pull qwen3:1.7b)
 OLLAMA_URL = "http://localhost:11434/api/generate"
 
 def query_ollama(prompt, label):
