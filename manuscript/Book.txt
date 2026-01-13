@@ -5,6 +5,7 @@ Short_examples.md
 Ollama_Tools.md
 Local_Search_Tool.md
 LLmEvals.md
+PromptCaching.md
 Agents.md
 AgentsPython.md
 Agno_Agents.md
