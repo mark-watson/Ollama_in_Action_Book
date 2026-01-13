@@ -156,4 +156,4 @@ In the current version of Ollama's API, the prompt_eval_count field reports the 
 
 ## Wrap Up for Prompt Caching
 
-You don't need to optimize initially for prompt caching but it is a good idea to keeping caching in mind for applications where, for example, you have a large system prompt containing several example data transformation (perhaps text to JSON) and then what to run a large number of data transformation inference calls. You might make your data transformation applications an order of magnitude faster.
+You don't need to optimize initially for prompt caching but it is a good idea to keeping caching in mind for applications where, for example, you have a large system prompt containing several example data transformation (perhaps text to JSON) and then want to run a large number of data transformation inference calls. You might make your data transformation applications an order of magnitude faster.
