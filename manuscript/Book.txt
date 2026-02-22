@@ -16,4 +16,5 @@ OpenCodex.md
 Persistence.md
 OllamaCloud.md
 semantic_navigator.md
+zvec_RAG.md
 WrapUp.md
