@@ -1,4 +1,4 @@
-# Advanced RAG Using zvec Vector Datastore and Local Model
+# RAG Using zvec Vector Datastore and Local Model
 
 The **zvec** library implements a lightweight, lightning-fast, in-process vector database. Allibaba released **zvec** in February 2026. We will see how to use **zvec** and then build a high performance RAG system. We will use the tiny model **qwen3:1.7b** as part of the application.
 
@@ -168,6 +168,43 @@ def ask_ollama(question, context_chunks):
 
 Function **ask_ollama** uses stateless execution: The /api/chat call sets "stream": False and does not maintain a conversation history array across loop iterations. This makes it a pure Q&A interface rather than a continuous chat, ensuring each answer is cleanly tied to a fresh zvec retrieval.
 
-### Execution
+## Example Run
 
 To run the pipeline, ensure the Ollama daemon is running locally on port 11434 and that both models (embeddinggemma and qwen3:1.7b) have been pulled. Place your .txt files in the **../data** directory and execute the script. The system will build the index and immediately drop you into a REPL loop for interactive querying.
+
+Here is an example run:
+
+```bash
+ $ uv run app.py 
+Using CPython 3.12.12
+Creating virtual environment at: .venv
+Installed 2 packages in 31ms
+Building zvec index from text files …
+Indexed 9 chunks from ../data
+
+RAG chat ready  (model: qwen3:1.7b)
+Type your question, or 'quit' to exit.
+
+You> who says economics is bullshit?
+
+Assistant> The context mentions Pauli Blendergast, an economist at the University of Krampton Ohio, who is noted for stating that "economics is bullshit." No other individuals are explicitly cited in the provided text.
+
+You> what procedures are performed in chemistry labs?
+
+Assistant> The provided context does not contain information about procedures performed in chemistry labs. It focuses on economic concepts, microeconomics, macroeconomics, and related topics, but does not mention chemistry or laboratory procedures.
+
+You> how do microeconomics and macroeconomics differ?
+
+Assistant> Microeconomics focuses on individual agents (e.g., households, firms) and specific markets, analyzing decisions like pricing, resource allocation, and consumer behavior. Macroeconomics examines the entire economy, addressing broader issues such as unemployment, inflation, growth, and fiscal/money policy. While microeconomics deals with "how" resources are used, macroeconomics focuses on "what" the economy produces and "how collectively" it functions.
+
+You> quit
+Goodbye!
+```
+
+Dear reader, notice that there was no information in the indexed text to answer the second example query and this program correctly refused to hallucinate (or make up) an answer.
+
+## Wrap Up for RAG Using zvec Vector Datastore and Local Model
+
+In this chapter, we built a completely offline, privacy-preserving RAG architecture by bridging Alibaba’s recently released in-process vector database, zvec, with local Ollama inference. By intentionally minimizing external dependencies and utilizing a strictly typed, schema-driven datastore, we eliminated the network overhead and deployment bloat typical of client-server vector databases. The fixed-size overlapping chunking strategy, combined with the 768-dimensional embeddinggemma model, ensures high-fidelity semantic retrieval. Simultaneously, the compact qwen3:1.7b model demonstrates that a heavily constrained, prompt-engineered generation phase can effectively synthesize retrieved context without hallucination.
+
+The resulting pipeline serves as a robust, lightweight foundation for edge-deployable AI applications. Because the entire storage and inference stack executes locally within the same process, the pattern is exceptionally portable, fast, and secure. Moving forward, this baseline implementation can be extended to handle more complex retrieval requirements, such as integrating dynamic semantic chunking, implementing Reciprocal Rank Fusion (RRF) for hybrid multi-vector queries, or introducing multi-turn conversational memory. Ultimately, combining embedded vector storage with small-parameter LLMs proves that high-performance, domain-specific RAG does not require massive cloud infrastructure.
