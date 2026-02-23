@@ -2,7 +2,7 @@
 
 The **zvec** library implements a lightweight, lightning-fast, in-process vector database. Allibaba released **zvec** in February 2026. We will see how to use **zvec** and then build a high performance RAG system. We will use the tiny model **qwen3:1.7b** as part of the application.
 
-Note: the source code for this example can be found in **Ollama_in_Action_Book/source-code/RAG_zvec/app.py**. Not all the code in this file is listed here.
+Note: The source code for this example can be found in **Ollama_in_Action_Book/source-code/RAG_zvec/app.py**. Not all the code in this file is listed here.
 
 ## Introduction and Architecture
 
@@ -56,8 +56,8 @@ The **zvec** integration demonstrates a strictly typed, schema-driven approach t
 
 Analysis of code:
 
--- Dimensionality Matching: The vector schema is hardcoded to 768 dimensions (FP32), which strictly matches the output tensor of the embeddinggemma model. Any change to the embedding model in the configuration must be accompanied by a corresponding update to this schema.
--- Storage Path: The database is initialized locally at ./zvec_example. The implementation includes a defensive teardown (shutil.rmtree) of existing databases on startup. This is excellent for testing and iterative development, though destructive in a persistent production environment.
+- Dimensionality Matching: The vector schema is hardcoded to 768 dimensions (FP32), which strictly matches the output tensor of the embeddinggemma model. Any change to the embedding model in the configuration must be accompanied by a corresponding update to this schema.
+- Storage Path: The database is initialized locally at ./zvec_example. The implementation includes a defensive teardown (shutil.rmtree) of existing databases on startup. This is excellent for testing and iterative development, though destructive in a persistent production environment.
 
 The following function builds the index using an embedding model for the local Ollama server:
 
@@ -106,6 +106,7 @@ def build_index():
 ```
 
 This function **build_index** initializes a local vector database and populates it with document embeddings. Specifically, it executes four main operations:
+
 - Schema & Storage Initialization: Defines a strict schema for zvec (768-dimensional FP32 vectors and a string metadata field) and destructively recreates the local database directory (./zvec_example).
 - File Traversal: Recursively walks a configured target directory (config["data_dir"]) to locate specific file types.
 - Transformation & Embedding: Reads each file, splits it into overlapping chunks, and retrieves the vector embedding for each chunk via an external call (get_embedding).
