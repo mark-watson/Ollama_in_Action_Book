@@ -38,4 +38,5 @@ members = [
     "PydanticToolUse",
     "MCP",
     "MCP_experiments",
+    "new_tool_examples",
 ]
