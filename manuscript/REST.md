@@ -1,5 +1,7 @@
 # Ollama REST APIs
 
+** not yet in book **
+
 The Ollama REST API provides a straightforward way to integrate local LLM capabilities into applications, offering both Ollama-specific endpoints and OpenAI-compatible interfaces. The native Ollama API is accessible at http://localhost:11434/api and supports core operations like /generate for text generation, /chat for conversational interactions, and /embeddings for vector representations. Basic usage involves sending POST requests with JSON payloads containing the model name and prompt. For example, generating text is as simple as sending a POST to /api/generate with {"model": "llama3.2:latest", "prompt": "Your text here"}.
 
 Ollama's OpenAI-compatible API interface allows developers to use their existing OpenAI-based code with minimal modifications. By pointing your OpenAI client library to http://localhost:11434/v1 instead of OpenAI's endpoints, you can often use the same code structure and request formats. The compatible endpoints include /chat/completions, /completions, and /embeddings, matching OpenAI's API structure. This compatibility layer is particularly valuable for teams transitioning from cloud-based to local LLM deployments, as it reduces the refactoring effort significantly.

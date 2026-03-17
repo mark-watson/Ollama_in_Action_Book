@@ -2,6 +2,8 @@
 
 Prompt caching serves as an optimization for the computationally expensive "prefill" phase of LLM inference, specifically targeting the attention mechanism. When a standard transformer processes a prompt, it must linearly project input tokens into Query (Q), Key (K), and Value (V) tensors and compute the attention scores. In a stateless setup, this entire forward pass is recomputed for every request, even if 90% of the prompt (e.g., a massive system instruction or RAG context) remains static. Prompt caching persists the K and V tensors (the "KV Cache") of these static prefixes in GPU high-bandwidth memory (HBM) or tiered storage, allowing the model to effectively "resume" inference from a checkpoint rather than starting from zero.
 
+The examples for this chapter are in the directory **prompt_caching**.
+
 APIs like Anthropic's Claude and Google's Gemini support an explicit form of API calls to enable and use caching. As we will see, caching is different in Ollama.
 
 ## Caching is Implicit with Ollama
@@ -55,15 +57,31 @@ Here is a Python script that demonstrates the caching behavior. It sends a "heav
 import requests
 import time
 import json
-
+import os
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ollama_config import get_model
 
 # 1. Create a "Heavy" System Prompt (simulating your few pages of text)
 static_context = Path("../data/economics.txt").read_text(encoding="utf-8")
 
-# CONFIGURATION
-MODEL = "qwen3:1.7b"  # Ensure you have this model pulled (ollama pull qwen3:1.7b)
-OLLAMA_URL = "http://localhost:11434/api/generate"
+# CONFIGURATION — model from env var; URL switches between local and cloud
+MODEL = get_model()
+
+if os.environ.get("CLOUD"):
+    OLLAMA_URL = "https://ollama.com/api/generate"
+    HEADERS = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + os.environ.get("OLLAMA_API_KEY", ""),
+    }
+else:
+    OLLAMA_URL = "http://localhost:11434/api/generate"
+    HEADERS = {"Content-Type": "application/json"}
 
 def query_ollama(prompt, label):
     payload = {
@@ -77,7 +95,7 @@ def query_ollama(prompt, label):
     }
     
     start_time = time.time()
-    response = requests.post(OLLAMA_URL, json=payload)
+    response = requests.post(OLLAMA_URL, json=payload, headers=HEADERS)
     end_time = time.time()
     
     if response.status_code == 200:
@@ -116,6 +134,10 @@ if time_a > 0 and time_b > 0:
         print("✅ SUCCESS: Cache hit verified!")
     else:
         print("❌ FAILURE: Cache likely missed. Check 'keep_alive' or exact string matching.")
+
+        
+print("\nIn the current version of Ollama's API, the prompt_eval_count field reports the Total Context Size of the request you sent, not the number of new calculations the GPU performed.")
+print("Ignore: prompt_eval_count (for checking cache hits). It just confirms you sent the same amount of text.\n")
 ```
 
 What to look for in the output:

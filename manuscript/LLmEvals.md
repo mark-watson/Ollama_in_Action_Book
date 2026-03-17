@@ -2,6 +2,8 @@
 
 As Large Language Models (LLMs) become increasingly integrated into production systems and workflows, the ability to systematically evaluate their performance becomes crucial. While qualitative assessment of LLM outputs remains important, organizations need robust, quantitative methods to measure and compare model performance across different prompts, use cases, and deployment scenarios. This has led to the development of specialized tools and frameworks designed specifically for LLM evaluation.
 
+The examples listed here can be found in the directory **Ollama_in_Action_Book/source-code/tools**.
+
 The evaluation of LLM outputs presents unique challenges that set it apart from traditional natural language processing metrics. Unlike straightforward classification or translation tasks, LLM responses often require assessment across multiple dimensions, including factual accuracy, relevance, coherence, creativity, and adherence to specified formats or constraints. Furthermore, the stochastic nature of LLM outputs means that the same prompt can generate different responses across multiple runs, necessitating evaluation methods that can account for this variability.
 
 Modern LLM evaluation tools address these challenges through a combination of automated metrics, human-in-the-loop validation, and specialized frameworks for prompt testing and response analysis. These tools can help developers and researchers understand how well their prompts perform, identify potential failure modes, and optimize prompt engineering strategies. By providing quantitative insights into LLM performance, these evaluation tools enable more informed decisions about model selection, prompt design, and system architecture in LLM-powered applications.
@@ -24,15 +26,22 @@ The following listing shows the tool **tool_judge_results.py**:
 Judge results from LLM generation from prompts
 """
 
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from typing import Optional, Dict, Any
 from pathlib import Path
 import json
 import re
 from pprint import pprint
 
-import ollama
+from ollama_config import get_client, get_model
 
-client = ollama.Client()
+client = get_client()
 
 def judge_results(original_prompt: str, llm_gen_results: str) -> Dict[str, str]:
     """
@@ -54,7 +63,7 @@ def judge_results(original_prompt: str, llm_gen_results: str) -> Dict[str, str]:
         ]
 
         response = client.chat(
-            model="qwen2.5-coder:14b", # "llama3.2:latest",
+            model=get_model(),
             messages=messages,
         )
 
@@ -162,25 +171,38 @@ The following listing shows the tool utility **tool_llm_eval.py**:
 
 ```python
 import json
+import sys
+from pathlib import Path
 from typing import List, Dict, Optional, Iterator
-import ollama
-from ollama import GenerateResponse
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ollama_config import get_client, get_model
 
 
 def clean_json_response(response: str) -> str:
     """
-    Cleans the response string by removing markdown code blocks and other formatting
+    Cleans the response string by removing markdown code blocks, think tags, and other formatting
     """
+    # Strip reasoning model <think>...</think> blocks
+    if "</think>" in response:
+        response = response.split("</think>", 1)[-1]
     # Remove markdown code block indicators
-    response = response.replace("json", "").replace("```", "")
+    response = response.replace("```json", "").replace("```", "")
     # Strip whitespace
     response = response.strip()
+    # Extract JSON object if there's leading non-JSON text
+    start = response.find("{")
+    if start > 0:
+        response = response[start:]
     return response
 
 def evaluate_llm_conversation(
     chat_history: List[Dict[str, str]],
     evaluation_criteria: Optional[List[str]] = None,
-    model: str = "llama3.1" # older model that is good at generating JSON
+    model: str = None  # defaults to get_model() when None
 ) -> Dict[str, any]:
     """
     Evaluates a chat history using Ollama to run the evaluation model.
@@ -188,11 +210,14 @@ def evaluate_llm_conversation(
     Args:
         chat_history: List of dictionaries containing the conversation
         evaluation_criteria: Optional list of specific criteria to evaluate
-        model: Ollama model to use for evaluation
+        model: Ollama model to use for evaluation (defaults to MODEL env var or nemotron-3-nano:4b)
 
     Returns:
         Dictionary containing evaluation results
     """
+    if model is None:
+        model = get_model()
+
     if evaluation_criteria is None:
         evaluation_criteria = [
             "Response accuracy",
@@ -226,11 +251,11 @@ def evaluate_llm_conversation(
     """
 
     try:
-        # Get evaluation from Ollama
-        response: GenerateResponse | Iterator[GenerateResponse] = ollama.generate(
+        client = get_client()
+        response = client.generate(
             model=model,
             prompt=evaluation_prompt,
-            system="You are an expert AI evaluator. Provide detailed, objective assessments in JSON format."
+            system="You are an expert AI evaluator. Provide detailed, objective assessments in JSON format. Only return JSON, no other text."
         )
 
         response_clean: str = clean_json_response(response['response'])
@@ -288,8 +313,8 @@ The main function **evaluate_llm_conversation** uses these steps:
 ### Sample Output
 
 ```
-$ cd OllamaEx 
-$ python tool_llm_eval.py 
+$ cd tools 
+$ uv run tool_llm_eval.py 
 {
   "evaluation": {
     "responseAccuracy": {
@@ -372,12 +397,18 @@ Here is the tool **tool_anti_hallucination.py** that uses this template:
 Provides functions detecting hallucinations by other LLMs
 """
 
-from typing import Optional, Dict, Any
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from typing import Optional, Dict, Any
 from pprint import pprint
 import json
-from ollama import ChatResponse
-from ollama import chat
+
+from ollama_config import get_client, get_model
 
 def read_anti_hallucination_template() -> str:
     """
@@ -408,8 +439,9 @@ def detect_hallucination(user_input: str, context: str, output: str) -> str:
      }
     """
     prompt = TEMPLATE.format(input=user_input, context=context, output=output)
-    response: ChatResponse = chat(
-        model="llama3.2:latest",
+    client = get_client()
+    response = client.chat(
+        model=get_model(),
         messages=[
             {"role": "system", "content": prompt},
             {"role": "user", "content": output},
@@ -444,6 +476,7 @@ def main():
     print(f"\n** JUDGEMENT ***\n")
     pprint(judgement)
 
+
 if __name__ == "__main__":
     try:
         main()
@@ -458,7 +491,7 @@ The implementation includes type hints and error handling, particularly for JSON
 The output looks something like this:
 
 ```bash
-python /Users/markw/GITHUB/OllamaExamples/tool_anti_hallucination.py 
+$ uv run tool_anti_hallucination.py 
 
 ==================================================
  Detect hallucination from a LLM

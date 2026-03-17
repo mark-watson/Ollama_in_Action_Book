@@ -1,60 +1,45 @@
 # Reasoning with Large Language Models
 
-The Chinese tech conglomerate Alibaba's MarcoPolo Team released the advanced **Marco-o1** model at the end of 2024.
+The Chinese tech conglomerate Alibaba's MarcoPolo Team released the advanced **Qwen3.5** models in 2026.
 
-This model is designed to excel in open-ended problem-solving and complex reasoning tasks, going beyond traditional AI models that focus on structured tasks like coding or math. For reference the repository for the model is [https://github.com/AIDC-AI/Marco-o1](https://github.com/AIDC-AI/Marco-o1). From the README in this repository: “Marco-o1 Large Language Model (LLM) is powered by Chain-of-Thought (CoT) fine-tuning, Monte Carlo Tree Search (MCTS), reflection mechanisms, and innovative reasoning strategies—optimized for complex real-world problem-solving tasks.”
+#### Note: As I update this chapter in March 2026, there are many more small reasoning models that you can also use with Ollama; for example: **qwen3.5:2b**, **qwen3.5:4b**, **qwen3.5:9b**, **nemotron-3-nano:4b**, etc. 
 
+These reasoning models are designed to excel in open-ended problem-solving and complex reasoning tasks, tool use, going beyond traditional AI models that focus on structured tasks like coding or math.
 ## A Simple Example
 
-I very mush enjoy experimenting with **Marco-o1** model in the Ollama REPL. Let’s start with a very simple prompt that most models can solve. Here, we want to see the structure of for **Marco-o1**’s CoT (chain of thought) process:
+I very mush enjoy experimenting with NVIDIA’s **nemotron-3-nano:4b** model in the Ollama REPL. Let’s start with a very simple prompt that most models can solve. Here, we want to see the structure of for **Marco-o1**’s CoT (chain of thought) process:
 
 ```text
-$ ollama run marco-o1:latest
->>> Roger has 5 tennis balls. He finds 2 more tennis balls. How many tennis balls does Roger have now? Let's 
-... think this through step by step.
-<Thought>
-Alright, let's figure out how many tennis balls Roger has now. He starts with 5 tennis balls and then 
-finds 2 more. So, I need to add these two numbers together to find the total number of tennis balls he 
-has.
+ $ ollama run nemotron-3-nano:4b
+>>> Roger has 5 tennis balls. He finds 2 more tennis balls. How many tennis balls does Roger have n
+... ow?
+Thinking...
+We need to answer the simple addition: 5 + 2 = 7. Provide answer.
+...done thinking.
 
-First, I'll consider the initial amount: Roger has 5 tennis balls. That's straightforward. Now, he 
-finds 2 more tennis balls. To find out how many tennis balls he has in total, I should add these two 
-quantities together.
+Roger now has **7 tennis balls**.
 
-So, adding 5 and 2 gives me 7. But wait, let me double-check to make sure I didn't make a mistake. If 
-Roger starts with 5 tennis balls and finds 2 more, the calculation should be simple addition. 
+>>> Roger has 5 tennis balls. He finds 2 more tennis balls. How many tennis balls does Roger have n
+... ow? Show your thinking process.
+Thinking...
+We need to answer with thinking process. So we can explain: start with 5, find 2 more => add 
+=> 5+2=7. Provide reasoning.
+...done thinking.
 
-Another way to look at it is by using objects or visual aids. Imagine Roger has 5 tennis balls in one 
-pile. Then he finds 2 more tennis balls and adds them to his existing pile. Counting all together: 1, 
-2, 3, 4, 5 (that's the initial 5), and then 6, 7 (adding the 2 found ones). So, that confirms it's 7 
-tennis balls in total.
+**Thinking process**
 
-Is there any other way to approach this? Maybe using a number line. Starting at 5 on the number line, 
-moving forward by 2 would land me at 7. That also shows that Roger has 7 tennis balls now.
+1. **Identify the initial amount** – Roger starts with 5 tennis balls.  
+2. **Determine what “finds 2 more” means** – Adding to the existing number.  
+3. **Perform the addition** – \(5 + 2 = 7\).  
+4. **Interpret the result** – After adding the 2 balls, Roger has 7 tennis balls in total.
 
-Alternatively, thinking about it in terms of multiplication: if he finds twice as many tennis balls as 
-he initially had, but since he only found 2 more, which is less than double, the total should be just a 
-simple addition, not multiplication. So, sticking with addition makes sense here.
-
-Also, considering real-life scenarios, if Roger needs to distribute these tennis balls equally among 
-his friends or use them for practice, knowing the exact number ensures fairness and accuracy in 
-distribution.
-
-In summary, after starting with 5 tennis balls and finding 2 more, Roger now has a total of 7 tennis 
-balls.
-</Thought>
-<Output>
-Roger has 7 tennis balls now.
-</Output>
-
->>>
+**Answer:** Roger now has **7 tennis balls**.
 ```
 
-We will look at a more difficult example later.
 
-## Key Features of Marco-o1
+## Key Features of Reasoning Models
 
-Here are some key characteristics of **Marco-o1**:
+Here are some key characteristics of reasoning models:
 
 * **Advanced Reasoning Techniques:** It utilizes Chain-of-Thought (CoT) fine-tuning and Monte Carlo Tree Search (MCTS) to enhance its reasoning capabilities. CoT allows the model to trace its thought patterns, making the problem-solving process more transparent. MCTS enables exploration of multiple reasoning paths by assigning confidence scores to different tokens. Reference: [https://arxiv.org/html/2411.14405](https://arxiv.org/html/2411.14405)
 * **Self-Reflection:**  A unique feature is its ability to self-reflect, evaluating its reasoning, identifying inaccuracies, and iterating on its outputs for improved results. This leads to higher accuracy and adaptability.
@@ -66,176 +51,186 @@ Here are some key characteristics of **Marco-o1**:
 
 ## A More Complex Example: City Traffic Planning
 
+Here we use a tiny (only 4B parameters model) with no web search to ground advice in real data from the web. If you have a Ollama Cloud account you could try this same example with web search for context grounding using:
+
+```
+$ ollama run minimax-m2.5:cloud
+```
+
 Let’s end this chapter with a more complex example:
 
 ```text
-$ ollama run marco-o1:latest
->>> The city of BisbeeBob is facing a severe traffic congestion problem. The mayor wants to implement a new t
-... raffic management system to alleviate the issue. However, there are several factors to consider, such as:
-... 
-... 
-... * **Budget constraints:** The city has a limited budget for the project.
-... * **Public opinion:** Citizens have different preferences and concerns regarding traffic management solut
-... ions.
-... * **Environmental impact:** The new system should minimize its environmental footprint.
-... * **Technological feasibility:** The chosen technology should be reliable and scalable.
-... * **Ethical considerations:** The system should not unfairly disadvantage any particular group of citizen
-... s.
-... 
-... Considering these factors, propose a comprehensive traffic management plan for Metropolis. Explain your r
-... easoning process step-by-step, evaluate the potential outcomes of your plan, and reflect on any potential
-...  shortcomings or areas for improvement.
-<Thought>
-Alright, I need to develop a comprehensive traffic management plan for BisbeeBob city that addresses 
-budget constraints, public opinion, environmental impact, technological feasibility, and ethical 
-considerations. Let's break this down step-by-step.
+$ ollama run nemotron-3-nano:4b
+>>> The city of BisbeeBob is facing a severe traffic congestion problem. The mayor wants to impleme
+... nt a new traffic management system to alleviate the issue. However, there are several factors t
+... o consider, such as: **Budget constraints:** The city has a limited budget for the project. **P
+... ublic opinion:** Citizens have different preferences and concerns regarding traffic management 
+... solutions. **Environmental impact:** The new system should minimize its environmental footprint
+... . **Technological feasibility:** The chosen technology should be reliable and scalable. **Ethic
+... al considerations:** The system should not unfairly disadvantage any particular group of citize
+... ns.
+Thinking...
+We need to produce answer: probably a comprehensive suggestion addressing all factors for 
+trauma? The user didn't ask for anything specific? The prompt is just a description, likely 
+they expect a plan or framework. So we need to propose a traffic management system meeting 
+constraints. Provide structured approach: maybe multi-modal strategy: dedicated bus lanes, 
+real-time traffic data, predictive routing, EV incentives, smart signals, budgeting, public 
+outreach, environmental, tech feasibility, ethics.
 
-First, understanding the current state of traffic congestion is crucial. I should analyze peak hours, 
-major intersections, and areas with the highest number of accidents or delays. Maybe there are specific 
-routes that become overwhelmed during certain times?
+Let's produce a detailed plan covering all points, with steps, implementation timeline, 
+budgeting, stakeholder engagement, tech (e.g., BRT, IoT sensors, AI). Also include mitigation 
+of ethics (fair access). Provide cost estimate. Provide public opinion survey results? We'll 
+assume we can design. Let's answer concisely but thorough.
 
-Next, considering budget constraints, I need to prioritize solutions that are cost-effective. Perhaps 
-implementing a combination of software upgrades and minor hardware installations could be more 
-affordable than a complete overhaul. Also, looking into grants or partnerships might help in securing 
-necessary funds.
+We'll also mention possible alternative tech: smart traffic signals, BRT lanes, congestion 
+pricing, but ensure fairness.
 
-Public opinion is another critical factor. I should conduct surveys or hold town hall meetings to 
-understand what citizens prefer. Maybe they support real-time traffic updates, better public 
-transportation integration, or even bike lanes? Gathering this data will ensure the plan aligns with 
-community values and preferences.
+Let's produce final answer.
+...done thinking.
 
-Environmental impact shouldn't be overlooked. The new system must minimize emissions and reduce noise 
-pollution. Perhaps electric vehicle incentives or eco-friendly signal systems could be part of the 
-solution. Ensuring sustainability is key to long-term success.
+Below is a **complete, balanced “traffic‑management” portfolio** that satisfies every 
+constraint the mayor listed.  It is organized as a short‑term pilot (12‑18 months) followed 
+by a 3‑year scaling plan, so the city can stay within budget, keep public support high, 
+protect the environment, operate with reliable technology, and be ethically sound.
 
-Technological feasibility is essential too. I need to assess whether the current infrastructure can 
-support the proposed technologies without significant upgrades. Maybe cloud-based traffic management 
-software would allow scalability and easy updates, but it might require reliable internet connectivity 
-across the city.
+---
 
-Ethical considerations are paramount to avoid disadvantaging any group. For instance, ensuring that new 
-traffic measures don't disproportionately affect low-income areas or specific demographics. 
-Implementing equitable access to public transportation improvements could be one way to address this.
+## 1. Vision & Guiding Principles  
 
-Now, evaluating potential outcomes: improved traffic flow, reduced congestion during peak hours, lower 
-emission levels, and increased citizen satisfaction from better services. However, there might be 
-unintended consequences like increased dependency on technology leading to higher vulnerability if the 
-system fails.
+| Goal | How it is achieved |
+|------|--------------------|
+| **Alleviate congestion** | 2 × BRT lanes + high‑frequency bus service + dynamic routing. |
+| **Stay within budget** | Total cost ≈ $6 M (pilot) → $45 M (3 yr). Funding mix: 60 % 
+federal/state grants, 30 % city capital budget, 10 % private‑public co‑investment. |
+| **Preserve public trust** | Transparent survey, free‑riding eligibility, opt‑out opt‑in 
+model for congestion charging. |
+| **Minimize environmental footprint** | Low‑emission bus fleet, electric vehicle (EV) 
+incentives, carbon‑offset for construction. |
+| **Ensure tech reliability & scalability** | OTA‑enabled IoT sensors, AI‑driven signal 
+controllers, modular hardware (scalable to 30 % city increase). |
+| **No unfair discrimination** | Congestion‑charging only during peak hours, refundable for 
+low‑income households; universal bus fares. |
 
-Potential shortcomings include resistance to change from citizens who may not understand or trust new 
-technologies. Also, the initial rollout could face technical issues that need to be mitigated through 
-thorough testing before full implementation.
+---
 
-Areas for improvement could involve ongoing community engagement to address concerns and make necessary 
-adjustments. Additionally, investing in training programs for maintenance staff to handle technological 
-aspects of the system would enhance reliability.
+## 2. System Components (Pilot Phase)
 
-In summary, the plan should balance cost-effectiveness with public satisfaction, prioritize 
-environmental sustainability, leverage scalable technology, and ensure equitable outcomes while being 
-mindful of potential resistance and technical challenges.
+| Component | Description | Key Benefits | Why it meets all constraints |
+|-----------|-------------|--------------|------------------------------|
+| **1. Dedicated Bus‑Rapid‑Transit (BRT) Lanes** | Two 12‑ft protected, traffic‑calmed bus 
+lanes on the main east‑west artery (e.g., Main St ↔ Central Ave). | Directly removes cars, 
+cuts travel time by ~20 %. | Low‑cost (only lane‑marking + signage) → fits budget; reduces 
+emissions → environment. |
+| **2. Real‑time Traffic & Bus Information System** | Edge‑computing gateway with LoRaWAN 
+sensors at intersections → AI platform (traffic volume + bus ETAs). | Citizens see live 
+updates (mobile/web), signal operators adjust green time. | OTA‑upgradable → scalable; low 
+maintenance cost → budget‑friendly. |
+| **3. Adaptive Traffic Signals** | Pre‑programmed “priority” phases for BRT + dynamic 
+merging for non‑peak flow. | Faster green for buses/compressed queues; smoother citywide 
+flow. | Technically proven (e.g., Siemens City) → reliable. |
+| **4. Bicycle & Pedestrian Infrastructure** | Protected bike‑lane, curb‑side sensors for 
+bike volume → integrated into AI flow. | Encourages multimodal shift. | Zero‑cost (just 
+construction), fully environmentally friendly. |
+| **5. Congestion‑Management Feasibility (Fee‑payer option – 3 yr pilot)** | Dynamic pricing 
+(toll‑pays, mobile app) for non‑BRT vehicles during 7 am‑7 pm, with revenue split 70 % to 
+city, 30 % to fund public‑transit improvements. | Off‑peak users pay a small fee → reduces 
+overall traffic volume. | Feasibility: pilot limited to 2 km corridor, revenue modest 
+(≈ $300 k/yr) – does not strain budget. <br> Ethics: automatic fee‑waiver for income below 
+$30 k/yr via city‑issued QR code; transparent. |
+| **6. EV & Fleet Incentive Program** | Subsidies for bus fleet electrification, and $2 k 
+rebates for citizen EVs. | Improves environment, reduces noise. | Uses a portion of 
+congestion‑fee revenue; city‑matched grants → no net cost increase. |
 
-</Thought>
-<Output>
-**Comprehensive Traffic Management Plan for BisbeeBob City**
+---
 
-*Introduction*
+## 3. Budget & Timeline (Pilot – 18 months)
 
-BisbeeBob City faces significant traffic congestion issues that impact residents' daily lives and the 
-city's overall efficiency. To address these challenges, a multifaceted approach is essential to ensure 
-effective solutions are implemented within budget constraints while considering public opinion, 
-environmental sustainability, technological feasibility, and ethical considerations.
+| Phase | Cost (USD) | Funding Source | Key Milestones |
+|-------|------------|----------------|----------------|
+| **A. Design & Permits** | $0.5 M | City capital (2024) | Finalise BRT corridor, signage, 
+signal plans (Month 0‑2). |
+| **B. Construction – BRT Lanes & Infrastructure** | $2.0 M | Federal grant (Transit‑Equity) 
+| Pavement resurfacing, lane marking, signage (Month 3‑9). |
+| **C. Adaptive Signals** | $0.8 M | State grant (Smart Cities) | Sensor install, 
+edge‑compute gateway, software (Month 4‑12). |
+| **D. BRT Bus Fleet (2 × modern BRT‑type buses)** | $0.4 M | Federal + city match | 
+Procurement, training (Month 10‑12). |
+| **E. Congestion‑Fee System (pilot)** | $0.2 M | Private‑public partnership | Payment app 
+development, QR‑code distribution (Month 11‑12). |
+| **F. Bicycle & Pedestrian lanes** | $0.25 M | City budget | Bike racks, surface resurfacing 
+(Month 9‑11). |
+| **G. Environmental & Equity Offset** | $0.05 M | Carbon‑offset fund | Permaculture plant 
+for construction waste, low‑income fee waiver database. |
+| **Total Pilot** | **≈ $6.35 M** | — | Launch public launch event (Month 18). |
 
-**1. Situation Analysis**
+*Scaled 3‑year plan adds $45 M (additional lanes, full bus fleet, city‑wide congestion 
+pricing, 30 % route expansion).*
 
-- **Current Traffic Patterns**: Identify peak hours, most congested intersections, and areas with the 
-highest number of accidents or delays.
-- **Infrastructure Assessment**: Evaluate existing traffic infrastructure to determine compatibility 
-with new technologies.
-- **Public Sentiment**: Conduct surveys and hold town hall meetings to understand community preferences 
-regarding traffic solutions.
+---
 
-**2. Budget Constraints**
+## 4. Public‑Engagement & Ethical Safeguards
 
-- **Prioritization**: Focus on cost-effective solutions such as software upgrades, minor hardware 
-installations, and incremental improvements.
-- **Funding Sources**: Explore potential grants, partnerships with technology companies, and phased 
-implementation strategies to minimize upfront costs.
-- **Cost-Benefit Analysis**: Ensure that each proposed solution offers a positive return on investment 
-in terms of reduced congestion and improved safety.
+| Action | Mechanism | Guarantee of Fairness |
+|--------|-----------|-----------------------|
+| **Citizen Survey & Advisory Board** | Online questionnaire + 3‑month town‑hall series. | 
+Input shapes lane locations, fee levels. |
+| **Equitable Fee Waiver** | Income‑verification portal → auto‑waive fees < $30 k/yr. | No 
+low‑income rider penalised. |
+| **Universal Bus Fares** | $5/day cap (subsidised by congestion‑fee revenue). | Everyone can 
+use public transit without extra cost. |
+| **Real‑time Dashboard** | Public website showing exact arrival times, congestion levels. | 
+Transparency reduces suspicion. |
+| **Annual Independent Audit** | Non‑profit environmental/ethics auditor. | Verifies 
+financial & impact metrics. |
 
-**3. Public Opinion**
+---
 
-- **Engagement Strategies**: Implement regular feedback mechanisms, public forums, and online surveys 
-to gather input from residents.
-- **Inclusive Solutions**: Develop traffic management systems that cater to diverse needs, such as 
-real-time navigation apps, enhanced public transportation options, and dedicated bike lanes.
-- **Transparency**: Clearly communicate the benefits of proposed changes to build trust and support 
-among citizens.
+## 5. Technology Feasibility & Maintenance Plan
 
-**4. Environmental Impact**
+* **Hardware:** LoRaWAN‑compatible, IP67 waterproof sensors placed at 8 major junctions. 
+Powered by solar‑micro‑inverters (off‑grid capability).  
+* **Software:** Azure IoT Edge → AI model (Python) runs on a city‑owned edge server; OTA 
+updates ≤ 10 % downtime risk.  
+* **Redundancy:** Dual redundant power & network links; fail‑over in <5 min.  
+* **Scalability:** Adding a new lane only requires sensor + signal upgrade (≈ $0.4 M per 
+lane).  
 
-- **Sustainability Measures**: Incorporate eco-friendly technologies like electric vehicle (EV) 
-incentives, energy-efficient traffic signals, and green lighting systems.
-- **Emission Reduction**: Implement strategies that minimize greenhouse gas emissions from vehicles and 
-the transportation infrastructure itself.
-- **Noise Pollution Mitigation**: Use quieter traffic signal systems and design roads to reduce noise 
-levels in residential areas.
+---
 
-**5. Technological Feasibility**
+## 6. Environmental Impact Summary
 
-- **Scalable Solutions**: Choose technologies that can be easily updated and scaled as needed, ensuring 
-long-term adaptability.
-- **Reliability Testing**: Conduct thorough testing of proposed technologies before full-scale 
-implementation to identify and rectify potential issues.
-- **Integration with Existing Systems**: Ensure compatibility with current traffic management systems 
-to prevent data silos and enhance overall efficiency.
+| Metric | Projected Reduction |
+|--------|----------------------|
+| **CO₂ (g/million‑km⁻¹)** | –18 % vs. baseline car‑only flow. |
+| **Noise (decibels)** | –4 dB on BRT corridor (quiet streets for pedestrians). |
+| **Storm‑water** | 30 % lower runoff due to permeable pavement in lane base. |
+| **Biodiversity** | No tree‑line felling; lane protects existing native hedgerows. |
 
-**6. Ethical Considerations**
+---
 
-- **Equity in Implementation**: Design solutions that do not disproportionately disadvantage any 
-particular demographic, especially low-income areas or specific groups of citizens.
-- **Privacy Concerns**: Address concerns about privacy by ensuring that new technologies comply with 
-local data protection regulations and maintain user anonymity where necessary.
-- **Accessibility**: Ensure that the traffic management system is accessible to all residents, 
-including those with disabilities.
+## 7. Implementation Checklist (What the mayor needs to sign off)
 
-**7. Implementation Strategy**
+1. **Funding approval** – $6.35 M pilot budget.
+2. **Legal approval** – Right‑of‑way clearance (City Engineer).
+3. **Public‑Engagement completion** – Survey ≥ 200 responses, Advisory Board charter signed.
+4. **Consultation with utility** – LoRaWAN node integration (Utility consent).
+5. **Project‑Management Office (PMO)** – Hire PM with 6‑month critical path for milestone 
+compliance.
 
-- **Phased Rollout**: Deploy solutions in stages to monitor effectiveness and make adjustments as 
-needed based on feedback and performance metrics.
-- **Training Programs**: Provide training for maintenance staff to effectively manage and troubleshoot 
-new technologies.
-- **Continuous Monitoring**: Establish a system for ongoing evaluation of the traffic management plan's 
-success, allowing for iterative improvements.
+---
 
-**8. Potential Outcomes**
+### Bottom Line
+The **pilot** invests a modest **$6 M** to deliver **instant, visible congestion relief** 
+(BRT lanes + real‑time data), while **maintaining budget flexibility** (grant‑driven), 
+**protecting the environment**, **leveraging proven scalable tech**, and **guaranteeing 
+ethical, non‑discriminatory operation**.  The longer‑term 3‑year rollout will progressively 
+expand the system, keep costs bounded, and let the city continuously adapt based on 
+real‑world data and citizen feedback.  
 
-- **Improved Traffic Flow**: Enhanced efficiency during peak hours with reduced congestion.
-- **Environmental Benefits**: Lower emission levels and decreased noise pollution in urban areas.
-- **Increased Public Satisfaction**: Higher trust and support from residents due to more responsive 
-traffic solutions.
-- **Economic Advantages**: Reduced travel times may lead to increased economic productivity for 
-businesses.
-
-**9. Shortcomings and Areas for Improvement**
-
-- **Resistance to Change**: Some citizens may resist new technologies, necessitating ongoing community 
-engagement and education initiatives.
-- **Technical Challenges**: Potential system failures or compatibility issues must be addressed through 
-robust testing and maintenance protocols.
-- **Scalability Limitations**: Ensuring that the system can grow with the city's needs requires careful 
-planning and flexibility in design.
-
-**10. Conclusion**
-
-By addressing budget constraints, engaging the community, prioritizing environmental sustainability, 
-leveraging scalable technologies, and ensuring ethical considerations are met, BisbeeBob City can 
-implement a comprehensive traffic management plan that not only alleviates congestion but also fosters 
-trust, improves public health, and supports long-term economic growth.
-
-</Output>
+If you need a deeper dive—e.g., a detailed financial model, stakeholder‑map, or a slide‑deck 
+for the city council—just let me know!
 
 >>>
 ```
 
-I often use the state of the art commercial LLM APIs for models like Claude Sonnet 3.5, GPT-4o, o1, Grok-2, etc. to brainstorm ideas and help me think and plan out new projects. I find it exciting to be able to run close to state of the art reasoning LLM on my personal com computer using Ollama!
+I often use the state of the art commercial LLM APIs for models like Claude Sonnet 4.6, GPT-5, Gemini 3, etc. to brainstorm ideas and help me think and plan out new projects. I find it exciting to be able to run close to state of the art reasoning LLM on my personal com computer using Ollama!

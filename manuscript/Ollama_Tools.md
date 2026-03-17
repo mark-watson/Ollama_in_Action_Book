@@ -1,34 +1,6 @@
 # LLM Tool Calling with Ollama
 
-There are several example Python tool utilities in the GitHub repository [https://github.com/mark-watson/Ollama_in_Action_Book](https://github.com/mark-watson/Ollama_in_Action_Book) in the **source-code** directory that we will use for function calling that start with the “tool” prefix:
-
-```bash
-https://github.com/mark-watson/Ollama_in_Action_Book/source-code $ ls -lh
-total 1680
-drwxr-xr-x   7 markw  staff   224B Oct 14 14:43 autogen
-drwxr-xr-x   6 markw  staff   192B Oct 14 14:43 chains
-drwxr-xr-x   4 markw  staff   128B Aug 10 16:50 data
-drwxr-xr-x   5 markw  staff   160B Oct 14 14:43 graph
-drwxr-xr-x   5 markw  staff   160B Oct 14 14:43 judges
-drwxr-xr-x   4 markw  staff   128B Oct 14 14:43 langgraph
--rw-r--r--   1 markw  staff   107B Oct 14 14:43 Makefile
-drwxr-xr-x   5 markw  staff   160B Oct 14 14:43 memory
-drwxr-xr-x   9 markw  staff   288B Oct 14 13:49 OllamaCloud
--rw-r--r--   1 markw  staff   754B Oct 14 14:43 pyproject.toml
--rw-r--r--   1 markw  staff   1.1K Oct 14 14:47 README.md
-drwxr-xr-x   4 markw  staff   128B Oct 14 14:43 reasoning
--rw-r--r--   1 markw  staff   295B Aug 11 10:00 requirements.txt
-drwxr-xr-x   4 markw  staff   128B Aug 10 16:50 short_programs
-drwxr-xr-x   7 markw  staff   224B Oct 14 14:43 smolagents
-drwxr-xr-x   4 markw  staff   128B Oct 14 14:43 tool_examples
-drwxr-xr-x  16 markw  staff   512B Oct 14 14:46 tools
-```
-
-If you have not yet done so, please clone the repository for my Ollama book examples using:
-
-```
-git clone https://github.com/mark-watson/Ollama_in_Action_Book.git
-```
+There are several example Python tool utilities in the GitHub repository [https://github.com/mark-watson/Ollama_in_Action_Book](https://github.com/mark-watson/Ollama_in_Action_Book) in the **source-code/tools** directory that we will use for function calling (this directory also contains examples for other chapters). One of the examples here is in the directory **tool_example**.
 
 **Use of Python docstrings at runtime:**
 
@@ -118,9 +90,7 @@ You have now looked at example tool use. We will now implement the several tools
 
 ## Tool for Reading and Writing File Contents
 
-This tool is meant to be combined with other tools, for example a summarization tool and a file reading tool might be used to process a user prompt to summarize a specific local file on your laptop.
-
-Here is the contents of tool utility **tool_file_contents.py**:
+This tool is meant to be combined with other tools, for example a summarization tool and a file reading tool might be used to process a user prompt to summarize a specific local file on your laptop. This example is in the **tools** directory in the file **tool_file_contents.py**:
 
 ```python
 """
@@ -273,6 +243,16 @@ Design Benefits for LLM Integration: the utilities are optimized for LLM functio
 This tool is similar to the last tool so here we just list the worker function from the file **tool_file_dir.py**:
 
 ```python
+"""
+File Directory Module
+Provides functions for listing files in the current directory
+"""
+
+from typing import Dict, List, Any
+from typing import Optional
+from pathlib import Path
+import os
+
 def list_directory(pattern: str = "*", list_dots=None) -> Dict[str, Any]:
     """
     Lists files and directories in the current working directory
@@ -310,12 +290,19 @@ The example file **tool_sqlite.py** serves two purposes here:
 ```python
 import sqlite3
 import json
+import sys
+from pathlib import Path
 from typing import Dict, Any, List, Optional
-import ollama
 from functools import wraps
 import re
 from contextlib import contextmanager
-from textwrap import dedent # for multi-line string literals
+from textwrap import dedent  # for multi-line string literals
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ollama_config import get_client, get_model
 
 class DatabaseError(Exception):
     """Custom exception for database operations"""
@@ -440,8 +427,8 @@ class SQLiteTool:
                 raise DatabaseError(f"Query execution failed: {str(e)}")
 
 class OllamaFunctionCaller:
-    def __init__(self, model: str = "llama3.2:latest"):
-        self.model = model
+    def __init__(self, model: str = None):
+        self.model = model or get_model()
         self.sqlite_tool = SQLiteTool()
         self.function_definitions = self._get_function_definitions()
 
@@ -476,9 +463,11 @@ class OllamaFunctionCaller:
 
             User request: {user_input}
 
-            Respond with a JSON object containing:
+            Respond with a single JSON object containing:
             - "function": The function name to call
             - "parameters": The parameters for the function
+
+            Return ONLY the JSON object, with no other text or explanation.
 
             Response:
         """).strip()
@@ -486,17 +475,23 @@ class OllamaFunctionCaller:
 
     def _parse_ollama_response(self, response: str) -> Dict[str, Any]:
         try:
-            json_match = re.search(r'\{.*\}', response, re.DOTALL)
-            if not json_match:
-                raise ValueError("No valid JSON found in response")
-            return json.loads(json_match.group())
-        except json.JSONDecodeError as e:
+            # Find the first opening brace
+            start_idx = response.find('{')
+            if start_idx == -1:
+                raise ValueError("No valid JSON object found in response")
+            
+            # Use raw_decode to parse the first JSON object found
+            decoder = json.JSONDecoder()
+            obj, end_idx = decoder.raw_decode(response[start_idx:])
+            return obj
+        except (json.JSONDecodeError, ValueError) as e:
             raise ValueError(f"Invalid JSON in response: {str(e)}")
 
     def process_request(self, user_input: str) -> Any:
         try:
-            response = ollama.generate(model=self.model, prompt=self._generate_prompt(user_input))
-            function_call = self._parse_ollama_response(response.response)
+            client = get_client()
+            response = client.generate(model=self.model, prompt=self._generate_prompt(user_input))
+            function_call = self._parse_ollama_response(response['response'])
 
             if function_call["function"] == "query_database":
                 return self.sqlite_tool.execute_query(function_call["parameters"]["query"])
@@ -598,7 +593,7 @@ This approach allows users to interact with the database using natural language 
 The output looks like this:
 
 ```bash
-python /Users/markw/GITHUB/Ollama_in_Action_Book/source-code/tool_sqlite.py 
+$ uv run tool_sqlite.py 
 
 Query: Show me all tables in the database
 Result: ['example', 'users', 'products']
@@ -667,15 +662,22 @@ __all__ = ["summarize_text"]
 
 This Python code implements a text summarization tool using the Ollama chat model. The core function **summarize_text** takes two parameters: the main text to summarize and an optional context string. The function operates by constructing a prompt that instructs the model to provide a concise summary without additional commentary. It includes an interesting logic where if the input text is very short (less than 50 characters), it defaults to using the context parameter instead. Additionally, if there's substantial context provided (more than 50 characters), it prepends this context to the prompt. The function utilizes the Ollama chat model "llama3.2:latest" to generate the summary, structuring the request with a system message containing the prompt and a user message containing the text to be summarized. The program includes metadata for Ollama integration, specifying the function name, description, and parameter details, and exports the summarize_text function through __all__.
 
-Here is an example of using this tool that you can find in the file **example_chain_web_summary.py**. Please note that this example also uses the web search tool that is discussed in the next section.
+Here is an example of using this tool that you can find in the file **example_chain_web_summary.py** in the directory **chains**. Please note that this example also uses the web search tool that is discussed in the next section.
 
 ```python
-from tool_web_search import uri_to_markdown
-from tool_summarize_text import summarize_text
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))
+
+from tools.tool_web_search import uri_to_markdown
+from tools.tool_summarize_text import summarize_text
 
 from pprint import pprint
 
-import ollama
+from ollama_config import get_client, get_model
 
 # Map function names to function objects
 available_functions = {
@@ -683,13 +685,14 @@ available_functions = {
     "summarize_text": summarize_text,
 }
 
+client = get_client()
 memory_context = ""
 # User prompt
-user_prompt = "Get the text of 'https://knowledgebooks.com' and then summarize the text."
+user_prompt = "Get the text of 'https://knowledgebooks.com' and then summarize the text from this web site."
 
 # Initiate chat with the model
-response = ollama.chat(
-    model='llama3.2:latest',
+response = client.chat(
+    model=get_model(),
     messages=[{"role": "user", "content": user_prompt}],
     tools=[uri_to_markdown, summarize_text],
 )
@@ -720,7 +723,7 @@ for tool_call in response.message.tool_calls or []:
 Here is the output edited for brevity:
 
 ```bash
-python /Users/markw/GITHUB/Ollama_in_Action_Book/source-code/example_chain_web_summary.py 
+$ uv run example_chain_web_summary.py 
 [ToolCall(function=Function(name='uri_to_markdown', arguments={'a_uri': 'https://knowledgebooks.com'})),
  ToolCall(function=Function(name='summarize_text', arguments={'context': '', 'text': 'uri_to_markdown(a_uri = "https://knowledgebooks.com")'}))]
 
@@ -728,18 +731,13 @@ python /Users/markw/GITHUB/Ollama_in_Action_Book/source-code/example_chain_web_s
 
 memory_context[:70]:
 
-
-
 *****
-
-
 
 * * tool_call.function.arguments:
 
 {'a_uri': 'https://knowledgebooks.com'}
 Arguments for uri_to_markdown: {'a_uri': 'https://knowledgebooks.com'}
 INFO:httpx:HTTP Request: POST http://127.0.0.1:11434/api/chat "HTTP/1.1 200 OK"
-
 
 ** Output of uri_to_markdown: Contents of URI https://knowledgebooks.com is:
 # KnowledgeBooks.com - research on the Knowledge Management, and the Semantic Web 
@@ -790,19 +788,14 @@ Carol Watson helps prepare training data and serves as the editor for Mark's pub
 Privacy policy: this site collects no personal data or information on site visitors
 Hosted on Cloudflare Pages.
 
-
 ***** function_to_call=<function summarize_text at 0x107519260>
 
 memory_context[:70]:
-
-
 
 Contents of URI https://knowledgebooks.com is:
 # KnowledgeBooks.com 
 
 *****
-
-
 
 * * tool_call.function.arguments:
 
@@ -843,13 +836,23 @@ A sole proprietorship company by Mark Watson promoting AI, NLP, and Semantic Web
 
 ## Tool for Web Search and Fetching Web Pages
 
-This code provides a set of functions for web searching and HTML content processing, with the main functions being **uri_to_markdown**, **search_web**, **brave_search_summaries**, and **brave_search_text**. The **uri_to_markdown** function fetches content from a given URI and converts HTML to markdown-style text, handling various edge cases and cleaning up the text by removing multiple blank lines and spaces while converting HTML entities. The **search_web** function is a placeholder that's meant to be implemented with a preferred search API, while brave_search_summaries implements actual web searching using the Brave Search API, requiring an API key from the environment variables and returning structured results including titles, URLs, and descriptions. The **brave_search_text** function builds upon **brave_search_summaries** by fetching search results and then using **uri_to_markdown** to convert the content of each result URL to text, followed by summarizing the content using a separate **summarize_text** function. The code also includes utility functions like **replace_html_tags_with_text** which uses BeautifulSoup to strip HTML tags and return plain text, and includes proper error handling, logging, and type hints throughout. The module is designed to be integrated with Ollama and exports **uri_to_markdown** and **search_web** as its primary interfaces.
+The examples in this section are in the directory **tools**.
+
+This code provides a set of functions for web searching and HTML content processing in the file **tool_web_search.py**, with the main functions being **uri_to_markdown**, **search_web**, **brave_search_summaries**, and **brave_search_text**. The **uri_to_markdown** function fetches content from a given URI and converts HTML to markdown-style text, handling various edge cases and cleaning up the text by removing multiple blank lines and spaces while converting HTML entities. The **search_web** function is a placeholder that's meant to be implemented with a preferred search API, while brave_search_summaries implements actual web searching using the Brave Search API, requiring an API key from the environment variables and returning structured results including titles, URLs, and descriptions. The **brave_search_text** function builds upon **brave_search_summaries** by fetching search results and then using **uri_to_markdown** to convert the content of each result URL to text, followed by summarizing the content using a separate **summarize_text** function. The code also includes utility functions like **replace_html_tags_with_text** which uses BeautifulSoup to strip HTML tags and return plain text, and includes proper error handling, logging, and type hints throughout. The module is designed to be integrated with Ollama and exports **uri_to_markdown** and **search_web** as its primary interfaces.
 
 ```python
+# file: tool_web_search.py
 """
 Provides functions for web searching and HTML to Markdown conversion
 and for returning the contents of a URI as plain text (with minimal markdown)
 """
+
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from typing import Dict, Any
 import requests
@@ -857,7 +860,6 @@ from bs4 import BeautifulSoup
 import re
 from urllib.parse import urlparse
 import html
-from ollama import chat
 import json
 from tool_summarize_text import summarize_text
 
@@ -983,6 +985,7 @@ def brave_search_summaries(
             logging.error(f"Error {response.status_code}: {response.text}")
 
     return ret
+
 
 def brave_search_text(query, num_results=3):
     summaries = brave_search_summaries(query, num_results)

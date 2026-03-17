@@ -31,18 +31,32 @@ We will use the Gradio toolkit for creating interactive web apps. You can find d
 
 The following program demonstrates the construction of a "Semantic Navigator," a web application built with Gradio that leverages Large Language Models (LLMs) to transform unstructured prose into structured knowledge. By using the Ollama Python client library, the application connects to a high-performance model to perform two distinct natural language processing tasks: named entity recognition (NER) and relationship extraction. The code implements a dual-stage workflow where users first submit raw text for analysis—triggering a system prompt that enforces a strict JSON schema for identifying persons, places, and organizations—and then interact with that data through a context-aware chatbot. This implementation showcases critical modern AI patterns, including the handling of structured LLM outputs, state management within a reactive UI, and the use of RAG-lite (Retrieval-Augmented Generation) techniques to constrain assistant responses to a specific, extracted dataset.
 
+This example is in the directory **SemanticNavigator** in the file **app.py**:
+
 ```python
+# set: export CLOUD=1
+#      export MODEL=nemotron-3-super:cloud
+
+
 import gradio as gr
 import os
 import json
+import sys
+from pathlib import Path
 from ollama import Client
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ollama_config import get_model
 
 client = Client(
   host="https://ollama.com",
-  headers={'Authorization': os.environ.get("OLLAMA_API_KEY")}
+  headers={'Authorization': 'Bearer ' + os.environ.get('OLLAMA_API_KEY', '')}
 )
 
-MODEL = "gpt-oss:20b-cloud"
+MODEL = get_model()
 
 def extract_entities_and_links(text: str):
   """Uses an LLM to extract entities and links from text."""

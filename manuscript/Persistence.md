@@ -5,6 +5,8 @@ Something important that we haven’t covered yet: building a persistent memory 
 - Mem0: persistent memory for AI Agents and LLM applications. GitHub: [https://github.com/mem0ai/mem0](https://github.com/mem0ai/mem0).
 - Chroma: AI-native open-source vector database that simplifies building LLM apps by providing tools for storing, embedding, and searching embeddings.
 
+The examples in this file are in the directory **memory**.
+
 The example in this chapter is simple and can be copied and modified for multiple applications; for example:
 
 - Code advice agent for Python
@@ -19,6 +21,7 @@ The Chroma vector store database is stored under the file path **./db_local** an
 
 One parameter you may want to change is the number of memories matched in the Chroma database. This can be set in the line of code **m.search(query=args.prompt, limit=5, ...)**.
 
+The example code is found in the file **mem0_persistence.py**:
 
 ```python
 # Run this script repeatedly to build a persistent memory:
@@ -26,13 +29,22 @@ One parameter you may want to change is the number of memories matched in the Ch
 #   uv run mem0_persistence.py "What color is the sky?"
 #   uv run mem0_persistence.py "What is the last color we talked about?"
 
-
 import argparse
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from mem0 import Memory
-from ollama import chat
 from ollama import ChatResponse
-           
+
+from ollama_config import get_client, get_model
+
 USER_ID = "123"
+
+_model = get_model()
 
 config = {
   "user_id": USER_ID,
@@ -43,9 +55,15 @@ config = {
   "llm": {
     "provider": "ollama",
     "config": {
-      "model": "gemma3:4b-it-qat",
+      "model": _model,
       "temperature": 0.1,
       "max_tokens": 5000
+    }
+  },
+  "embedder": {
+    "provider": "ollama",
+    "config": {
+      "model": "nomic-embed-text"
     }
   },
 }
@@ -54,7 +72,8 @@ def call_ollama_chat(model: str, messages: list[dict]) -> str:
   """
   Send a chat request to Ollama and return the assistant's reply.
   """
-  response: ChatResponse = chat(
+  client = get_client()
+  response: ChatResponse = client.chat(
       model=model,
       messages=messages
   )
@@ -70,9 +89,9 @@ def main():
 
   rel = m.search(query=args.prompt, limit=5, user_id=USER_ID)
   mems = "\n".join(f"- {e['memory']}" for e in rel["results"])
-  print("Memories:\n", mems)
+  print("Memories:\n", mems)  # 
 
-  system0 = "You are a helpful assistant who answers with concise, short answers."
+  system0 = "You are a helpful assistant who answers with very concise, short answers."
   system = f"{system0}\nPrevious user memories:\n{mems}"
   
   msgs = [
@@ -80,12 +99,10 @@ def main():
     {"role":"user","content":args.prompt}
   ]
   
-  reply = call_ollama_chat("gemma3:4b-it-qat", msgs)
+  reply = call_ollama_chat(_model, msgs)
 
-  convo = {"role":"assistant",
-           "content":
-           f"QUERY: {args.prompt}\n\nANSWER:\n{reply}\n"}
-  m.add(convo, user_id=USER_ID, infer=False)
+  convo = {"role":"assistant","content":f"QUERY: {args.prompt}\n\nANSWER:\n{reply}\n"}
+  m.add(convo, user_id=USER_ID, infer=False) # set to True to use LLM to infer good inserts
     
   print(f"\n\n** convo:\n{convo}\n\n")
 
@@ -108,7 +125,6 @@ The first time we run the test script the vector database is empty so the user q
 
 User: Name two Physical laws
 Memories:
-
 
 ** convo:
 {'role': 'assistant', 'content': "QUERY: Name two Physical laws\n\nANSWER:\n1.  Newton's First Law\n2.  Law of Conservation of Energy\n"}

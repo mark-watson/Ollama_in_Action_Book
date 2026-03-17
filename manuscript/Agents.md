@@ -4,20 +4,18 @@ We have seen a few useful examples of tool use (function calling) and now we wil
 
 Each example program and utility for this chapter uses the prefix **smolagents_** in the Python file name.
 
-### Note: We are using the 2 GB model Llama3.2:latest here. Different models support tools and agents differently.
-
 ## Choosing Specific LLMs for Writing Agents
 
 As agents operate performing tasks like interpreting user input, performing Chain of Thought (Cot) reasoning, observe the output from calling tools, and following plan steps one by one, then LLMs errors, hallucinations, and inconsistencies accumulate. When using Ollama we prefer using the most powerful models that we can run on our hardware. 
 
-Here we use Llama3.2:latest that is recognized for its function calling capabilities, facilitating seamless integration with various tools.
+Here we use nemotron-3-nano:4b (released by NVidea March 2026) that is recognized for its function calling capabilities, facilitating seamless integration with various tools. To use a different model set the **MODEL** environment variable.
 
 As you work through the examples here using different local models running on Ollama, you might encounter compounding errors problems. When I am experimenting with ideas for implementing agents, I sometimes keep two versions of my code, one for a local model and one using eight of the commercial models GPT-4o or Claude Sonnet 3.5. Comparing the same agent setup using different models might provide some insight into runtime agent problems being your code or the model you are using.
 
 
 ## Installation notes
 
-As I updatethis chapter on October 15, 2025, **smolagents** needs to be run with Python version 3.12. For exampleL
+As I update this chapter on March 17, 2025, **smolagents** needs to be run with Python version 3.12. For example:
 
 ```bash
 $ uv run python3 -V               
@@ -30,9 +28,9 @@ $ uv run smolagents_agent_test1.py
 
 ## Overview of the Hugging Face Smolagents Library
 
-The smolagents library [https://github.com/huggingface/smolagents](https://github.com/huggingface/smolagents) is built around a minimalist and modular architecture that emphasizes simplicity and composability. The core components are cleanly separated into the file **agents.py** for agent definitions, **tools.py** for tool implementations, and related support files. This design philosophy allows developers to easily understand, extend, and customize the components while maintaining a small codebase footprint - true to the "smol" name.
+The `smolagents` library [https://github.com/huggingface/smolagents](https://github.com/huggingface/smolagents) is built around a minimalist and modular architecture that emphasizes simplicity and composability. The core components are cleanly separated into the file **agents.py** for agent definitions, **tools.py** for tool implementations, and related support files. This design philosophy allows developers to easily understand, extend, and customize the components while maintaining a small codebase footprint - true to the "smol" name.
 
-This library implements a tools-first approach where capabilities are encapsulated as discrete tools that agents can use. The **tools.py** file in the smolagents implementation defines a clean interface for tools with input/output specifications, making it straightforward to add new tools. This tools-based architecture enables agents to have clear, well-defined capabilities while maintaining separation of concerns between the agent logic and the actual implementation of capabilities.
+This library implements a tools-first approach where capabilities are encapsulated as discrete tools that agents can use. The **tools.py** file in the `smolagents` implementation defines a clean interface for tools with input/output specifications, making it straightforward to add new tools. This tools-based architecture enables agents to have clear, well-defined capabilities while maintaining separation of concerns between the agent logic and the actual implementation of capabilities.
 
 Agents are designed to be lightweight and focused on specific tasks rather than trying to be general-purpose. The BaseAgent class provides core functionality while specific agents like WebAgent extend it for particular use cases. This specialization allows the agents to be more efficient and reliable at their designated tasks rather than attempting to be jack-of-all-trades.
 
@@ -71,18 +69,37 @@ I am still experimenting with LLM-based agents. Please accept the following exam
 Here we look at a simple example taken from the smolagents documentation and converted to run using local models with Ollama. Here is a listing of file **smolagents_test.py**:
 
 ```python
-"""
-smolagents example program (slightly modified)
-"""
+"""smolagents example program (slightly modified)"""
+
+import smolagents_compat  # noqa: F401
+
+import os
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from smolagents.agents import ToolCallingAgent
 from smolagents import tool, LiteLLMModel
 from typing import Optional
 
+from ollama_config import get_model
+
+_model_name = get_model()
+
+if os.environ.get("CLOUD"):
+    api_base = "https://ollama.com"
+    api_key = os.environ.get("OLLAMA_API_KEY", "")
+else:
+    api_base = "http://localhost:11434"
+    api_key = "your-api-key"
+
 model = LiteLLMModel(
-    model_id="ollama_chat/llama3.2:latest",
-    api_base="http://localhost:11434",
-    api_key="your-api-key" # not used
+    model_id=f"ollama_chat/{_model_name}",
+    api_base=api_base,
+    api_key=api_key,
 )
 
 @tool
@@ -104,16 +121,15 @@ print(agent.run("What's the weather like in Paris?"))
 
 **Understanding the smolagents and Ollama Example**
 
-This code demonstrates a simple integration between smolagents (a tool-calling framework) and Ollama (a local LLM server). Here's what the code accomplishes:
-Core Components
+This code demonstrates a simple integration between `smolagents` (a tool-calling framework) and Ollama (a local LLM server). Here's what the code accomplishes:
 
-Utilizes smolagents for creating AI agents with tool capabilities
-Integrates with a local Ollama server running llama3.2
-Implements a basic weather checking tool (though humorously hardcoded)
+- tilizes `smolagents` for creating AI agents with tool capabilities
+- Integrates with a local Ollama server running llama3.2
+- Implements a basic weather checking tool (though humorously hardcoded)
 
 **Model Configuration**
 
-The code sets up a LiteLLM model instance that connects to a local Ollama server on port 11434. It's configured to use the llama3.2 model and supports optional API key authentication.
+The code sets up a LiteLLM model instance that connects to a local Ollama server on port 11434. It's configured to use the model using the function **getg_model** in the file **Ollama_in_Action_Book/source-code/ollama_config.py** and supports optional API key authentication.
 
 **Weather Tool Implementation**
 
@@ -133,27 +149,38 @@ Provides an extensible structure for adding more tools
 
 ### Python Tools Compatible with Smolagents
 
-The tools I developed in previous chapters are not quite compatible with the smolagents library so I wrap a few of the tools I previously wrote in the utility **smolagents_tools.py**:
+The tools I developed in previous chapters are not quite compatible with the `smolagents` library so I wrap a few of the tools I previously wrote in the utility **smolagents_tools.py**:
 
 ```python
-"""
-Wrapper for book example tools for smloagents compatibility
-"""
+import sys
 from pathlib import Path
 
-from smolagents import tool, LiteLLMModel
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+"""
+Wrapper for book example tools for smolagents compatibility
+"""
+
+import smolagents_compat  # noqa: F401
+
+from smolagents import tool
 from typing import Optional
 from pprint import pprint
 
-from tool_file_dir import list_directory
+from tools.tool_file_dir import list_directory
+from tools.tool_file_contents import read_file_contents
+
+from ollama_config import get_client, get_model
 
 @tool
-def sa_list_directory(list_dots: Optional[bool]=None) -> str:
+def sa_list_directory() -> str:
     """
     Lists files and directories in the current working directory
 
     Args:
-        list_dots: optional boolean (if true, include dot files)
+        None
 
     Returns:
         string with directory name, followed by list of files in the directory
@@ -163,7 +190,7 @@ def sa_list_directory(list_dots: Optional[bool]=None) -> str:
     return lst
 
 @tool
-def read_file_contents(file_path: str) -> str:
+def sa_read_file_contents(file_path: str) -> str:
     """
     Reads contents from a file and returns the text
 
@@ -186,52 +213,89 @@ def read_file_contents(file_path: str) -> str:
         return f"Error reading file '{file_path}' is: {str(e)}"
 
 @tool
-def summarize_directory() -> str:
+def sa_summarize_directory() -> str:
     """
     Summarizes the files and directories in the current working directory
 
+    Args:
+        None
+
     Returns:
-        string with directory name, followed by summary of files in the directory
+        string with directory name, followed by summary of files in the directory and by
+        a summary of what the software in the current directory does.
     """
     lst = list_directory()
-    num_files = len(lst)
-    num_dirs = len([x for x in lst if x[1] == 'directory'])
-    num_files = num_files - num_dirs
-    return f"Current directory contains {num_files} files and {num_dirs} directories."
+    print(f"{lst=}")
+    client = get_client()
+    response = client.chat(
+        model=get_model(),
+        messages=[
+            {"role": "system", "content": f"Consider the contents of the current directory: {lst}"},
+            {"role": "user", "content": "Summarize the contents of the current directory. Make an educated guess as to what the major purposes of each file is, given the file name."},
+        ],
+    )
+
+    return f"Summary of directory:{response.message.content}\n"
 ```
 
-This code defines a wrapper module containing three tool functions designed for compatibility with the smolagents framework. The module includes **sa_list_directory()**, which lists files and directories in the current working directory with an optional parameter to include dot files; **read_file_contents()**, which takes a file path as input and returns the contents of that file as a string while handling potential errors and file encoding; and **summarize_directory()**, which provides a concise summary of the current directory by counting the total number of files and directories. All functions are decorated with @tool for integration with smlolagents, and the code imports necessary modules including **pathlib** for file operations, typing for type hints, and **pprint** for formatted output. The functions rely on an external **list_directory()** function imported from **tool_file_dir.py**, and they provide clear documentation through docstrings explaining their parameters, functionality, and return values. Error handling is implemented particularly in the file reading function to gracefully handle cases where files don't exist or cannot be read properly.
+This code defines a wrapper module containing three tool functions designed for compatibility with the `smolagents` framework. The module includes **sa_list_directory()**, which lists files and directories in the current working directory with an optional parameter to include dot files; **read_file_contents()**, which takes a file path as input and returns the contents of that file as a string while handling potential errors and file encoding; and **summarize_directory()**, which provides a concise summary of the current directory by counting the total number of files and directories. All functions are decorated with @tool for integration with smlolagents, and the code imports necessary modules including **pathlib** for file operations, typing for type hints, and **pprint** for formatted output. The functions rely on an external **list_directory()** function imported from **tool_file_dir.py**, and they provide clear documentation through docstrings explaining their parameters, functionality, and return values. Error handling is implemented particularly in the file reading function to gracefully handle cases where files don't exist or cannot be read properly.
 
 ### A Complete Smolagents Example using Three Tools
 
-This listing shows the script **smolagents_agent_test.py**:
+This listing shows the script **smolagents_agent_test1.py**:
 
 ```python
-from smolagents.agents import ToolCallingAgent
-from smolagents import tool, LiteLLMModel
-from typing import Optional
+import smolagents_compat  # noqa: F401
+
+import os
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from smolagents.agents import CodeAgent
+from smolagents import LiteLLMModel
 
 from smolagents_tools import sa_list_directory
-from smolagents_tools import summarize_directory
-from smolagents_tools import read_file_contents
+from smolagents_tools import sa_summarize_directory
+from smolagents_tools import sa_read_file_contents
+
+from ollama_config import get_model
+
+_model_name = get_model()
+
+if os.environ.get("CLOUD"):
+    api_base = "https://ollama.com"
+    api_key = os.environ.get("OLLAMA_API_KEY", "")
+else:
+    api_base = "http://localhost:11434"
+    api_key = "your-api-key"
 
 model = LiteLLMModel(
-    model_id="ollama_chat/llama3.2:latest",
-    api_base="http://localhost:11434",
-    api_key="your-api-key" # not used
+    model_id=f"ollama_chat/{_model_name}",
+    api_base=api_base,
+    api_key=api_key,
 )
+model.set_verbose=True
 
-agent = ToolCallingAgent(tools=[sa_list_directory,
-                                summarize_directory,
-                                read_file_contents],
-                         model=model)
+agent = CodeAgent(tools=[sa_list_directory,
+                                sa_summarize_directory,
+                                sa_read_file_contents],
+                         model=model,
+                         #planning_interval=2, # enables pre-planning for multiple steps
+                         max_steps=3, # maximum number of iterations
+                         add_base_tools=False) # set to True to use built-in tools
 
+#agent.write_inner_memory_from_logs() # creates an inner memory of the agent's logs for the LLM to view
+
+#print(agent.run("List the Python programs in the current directory, and then tell me which Python programs in the current directory evaluate the performance of LLMs?\n\n"))
 print(agent.run("What are the files in the current directory? Describe the current directory"))
-
-print(agent.run("Which Python scripts evaluate the performance of LLMs?"))
+#print(agent.run("Read the text in the file 'data/economics.txt' file and then summarize this text."))
 ```
 
-This code demonstrates the creation of an AI agent using the smolagents library, specifically configured to work with file system operations. It imports three specialized tools from **smolagents_tools**: **sa_list_directory** for listing directory contents, **summarize_directory** for providing directory summaries, and **read_file_contents** for accessing file contents. The code sets up a LiteLLMModel instance that connects to a local Ollama server running the llama3.2 model on port 11434, with provisions for API key authentication if needed. A **ToolCallingAgent** is then created with these three file-system-related tools, enabling it to interact with and analyze the local file system. The agent is instructed to examine the current directory through a natural language query, asking for both a listing and description of the files present. There's also a second section that would have asked the agent to specifically analyze Python programs in the directory and identify those related to LLM performance evaluation, showing the agent's potential for more complex file analysis tasks. This setup effectively creates an AI-powered file system navigator that can understand and respond to natural language queries about directory contents and file analysis.
+This code demonstrates the creation of an AI agent using the `smolagents` library, specifically configured to work with file system operations. It imports three specialized tools from **smolagents_tools**: **sa_list_directory** for listing directory contents, **summarize_directory** for providing directory summaries, and **read_file_contents** for accessing file contents. The code sets up a LiteLLMModel instance that connects to a local Ollama server running the llama3.2 model on port 11434, with provisions for API key authentication if needed. A **ToolCallingAgent** is then created with these three file-system-related tools, enabling it to interact with and analyze the local file system. The agent is instructed to examine the current directory through a natural language query, asking for both a listing and description of the files present. There's also a second section that would have asked the agent to specifically analyze Python programs in the directory and identify those related to LLM performance evaluation, showing the agent's potential for more complex file analysis tasks. This setup effectively creates an AI-powered file system navigator that can understand and respond to natural language queries about directory contents and file analysis.
 
 ### Output from the First Example: "List the Python programs in the current directory, and then tell me which Python programs in the current directory evaluate the performance of LLMs?"
 
@@ -572,4 +636,4 @@ Through multiple iterations, the agent analyzes a directory containing various P
 
 ## Agents Wrap Up
 
-There are several options for LLM agent frameworks. I especially like smolagents because it works fairly well with smaller models run with Ollama. I have experimented with other agent frameworks that work well with Claude, GPT-4o, etc., but fail more frequently when used with smaller LLMs.
+There are several options for LLM agent frameworks. I especially like `smolagents` because it works fairly well with smaller models run with Ollama. I have experimented with other agent frameworks that work well with Claude, GPT-5, Gemini 3, etc., but fail more frequently when used with smaller LLMs.

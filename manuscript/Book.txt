@@ -4,14 +4,17 @@ Commandline.md
 Short_examples.md
 Ollama_Tools.md
 Local_Search_Tool.md
+PydanticAI.md
 LLmEvals.md
 PromptCaching.md
 Agents.md
 AgentsPython.md
 Agno_Agents.md
 Colab_Finetuning.md
+DSP.md
 ReasoningModels.md
 GraphDb.md
+LangGraph.md
 OpenCodex.md
 Persistence.md
 OllamaCloud.md

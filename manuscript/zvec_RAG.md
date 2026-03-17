@@ -172,10 +172,11 @@ Function **ask_ollama** uses stateless execution: The /api/chat call sets "strea
 
 To run the pipeline, ensure the Ollama daemon is running locally on port 11434 and that both models (embeddinggemma and qwen3:1.7b) have been pulled. Place your .txt files in the **../data** directory and execute the script. The system will build the index and immediately drop you into a REPL loop for interactive querying.
 
-Here is an example run:
+Here is an example run where we specify the use of model **qwen3:1.7b**:
 
 ```bash
- $ uv run app.py 
+$ export MODEL=qwen3:1.7b
+$ uv run app.py 
 Using CPython 3.12.12
 Creating virtual environment at: .venv
 Installed 2 packages in 31ms

@@ -1,23 +1,49 @@
-DSP Experiments
+# DSP Experiments
 
 The DSP (Declarative Semantic Prompting) library represents a interesting shift in how we design, test, and deploy prompts for language models. Instead of treating prompt engineering as an ad hoc, trial-and-error process, DSP provides a structured framework—allowing developers to express prompts, model interfaces, and evaluation strategies declaratively. This design brings reproducibility and modularity to the forefront, enabling users to define what a model should do, rather than getting lost in procedural details of how to make it happen. At its core, DSP treats prompts, model parameters, and outputs as composable objects that can be versioned, tested, and reused across different workflows or projects.
 
 One of DSP’s most powerful aspects is its flexibility in integrating with different model backends. Whether you’re working with OpenAI or Gemini APIs, local inference servers, or fine-tuned models, DSP abstracts away the complexities of each environment. This is where Ollama becomes particularly compelling—it provides a seamless interface for running large language models locally with remarkable efficiency. Using DSP with Ollama, developers can declaratively specify prompts that interface directly with local models, allowing for private, offline experimentation while maintaining the same declarative patterns used with cloud-hosted models. The combination of DSP’s prompt modularity and Ollama’s local inference capabilities creates a powerful workflow for developers who want fine-grained control over both their model logic and their execution environment.
 
-## DSP Uses Pydantic for Type Signatures - a Frist Ollama Example
+## DSP Uses Pydantic for Type Signatures - a First Ollama Example
 
 The following Ollama DSP code leverages Pydantic-style typing to enforce structured input and output validation for prompts and model responses. In DSP, a Signature class—like MathProblem—uses a docstring or explicit field annotations to declare the expected input and output schema. When dspy.Signature is defined, DSP internally maps these declarations to Pydantic models, meaning each field (e.g., question, answer: float) gains automatic type checking, serialization, and conversion. This ensures that when a model produces an output, DSP can validate and coerce the response into the correct Python type—here, a float for answer, or a **list[float]** in the later **ChainOfThought** example.
 
 By doing this, DSP tightly integrates language model reasoning with Python’s data model, allowing structured validation and predictable data flow across model calls. Pydantic typing not only helps catch mismatched or ill-formed responses but also provides self-documenting clarity for developers—making each prompt specification both executable and strongly typed. This makes DSP code more robust and maintainable, particularly in complex prompt pipelines or when integrating multiple model components.
 
-Here is the documentation for DSP type signatures: [https://dspy.ai/learn/programming/signatures/](https://dspy.ai/learn/programming/signatures/).
+Here is the documentation for DSP type signatures: [https://dspy.ai/learn/programming/signatures/](https://dspy.ai/learn/programming/signatures/). The example is in file **Ollama_in_Action_Book/source-code/DSP/ollama_test.py**:
 
 ```python
+import os
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 import dspy
 
-lm = dspy.LM('ollama_chat/qwen3:8b', api_base="http://localhost:11434", api_key="ollama",
-                 temperature=1.0, max_tokens=4096)
-#print(lm("what s 1 + 2?"))
+from ollama_config import get_model
+
+_model_name = get_model()
+
+if os.environ.get("CLOUD"):
+    api_key = os.environ.get("OLLAMA_API_KEY", "")
+    lm = dspy.LM(
+        f"ollama_chat/{_model_name}",
+        api_base="https://ollama.com",
+        api_key=api_key,
+        temperature=1.0,
+        max_tokens=4096,
+    )
+else:
+    lm = dspy.LM(
+        f"ollama_chat/{_model_name}",
+        api_base="http://localhost:11434",
+        api_key="ollama",
+        temperature=1.0,
+        max_tokens=4096,
+    )
 
 dspy.configure(lm=lm)
 
