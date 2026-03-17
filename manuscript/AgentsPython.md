@@ -57,10 +57,11 @@ This example uses a UserProxyAgent configured for Python code execution with a d
 We use **uv** to run Python examples in this book. Internally the AG2 agent library will write, install dependencies in a sandbox, and run automatically generated code. Therefore, we must explicitly install *pip** inside the directory local **uv** **.venv** environment:
 
 ```
+export MODEL=nemotron-3-nano:4b
 uv run autogen_python_example.py
 ```
 
-The agent will generate Python code that it tries to run in a sandbox. As mentioned, **pip** is required for that to pull in libraries for the generated Python code.
+The agent will generate Python code that it tries to run in a sandbox.
 
 ## Example Output
 
