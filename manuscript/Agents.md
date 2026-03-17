@@ -8,7 +8,7 @@ Each example program and utility for this chapter uses the prefix **smolagents_*
 
 As agents operate performing tasks like interpreting user input, performing Chain of Thought (Cot) reasoning, observe the output from calling tools, and following plan steps one by one, then LLMs errors, hallucinations, and inconsistencies accumulate. When using Ollama we prefer using the most powerful models that we can run on our hardware. 
 
-Here we use nemotron-3-nano:4b (released by NVidea March 2026) that is recognized for its function calling capabilities, facilitating seamless integration with various tools. To use a different model set the **MODEL** environment variable.
+Here we use nemotron-3-nano:4b (released by NVIDEA March 2026) that is recognized for its function calling capabilities, facilitating seamless integration with various tools. To use a different model set the **MODEL** environment variable.
 
 As you work through the examples here using different local models running on Ollama, you might encounter compounding errors problems. When I am experimenting with ideas for implementing agents, I sometimes keep two versions of my code, one for a local model and one using eight of the commercial models GPT-4o or Claude Sonnet 3.5. Comparing the same agent setup using different models might provide some insight into runtime agent problems being your code or the model you are using.
 
@@ -62,7 +62,7 @@ Agents are designed to be lightweight and focused on specific tasks rather than 
 
 ## Let’s Write Some Code
 
-I am still experimenting with LLM-based agents. Please accept the following examples as my personal works in progress.
+I spend most of my time experimenting with LLM based agents and tool calling.
 
 ### “Hello World” Smolagents Example
 

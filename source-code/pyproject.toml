@@ -39,4 +39,5 @@ members = [
     "MCP",
     "MCP_experiments",
     "new_tool_examples",
+    "AG2_agents",
 ]

@@ -4,54 +4,59 @@ AG2 Open-Source AgentOS is a fork of Microsoft’s Autogen agent framework by ma
 
 The AG2 agent framework is an excellent tool for creating multi-agent applications, though it was originally designed to work primarily with OpenAI’s models. In this chapter, we demonstrate how to use its capabilities with a local Ollama model (qwen2.5:14b.) We use a modified version of an AG2 example that combines Python and Matplotlib with AG2, showcasing how local deployment can be achieved without sacrificing the robust tool calling features the framework offers.
 
-This approach provides several benefits. By leveraging a local model via Ollama, developers reduce dependency on external APIs, enhance privacy and security, and potentially lower operational costs while retaining the power of AG2’s code generation and execution. The example illustrates how an assistant agent generates the necessary code to perform tasks, and a user proxy agent executes that code to produce dynamic visualizations, such as plotting stock price changes. This decoupling of code generation from execution not only enhances reliability but also allows for greater customization of the execution environment. 
+This approach provides several benefits. By leveraging a local model via Ollama, developers reduce dependency on external APIs, enhance privacy and security, and potentially lower operational costs while retaining the power of AG2’s code generation and execution. The example illustrates how an assistant agent generates the necessary code to perform tasks, and a user proxy agent executes that code to produce dynamic visualizations, such as plotting stock price changes. This decoupling of code generation from execution not only enhances reliability but also allows for greater customization of the execution environment.
+
+The example for this chapter is in directory **AG2_agents**.
+
 
 ## Example Implementation
 
-I experimented with several local models using Ollama with mediocre results but the larger **qwen2.5:14b** model works very well. If you are running on a Mac you will need an Apple Silicon chip with 16G of memory to run this model.
+As I update this chapter in March 2026 most reasoning models work very well. You can specify which model is used using the MODEL environment variable.
 
 ```python
 from autogen import AssistantAgent, UserProxyAgent
+import sys
+from pathlib import Path
 
 # Requirements:
 # pip install ag2 ollama fix_busted_json yfinance matplotlib
 
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ollama_config import get_model
+
 config_list = [
  {
-    "model": "qwen2.5:14b",   # Choose a model that supports tool calling
-    "api_type": "ollama",     # Specify Ollama as the API type
-    "client_host": "http://localhost:11434",  # local Ollama server
-    "api_key": "fakekey",
-    "native_tool_calls": True # Enable native tool calling 
+  "model": get_model(), # Choose a model that supports tool calling
+  "api_type": "ollama", # Specify Ollama as the API type
+  "client_host": "http://localhost:11434", # local Ollama server
+  "api_key": "fakekey",
+  "native_tool_calls": True # Enable native tool calling
  }
 ]
 
 # Create the AssistantAgent using the local model config
 assistant = AssistantAgent("assistant",
                            llm_config={"config_list": config_list})
-
 # Create the UserProxyAgent; adjust code_execution_config as needed.
-user_proxy = UserProxyAgent(
-    "user_proxy",
-    code_execution_config={"work_dir": "coding", "use_docker": False}
-)
+user_proxy = UserProxyAgent("user_proxy",
+                            code_execution_config={"work_dir": "coding",
+                                                   "use_docker": False})
 
 # Initiate an automated chat between the agents.
-user_proxy.initiate_chat(
-    assistant,
-    message="Plot a chart of NVDA and TESLA stock price change YTD."
-)
+user_proxy.initiate_chat(assistant,
+                         message="Plot a chart of NVDA and TESLA stock price change YTD.")
 ```
 
-This code sets up a multi-agent workflow using AG2 by configuring an assistant agent and a user proxy agent. First, it defines a configuration for a local Ollama-based model (here, "qwen2.5:14b") that supports native tool calling. The configuration specifies details such as the API type ("ollama"), the local server URL ("http://localhost:11434"), a placeholder API key, and an option to enable native tool calls. This configuration is then passed to instantiate the AssistantAgent, which uses it to generate responses based on the local LLM.
+This code sets up a multi-agent workflow using AG2 by configuring an assistant agent and a user proxy agent. First, it defines a configuration for a local Ollama-based model that supports native tool calling. The configuration specifies details such as the API type ("ollama"), the local server URL ("http://localhost:11434"), a placeholder API key, and an option to enable native tool calls. This configuration is then passed to instantiate the AssistantAgent, which uses it to generate responses based on the local LLM.
 
 This example uses a UserProxyAgent configured for Python code execution with a designated working directory ("coding") and Docker disabled. Finally, the user proxy agent initiates an automated chat with the assistant by sending a message requesting the plotting of a chart for NVDA and TESLA stock price changes year-to-date. This setup demonstrates a simple, automated multi-agent interaction where the assistant generates responses (potentially including code) and the user proxy executes those responses to fulfill the requested task. You will either want to remove the generated code directory **coding** after running this example of add **coding** to your **.gitignore** file.
 
 We use **uv** to run Python examples in this book. Internally the AG2 agent library will write, install dependencies in a sandbox, and run automatically generated code. Therefore, we must explicitly install *pip** inside the directory local **uv** **.venv** environment:
 
 ```
-uv venv
-uv pip install pip
 uv run autogen_python_example.py
 ```
 
