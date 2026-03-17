@@ -1,11 +1,18 @@
 import sqlite3
 import json
+import sys
+from pathlib import Path
 from typing import Dict, Any, List, Optional
-import ollama
 from functools import wraps
 import re
 from contextlib import contextmanager
-from textwrap import dedent # for multi-line string literals
+from textwrap import dedent  # for multi-line string literals
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ollama_config import get_client, get_model
 
 class DatabaseError(Exception):
     """Custom exception for database operations"""
@@ -130,8 +137,8 @@ class SQLiteTool:
                 raise DatabaseError(f"Query execution failed: {str(e)}")
 
 class OllamaFunctionCaller:
-    def __init__(self, model: str = "llama3.2:latest"):
-        self.model = model
+    def __init__(self, model: str = None):
+        self.model = model or get_model()
         self.sqlite_tool = SQLiteTool()
         self.function_definitions = self._get_function_definitions()
 
@@ -166,9 +173,11 @@ class OllamaFunctionCaller:
 
             User request: {user_input}
 
-            Respond with a JSON object containing:
+            Respond with a single JSON object containing:
             - "function": The function name to call
             - "parameters": The parameters for the function
+
+            Return ONLY the JSON object, with no other text or explanation.
 
             Response:
         """).strip()
@@ -176,17 +185,23 @@ class OllamaFunctionCaller:
 
     def _parse_ollama_response(self, response: str) -> Dict[str, Any]:
         try:
-            json_match = re.search(r'\{.*\}', response, re.DOTALL)
-            if not json_match:
-                raise ValueError("No valid JSON found in response")
-            return json.loads(json_match.group())
-        except json.JSONDecodeError as e:
+            # Find the first opening brace
+            start_idx = response.find('{')
+            if start_idx == -1:
+                raise ValueError("No valid JSON object found in response")
+            
+            # Use raw_decode to parse the first JSON object found
+            decoder = json.JSONDecoder()
+            obj, end_idx = decoder.raw_decode(response[start_idx:])
+            return obj
+        except (json.JSONDecodeError, ValueError) as e:
             raise ValueError(f"Invalid JSON in response: {str(e)}")
 
     def process_request(self, user_input: str) -> Any:
         try:
-            response = ollama.generate(model=self.model, prompt=self._generate_prompt(user_input))
-            function_call = self._parse_ollama_response(response.response)
+            client = get_client()
+            response = client.generate(model=self.model, prompt=self._generate_prompt(user_input))
+            function_call = self._parse_ollama_response(response['response'])
 
             if function_call["function"] == "query_database":
                 return self.sqlite_tool.execute_query(function_call["parameters"]["query"])

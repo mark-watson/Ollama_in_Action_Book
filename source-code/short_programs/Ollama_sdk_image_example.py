@@ -1,15 +1,32 @@
 import ollama
 import base64
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ollama_config import get_client, get_model
+
+# NOTE: This example uses a vision/multimodal model to analyze images.
+# The default model (nemotron-3-nano:4b) is text-only; set MODEL env var
+# to a vision-capable model such as 'llava:7b' for image analysis.
+DEFAULT_VISION_MODEL = "llava:7b"
 
 def analyze_image(image_path: str, prompt: str) -> str:
     # Read and encode the image
     with open(image_path, 'rb') as img_file:
         image_data = base64.b64encode(img_file.read()).decode('utf-8')
 
+    # Use MODEL env var if set, otherwise fall back to the vision default
+    model = get_model() if __import__('os').environ.get('MODEL') else DEFAULT_VISION_MODEL
+
     try:
+        client = get_client()
         # Create a stream of responses using the Ollama SDK
-        stream = ollama.generate(
-            model='llava:7b',
+        stream = client.generate(
+            model=model,
             prompt=prompt,
             images=[image_data],
             stream=True

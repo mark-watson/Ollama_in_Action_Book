@@ -2,14 +2,33 @@
 
 import smolagents_compat  # noqa: F401
 
+import os
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from smolagents.agents import ToolCallingAgent
 from smolagents import tool, LiteLLMModel
 from typing import Optional
 
+from ollama_config import get_model
+
+_model_name = get_model()
+
+if os.environ.get("CLOUD"):
+    api_base = "https://ollama.com"
+    api_key = os.environ.get("OLLAMA_API_KEY", "")
+else:
+    api_base = "http://localhost:11434"
+    api_key = "your-api-key"
+
 model = LiteLLMModel(
-    model_id="ollama_chat/llama3.2:latest",
-    api_base="http://localhost:11434", # replace with remote open-ai compatible server if necessary
-    api_key="your-api-key" # replace with API key if necessary
+    model_id=f"ollama_chat/{_model_name}",
+    api_base=api_base,
+    api_key=api_key,
 )
 
 @tool

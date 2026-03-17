@@ -1,8 +1,34 @@
+import os
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 import dspy
 
-lm = dspy.LM('ollama_chat/qwen3:8b', api_base="http://localhost:11434", api_key="ollama",
-                 temperature=1.0, max_tokens=4096)
-#print(lm("what s 1 + 2?"))
+from ollama_config import get_model
+
+_model_name = get_model()
+
+if os.environ.get("CLOUD"):
+    api_key = os.environ.get("OLLAMA_API_KEY", "")
+    lm = dspy.LM(
+        f"ollama_chat/{_model_name}",
+        api_base="https://ollama.com",
+        api_key=api_key,
+        temperature=1.0,
+        max_tokens=4096,
+    )
+else:
+    lm = dspy.LM(
+        f"ollama_chat/{_model_name}",
+        api_base="http://localhost:11434",
+        api_key="ollama",
+        temperature=1.0,
+        max_tokens=4096,
+    )
 
 dspy.configure(lm=lm)
 

@@ -137,14 +137,22 @@ In this example we perform a web search and then use a LLM model to summarize ea
 
 # Note: the answer.contents is nicely converted from HTML to Markdown.
 
+import os
+import sys
+from pathlib import Path
 import ollama
 from ollama import Client
-import os
 from pprint import pprint
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ollama_config import get_model
 
 client = Client(
     host="https://ollama.com",
-    headers={'Authorization': os.environ.get("OLLAMA_API_KEY")}
+    headers={'Authorization': 'Bearer ' + os.environ.get('OLLAMA_API_KEY', '')}
 )
 
 def generate(text):
@@ -155,10 +163,10 @@ def generate(text):
       },
     ]
 
-    response = client.chat('gpt-oss:20b', messages=messages, stream=False)
+    response = client.chat(get_model(), messages=messages, stream=False)
     return response['message']['content']
 
-P="Summarize the following Markdown text, returning plain text. Markdown text:\n"
+P = "Summarize the following Markdown text, returning only plain text. Markdown text:\n\n"
 
 def clean_web_query(query, max_results=2):
     ret = []
@@ -184,9 +192,10 @@ What the code does:
 - Define **clean_web_query(query, max_results=2)** by calling **ollama.web_search(query)** to get search results (each result has fields **.content**, **.url**, etc.). For each result, it takes the **.content**, prepends the prefix **P**, and passes that into **generate(...)** to get a cleaned, summarized plain-text version.	It collects and returns a list of those cleaned summaries.
 - Test/example usage:	Calls **clean_web_query(...)** on a sample query about “AI Consultant Mark Watson … Semantic Web." and prints eac the cleaned summaries for all of the returned search results.
 
-Here is some partial sample output:
+Here is some partial sample output (note we are defining the model as gpt-oss:20b):
 
 ```bash
+$ export MODEL='gpt-oss:20b'
 $ uv run ollama_web_search.py
 Mark Watson is a remote artificial intelligence consultant with experience dating back to 1982. He has worked on AI, machine learning, semantic web, linked data, and natural language processing, and has been using deep learning since 2015 and large language models since 2022. His customer list includes major firms such as Google, Capital One, Disney, and others. He offers “Getting Started” consulting for LLMs, with priority services at $120 per hour and non priority at $60 per hour.  
 

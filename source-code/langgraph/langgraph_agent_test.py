@@ -2,11 +2,18 @@ from langgraph.prebuilt import create_react_agent
 from langchain_core.tools import tool
 from langchain_community.tools import DuckDuckGoSearchRun
 from langchain_ollama import ChatOllama
-import ollama
 import json
 from pprint import pprint
+import sys
+from pathlib import Path
 
-client = ollama.Client()
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ollama_config import get_client, get_model
+
+client = get_client()
 
 @tool
 def search(s_query: str) -> str:
@@ -26,7 +33,7 @@ def answer_from_search(original_query: str, search_results: str) -> str:
     ]
 
     response = client.chat(
-        model="llama3.1:latest",
+        model=get_model(),
         messages=messages,
     )
 
@@ -35,7 +42,7 @@ def answer_from_search(original_query: str, search_results: str) -> str:
     return r
 
 
-model = ChatOllama(model="llama3.1:latest")
+model = ChatOllama(model=get_model())
 tools = [search, answer_from_search]
 agent = create_react_agent(model,
                            tools)

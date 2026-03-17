@@ -1,9 +1,17 @@
 import os
+import sys
+from pathlib import Path
 import requests
 from pydantic import Field
 from pydantic_ai import Agent, ModelSettings
 from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.openai import OpenAIProvider
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ollama_config import get_model
 
 # --- 1. Define the Web Search Tool ---
 # This tool uses the DuckDuckGo Instant Answer API to get a summary for a query.
@@ -33,8 +41,6 @@ def search_web(query: str = Field(..., description="The search query to look up 
         summary = data.get("AbstractText") or data.get("Answer")
         
         if summary:
-            # The API can return HTML entities, so we'll clean them up for this example.
-            # In a real app, you might use a library like BeautifulSoup for robust parsing.
             summary = summary.replace('<b>', '').replace('</b>', '').replace('<i>', '').replace('</i>', '')
             print(f"--- Search successful. Summary found. ---")
             return summary
@@ -47,35 +53,32 @@ def search_web(query: str = Field(..., description="The search query to look up 
         return f"An error occurred while trying to search: {e}"
 
 
-# --- 2. Configure the AI Model (Ollama) ---
-# This mirrors the working weather example, pointing to a local Ollama instance.
-# Ensure Ollama is running (`ollama serve`) and you have pulled the model (`ollama pull qwen3:8b`).
-os.environ["OPENAI_API_KEY"] = "ollama"  # Dummy key required by the provider interface
-ollama_provider = OpenAIProvider(base_url="http://localhost:11434/v1")
+# --- 2. Configure the AI Model (Ollama or Ollama Cloud) ---
+if os.environ.get("CLOUD"):
+    # Use Ollama Cloud via OpenAI-compatible endpoint
+    api_key = os.environ.get("OLLAMA_API_KEY", "")
+    os.environ["OPENAI_API_KEY"] = api_key
+    ollama_provider = OpenAIProvider(base_url="https://ollama.com/v1")
+else:
+    os.environ["OPENAI_API_KEY"] = "ollama"  # Dummy key required by the provider interface
+    ollama_provider = OpenAIProvider(base_url="http://localhost:11434/v1")
+
 ollama_model = OpenAIChatModel(
-    "qwen3:8b",
+    get_model(),
     provider=ollama_provider,
     settings=ModelSettings(temperature=0.1),  # Lower temperature for more reliable tool use
 )
 
 
 # --- 3. Create the Agent ---
-# We create the agent, providing it with the LLM configuration and the list of
-# available tools. In this case, it only has one tool: `search_web`.
 agent = Agent(ollama_model, tools=[search_web])
 
 
 # --- 4. Run the Agent to Find the Weather ---
-# The user asks a question the LLM can't answer from its internal knowledge.
-# The agent will recognize this, inspect its tools, and decide that `search_web`
-# is the appropriate tool to use. It will then formulate a search query
-# (e.g., "current weather in San Diego") and call the tool.
 prompt = "What is the population of San Diego?"
 print(f"Querying the agent with prompt: '{prompt}'\n")
 
 response = agent.run_sync(prompt)
 
 print("\n--- Final Agent Response ---")
-# The final output is the LLM's natural language response, which is
-# synthesized from the information returned by the search tool.
 print(response)

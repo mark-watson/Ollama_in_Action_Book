@@ -4,11 +4,21 @@
 #   uv run mem0_persistence.py "What is the last color we talked about?"
 
 import argparse
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from mem0 import Memory
-from ollama import chat
 from ollama import ChatResponse
-           
+
+from ollama_config import get_client, get_model
+
 USER_ID = "123"
+
+_model = get_model()
 
 config = {
   "user_id": USER_ID,
@@ -19,9 +29,15 @@ config = {
   "llm": {
     "provider": "ollama",
     "config": {
-      "model": "gemma3n:latest",
+      "model": _model,
       "temperature": 0.1,
       "max_tokens": 5000
+    }
+  },
+  "embedder": {
+    "provider": "ollama",
+    "config": {
+      "model": "nomic-embed-text"
     }
   },
 }
@@ -30,7 +46,8 @@ def call_ollama_chat(model: str, messages: list[dict]) -> str:
   """
   Send a chat request to Ollama and return the assistant's reply.
   """
-  response: ChatResponse = chat(
+  client = get_client()
+  response: ChatResponse = client.chat(
       model=model,
       messages=messages
   )
@@ -56,7 +73,7 @@ def main():
     {"role":"user","content":args.prompt}
   ]
   
-  reply = call_ollama_chat("gemma3n:latest", msgs) # "gemma3:27b-it-qat", msgs)
+  reply = call_ollama_chat(_model, msgs)
 
   convo = {"role":"assistant","content":f"QUERY: {args.prompt}\n\nANSWER:\n{reply}\n"}
   m.add(convo, user_id=USER_ID, infer=False) # set to True to use LLM to infer good inserts

@@ -12,11 +12,7 @@ from tools.tool_summarize_text import summarize_text
 
 from pprint import pprint
 
-# print(list_directory())
-# print(read_file_contents('requirements.txt'))
-# print(uri_to_markdown('https://markwatson.com'))
-
-import ollama
+from ollama_config import get_client, get_model
 
 # Map function names to function objects
 available_functions = {
@@ -26,14 +22,15 @@ available_functions = {
     "summarize_text": summarize_text,
 }
 
+client = get_client()
 memory_context = ""
 
 # User prompt
 user_prompt = "Read the text in the file '../data/economics.txt' file and then summarize this text."
 
 # Initiate chat with the model
-response = ollama.chat(
-    model="llama3.2:latest",
+response = client.chat(
+    model=get_model(),
     messages=[
         {"role": "system", "content": f"Current conversation memory: {memory_context}"},
         {"role": "user", "content": user_prompt},

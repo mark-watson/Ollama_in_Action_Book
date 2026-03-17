@@ -2,27 +2,49 @@ import os
 import json
 import urllib.request
 from pathlib import Path
+import sys
 import zvec
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ollama_config import get_model
 
 # Configuration
 config = {
     "data_dir": os.getenv("DATA_DIR", "../data"),
     "extensions": (".txt",),
     "embedding_model": os.getenv("EMBEDDING_MODEL", "embeddinggemma"),
-    "chat_model": os.getenv("CHAT_MODEL", "qwen3:1.7b"),
+    "chat_model": os.getenv("CHAT_MODEL", get_model()),
 }
 
-OLLAMA_BASE = "http://localhost:11434"
+if os.environ.get("CLOUD"):
+    OLLAMA_BASE = "https://ollama.com"
+    OLLAMA_HEADERS = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + os.environ.get("OLLAMA_API_KEY", ""),
+    }
+else:
+    OLLAMA_BASE = "http://localhost:11434"
+    OLLAMA_HEADERS = {"Content-Type": "application/json"}
+
+
+def _make_request(url, data):
+    """Helper to make an HTTP POST with appropriate headers."""
+    encoded = json.dumps(data).encode("utf-8")
+    req = urllib.request.Request(url, data=encoded, headers=OLLAMA_HEADERS)
+    return req
 
 
 def get_embedding(text):
-    """Get embedding from local Ollama instance."""
+    """Get embedding from Ollama (local or cloud)."""
     url = f"{OLLAMA_BASE}/api/embeddings"
-    data = json.dumps({
+    data = {
         "model": config["embedding_model"],
         "prompt": text,
-    }).encode("utf-8")
-    req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
+    }
+    req = _make_request(url, data)
     try:
         with urllib.request.urlopen(req) as res:
             return json.loads(res.read().decode("utf-8"))["embedding"]
@@ -110,15 +132,15 @@ def ask_ollama(question, context_chunks):
         f"Context:\n{context}"
     )
     url = f"{OLLAMA_BASE}/api/chat"
-    payload = json.dumps({
+    payload = {
         "model": config["chat_model"],
         "stream": False,
         "messages": [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": question},
         ],
-    }).encode("utf-8")
-    req = urllib.request.Request(url, data=payload, headers={"Content-Type": "application/json"})
+    }
+    req = _make_request(url, payload)
     try:
         with urllib.request.urlopen(req) as res:
             body = json.loads(res.read().decode("utf-8"))

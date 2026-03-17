@@ -1,7 +1,7 @@
 [project]
 name = "graph"
 version = "0.1.0"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.14"
 dependencies = [
     "kuzu>=0.11.3",
     "langchain>=0.3.27",

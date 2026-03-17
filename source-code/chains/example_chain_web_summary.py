@@ -10,11 +10,7 @@ from tools.tool_summarize_text import summarize_text
 
 from pprint import pprint
 
-# print(list_directory())
-# print(read_file_contents('requirements.txt'))
-# print(uri_to_markdown('https://markwatson.com'))
-
-import ollama
+from ollama_config import get_client, get_model
 
 # Map function names to function objects
 available_functions = {
@@ -22,13 +18,14 @@ available_functions = {
     "summarize_text": summarize_text,
 }
 
+client = get_client()
 memory_context = ""
 # User prompt
 user_prompt = "Get the text of 'https://knowledgebooks.com' and then summarize the text from this web site."
 
 # Initiate chat with the model
-response = ollama.chat(
-    model='llama3.2:latest',
+response = client.chat(
+    model=get_model(),
     messages=[{"role": "user", "content": user_prompt}],
     tools=[uri_to_markdown, summarize_text],
 )

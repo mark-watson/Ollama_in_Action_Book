@@ -10,11 +10,7 @@ from tools.tool_file_dir import list_directory
 from tools.tool_file_contents import read_file_contents
 from tools.tool_web_search import uri_to_markdown
 
-# print(list_directory())
-# print(read_file_contents('requirements.txt'))
-# print(uri_to_markdown('https://markwatson.com'))
-
-import ollama
+from ollama_config import get_client, get_model
 
 # Map function names to function objects
 available_functions = {
@@ -23,12 +19,14 @@ available_functions = {
     "uri_to_markdown": uri_to_markdown,
 }
 
+client = get_client()
+
 # User prompt
 user_prompt = "Please list the contents of the current directory, read the 'pyproject.toml' file, and convert 'https://markwatson.com' to markdown."
 
 # Initiate chat with the model
-response = ollama.chat(
-    model="llama3.2:latest",
+response = client.chat(
+    model=get_model(),
     messages=[{"role": "user", "content": user_prompt}],
     tools=[list_directory, read_file_contents, uri_to_markdown],
 )

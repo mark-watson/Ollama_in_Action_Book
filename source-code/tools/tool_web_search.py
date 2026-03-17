@@ -3,15 +3,21 @@ Provides functions for web searching and HTML to Markdown conversion
 and for returning the contents of a URI as plain text (with minimal markdown)
 """
 
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from typing import Dict, Any
 import requests
 from bs4 import BeautifulSoup
 import re
 from urllib.parse import urlparse
 import html
-from ollama import chat
 import json
-from .tool_summarize_text import summarize_text
+from tool_summarize_text import summarize_text
 
 import requests
 import os

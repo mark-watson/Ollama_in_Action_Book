@@ -3,6 +3,8 @@ name = "smolagents-examples"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
+    "bs4>=0.0.2",
+    "litellm>=1.82.3",
     "ollama>=0.6.0",
     "smolagents>=0.1.0",
 ]

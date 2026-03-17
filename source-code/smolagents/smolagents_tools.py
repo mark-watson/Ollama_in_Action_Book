@@ -3,10 +3,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
-    sys.path.append(str(ROOT))
+    sys.path.insert(0, str(ROOT))
 
 """
-Wrapper for book example tools for smloagents compatibility
+Wrapper for book example tools for smolagents compatibility
 """
 
 import smolagents_compat  # noqa: F401
@@ -18,7 +18,7 @@ from pprint import pprint
 from tools.tool_file_dir import list_directory
 from tools.tool_file_contents import read_file_contents
 
-import ollama
+from ollama_config import get_client, get_model
 
 @tool
 def sa_list_directory() -> str:
@@ -72,13 +72,13 @@ def sa_summarize_directory() -> str:
     """
     lst = list_directory()
     print(f"{lst=}")
-    response = ollama.chat(
-        model="llama3.2:latest",
+    client = get_client()
+    response = client.chat(
+        model=get_model(),
         messages=[
             {"role": "system", "content": f"Consider the contents of the current directory: {lst}"},
             {"role": "user", "content": "Summarize the contents of the current directory. Make an educated guess as to what the major purposes of each file is, given the file name."},
         ],
-        #tools=[read_file_contents],
     )
 
     return f"Summary of directory:{response.message.content}\n"

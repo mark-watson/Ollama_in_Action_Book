@@ -1,14 +1,26 @@
+# set: export CLOUD=1
+#      export MODEL=nemotron-3-super:cloud
+
+
 import gradio as gr
 import os
 import json
+import sys
+from pathlib import Path
 from ollama import Client
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ollama_config import get_model
 
 client = Client(
   host="https://ollama.com",
-  headers={'Authorization': os.environ.get("OLLAMA_API_KEY")}
+  headers={'Authorization': 'Bearer ' + os.environ.get('OLLAMA_API_KEY', '')}
 )
 
-MODEL = "gpt-oss:20b-cloud"
+MODEL = get_model()
 
 def extract_entities_and_links(text: str):
   """Uses an LLM to extract entities and links from text."""

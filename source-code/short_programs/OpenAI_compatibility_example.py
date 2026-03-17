@@ -1,18 +1,38 @@
+import os
+import sys
+from pathlib import Path
 import openai
 from typing import List, Dict
 
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ollama_config import get_model
+
+DEFAULT_MODEL = get_model()
+
+
 class OllamaClient:
-    def __init__(self, base_url: str = "http://localhost:11434/v1"):
-        self.client = openai.OpenAI(
-            base_url=base_url,
-            api_key="fake-key"  # Ollama doesn't require authentication locally
-        )
+    def __init__(self):
+        if os.environ.get("CLOUD"):
+            # Use Ollama Cloud via OpenAI-compatible endpoint
+            api_key = os.environ.get("OLLAMA_API_KEY", "")
+            self.client = openai.OpenAI(
+                base_url="https://ollama.com/v1",
+                api_key=api_key,
+            )
+        else:
+            self.client = openai.OpenAI(
+                base_url="http://localhost:11434/v1",
+                api_key="fake-key"  # Ollama doesn't require authentication locally
+            )
 
     def chat_with_context(
         self,
         system_context: str,
         user_prompt: str,
-        model: str = "llama3.2:latest",
+        model: str = DEFAULT_MODEL,
         temperature: float = 0.7
     ) -> str:
         try:
@@ -36,7 +56,7 @@ class OllamaClient:
     def chat_conversation(
         self,
         messages: List[Dict[str, str]],
-        model: str = "llama2"
+        model: str = DEFAULT_MODEL
     ) -> str:
         try:
             response = self.client.chat.completions.create(
@@ -63,7 +83,7 @@ def main():
     response = client.chat_with_context(
         system_context=system_context,
         user_prompt=user_prompt,
-        model="llama3.2:latest",
+        model=DEFAULT_MODEL,
         temperature=0.7
     )
 
@@ -81,7 +101,7 @@ def main():
 
     response = client.chat_conversation(
         messages=conversation,
-        model="llama3.2:latest"
+        model=DEFAULT_MODEL
     )
 
     print("Conversation response:")

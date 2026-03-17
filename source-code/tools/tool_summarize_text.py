@@ -2,8 +2,14 @@
 Summarize text
 """
 
-from ollama import ChatResponse
-from ollama import chat
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ollama_config import get_client, get_model
 
 
 def summarize_text(text: str, context: str = "") -> str:
@@ -24,8 +30,9 @@ def summarize_text(text: str, context: str = "") -> str:
     elif len(context) > 50:
         prompt = f"Given this context:\n\n{context}\n\n" + prompt
 
-    summary: ChatResponse = chat(
-        model="llama3.2:latest",
+    client = get_client()
+    summary = client.chat(
+        model=get_model(),
         messages=[
             {"role": "system", "content": prompt},
             {"role": "user", "content": text},

@@ -1,23 +1,36 @@
 import json
+import sys
+from pathlib import Path
 from typing import List, Dict, Optional, Iterator
-import ollama
-from ollama import GenerateResponse
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ollama_config import get_client, get_model
 
 
 def clean_json_response(response: str) -> str:
     """
-    Cleans the response string by removing markdown code blocks and other formatting
+    Cleans the response string by removing markdown code blocks, think tags, and other formatting
     """
+    # Strip reasoning model <think>...</think> blocks
+    if "</think>" in response:
+        response = response.split("</think>", 1)[-1]
     # Remove markdown code block indicators
-    response = response.replace("json", "").replace("```", "")
+    response = response.replace("```json", "").replace("```", "")
     # Strip whitespace
     response = response.strip()
+    # Extract JSON object if there's leading non-JSON text
+    start = response.find("{")
+    if start > 0:
+        response = response[start:]
     return response
 
 def evaluate_llm_conversation(
     chat_history: List[Dict[str, str]],
     evaluation_criteria: Optional[List[str]] = None,
-    model: str = "llama3.1" # older model that is very good at generating JSON
+    model: str = None  # defaults to get_model() when None
 ) -> Dict[str, any]:
     """
     Evaluates a chat history using Ollama to run the evaluation model.
@@ -25,11 +38,14 @@ def evaluate_llm_conversation(
     Args:
         chat_history: List of dictionaries containing the conversation
         evaluation_criteria: Optional list of specific criteria to evaluate
-        model: Ollama model to use for evaluation
+        model: Ollama model to use for evaluation (defaults to MODEL env var or nemotron-3-nano:4b)
 
     Returns:
         Dictionary containing evaluation results
     """
+    if model is None:
+        model = get_model()
+
     if evaluation_criteria is None:
         evaluation_criteria = [
             "Response accuracy",
@@ -63,11 +79,11 @@ def evaluate_llm_conversation(
     """
 
     try:
-        # Get evaluation from Ollama
-        response: GenerateResponse | Iterator[GenerateResponse] = ollama.generate(
+        client = get_client()
+        response = client.generate(
             model=model,
             prompt=evaluation_prompt,
-            system="You are an expert AI evaluator. Provide detailed, objective assessments in JSON format. Only return JSON, no other text." 
+            system="You are an expert AI evaluator. Provide detailed, objective assessments in JSON format. Only return JSON, no other text."
         )
 
         response_clean: str = clean_json_response(response['response'])

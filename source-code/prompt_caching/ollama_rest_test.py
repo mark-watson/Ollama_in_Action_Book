@@ -1,15 +1,31 @@
 import requests
 import time
 import json
-
+import os
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ollama_config import get_model
 
 # 1. Create a "Heavy" System Prompt (simulating your few pages of text)
 static_context = Path("../data/economics.txt").read_text(encoding="utf-8")
 
-# CONFIGURATION
-MODEL = "qwen3:1.7b"  # Ensure you have this model pulled (ollama pull qwen3:1.7b)
-OLLAMA_URL = "http://localhost:11434/api/generate"
+# CONFIGURATION — model from env var; URL switches between local and cloud
+MODEL = get_model()
+
+if os.environ.get("CLOUD"):
+    OLLAMA_URL = "https://ollama.com/api/generate"
+    HEADERS = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + os.environ.get("OLLAMA_API_KEY", ""),
+    }
+else:
+    OLLAMA_URL = "http://localhost:11434/api/generate"
+    HEADERS = {"Content-Type": "application/json"}
 
 def query_ollama(prompt, label):
     payload = {
@@ -23,7 +39,7 @@ def query_ollama(prompt, label):
     }
     
     start_time = time.time()
-    response = requests.post(OLLAMA_URL, json=payload)
+    response = requests.post(OLLAMA_URL, json=payload, headers=HEADERS)
     end_time = time.time()
     
     if response.status_code == 200:

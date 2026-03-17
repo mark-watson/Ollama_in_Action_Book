@@ -2,15 +2,22 @@
 Judge results from LLM generation from prompts
 """
 
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from typing import Optional, Dict, Any
 from pathlib import Path
 import json
 import re
 from pprint import pprint
 
-import ollama
+from ollama_config import get_client, get_model
 
-client = ollama.Client()
+client = get_client()
 
 def judge_results(original_prompt: str, llm_gen_results: str) -> Dict[str, str]:
     """
@@ -32,7 +39,7 @@ def judge_results(original_prompt: str, llm_gen_results: str) -> Dict[str, str]:
         ]
 
         response = client.chat(
-            model="qwen3-coder:latest", # "llama3.2:latest",
+            model=get_model(),
             messages=messages,
         )
 

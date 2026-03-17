@@ -2,12 +2,18 @@
 Provides functions detecting hallucinations by other LLMs
 """
 
-from typing import Optional, Dict, Any
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from typing import Optional, Dict, Any
 from pprint import pprint
 import json
-from ollama import ChatResponse
-from ollama import chat
+
+from ollama_config import get_client, get_model
 
 def read_anti_hallucination_template() -> str:
     """
@@ -38,8 +44,9 @@ def detect_hallucination(user_input: str, context: str, output: str) -> str:
      }
     """
     prompt = TEMPLATE.format(input=user_input, context=context, output=output)
-    response: ChatResponse = chat(
-        model="llama3.2:latest",
+    client = get_client()
+    response = client.chat(
+        model=get_model(),
         messages=[
             {"role": "system", "content": prompt},
             {"role": "user", "content": output},
