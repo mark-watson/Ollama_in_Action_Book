@@ -108,7 +108,7 @@ The evaluation process is:
 
 ```text
 $ cd OllamaEx
-$ python example_judge.py 
+$ uv run example_judge.py 
 
 ==================================================
  Judge output from a LLM
