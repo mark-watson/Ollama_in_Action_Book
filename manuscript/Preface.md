@@ -4,11 +4,9 @@ Ollama is an open-source framework that enables users to run
 large language models (LLMs) locally on their computers, facilitating tasks like text summarization, chatbot development, and more. It supports various models, including Llama 4, Mistral, and Gemma, and offers flexibility in model sizes and quantization options to balance performance and resource usage. Ollama provides a command-line interface and an HTTP API for seamless integration into applications, making advanced AI capabilities accessible without relying on cloud services. Ollama is available on macOS,
 Linux, and Windows.
 
-**A main theme of this book are the advantages of running models privately on either your personal computer or a computer at work.**
-While many commercial LLM API venders have options to not reuse
-your prompt data and the output generated from your prompts to train their systems,
-there is no better privacy and security than running open weight
-models on your own hardware.
+**Note: New change March 2026: in all examples, the model name used in examples is picked up from the environmental variable `MODEL` and if the environmental variable `CLOUD` is set then Ollama Cloud services will be used instead of using Ollama on your computer. Dear reader, this is a quality of life change for my own benefit since I test many models and often run tests using Ollama Cloud.**
+
+A main theme of this book are the advantages of running models privately on either your personal computer or a computer at work. While many commercial LLM API venders have options to not reuse your prompt data and the output generated from your prompts to train their systems, there is no better privacy and security than running open weight models on your own hardware.
 
 This book is about running Large Language Models (LLMs)
 on your own hardware using Ollama. We will be using both the Ollama Python SDK library’s native support for passing text and images to LLMs as well as Ollama’s OpenAI API compatibility layer that lets you take any of the projects you may already run using OpenAI’s APIs and port them easily to run locally on Ollama.
