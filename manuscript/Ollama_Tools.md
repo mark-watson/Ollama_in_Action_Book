@@ -54,7 +54,7 @@ The main execution flow involves sending a user prompt to the Ollama hosted mode
 Here is sample output from using these three tools (most output removed for brevity and blank lines added for clarity):
 
 ```
-$ python ollama_tools_examples.py
+$ uv run ollama_tools_examples.py
 
 function_to_call=<function read_file_contents at 0x104fac9a0>
 
