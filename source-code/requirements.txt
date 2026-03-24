@@ -1,5 +1,5 @@
 smolagents
-litellm[proxy]
+litellm[proxy]>=1.82.6
 accelerate
 requests
 beautifulsoup4
