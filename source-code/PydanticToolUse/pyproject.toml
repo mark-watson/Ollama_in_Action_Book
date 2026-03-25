@@ -8,3 +8,6 @@ dependencies = [
     "pydantic>=2.11.10",
     "pydantic-ai>=1.1.0",
 ]
+
+[tool.uv]
+exclude-newer = "2 days"

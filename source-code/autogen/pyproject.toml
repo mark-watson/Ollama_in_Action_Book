@@ -9,3 +9,6 @@ dependencies = [
     "ollama>=0.6.0",
     "yfinance>=0.2.66",
 ]
+
+[tool.uv]
+exclude-newer = "2 days"

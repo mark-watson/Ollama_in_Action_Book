@@ -10,3 +10,6 @@ dependencies = [
     "langgraph>=0.6.10",
     "ollama>=0.6.0",
 ]
+
+[tool.uv]
+exclude-newer = "2 days"

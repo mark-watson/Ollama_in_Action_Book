@@ -8,3 +8,5 @@ dependencies = [
     "gradio>=5.49.1",
     "ollama",
 ]
+[tool.uv]
+exclude-newer = "2 days"

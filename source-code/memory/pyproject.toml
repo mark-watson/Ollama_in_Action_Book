@@ -7,3 +7,6 @@ dependencies = [
     "mem0ai>=0.1.118",
     "ollama>=0.6.0",
 ]
+
+[tool.uv]
+exclude-newer = "2 days"

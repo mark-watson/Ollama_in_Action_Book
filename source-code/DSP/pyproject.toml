@@ -8,3 +8,6 @@ dependencies = [
     "dspy>=3.0.3",
     "ollama>=0.6.1",
 ]
+
+[tool.uv]
+exclude-newer = "2 days"

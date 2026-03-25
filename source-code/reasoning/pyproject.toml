@@ -7,3 +7,6 @@ dependencies = [
     "langchain-ollama>=0.3.10",
     "ollama>=0.6.0",
 ]
+
+[tool.uv]
+exclude-newer = "2 days"
