@@ -4,6 +4,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))
+if str(ROOT / "tools") not in sys.path:
+    sys.path.append(str(ROOT / "tools"))
 
 """
 Example script demonstrating the usage of LLM tools

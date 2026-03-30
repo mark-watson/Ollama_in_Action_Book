@@ -3,7 +3,9 @@ name = "judges"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
+    "bs4>=0.0.2",
     "ollama>=0.6.0",
+    "requests>=2.33.0",
 ]
 
 [tool.uv]
