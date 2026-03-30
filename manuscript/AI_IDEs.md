@@ -82,12 +82,15 @@ Here is an example (edited for brevity):
 ```
 $ CLAUDE
 
-╭─── Claude Code v2.1.62                                                     │ Tips for getting started     
+╭─── Claude Code v2.1.62
+│ Tips for getting started     
 │                 Welcome back Mark!
     Run /init to create a CLAUDE.md file …
 │ Recent activity: No recent activity         
-│         glm-4.7:cloud · Claude API ·                                         │
-│         markwatson.com's Organization                                         │
+│         glm-4.7:cloud · Claude API ·
+│
+│         markwatson.com's Organization
+│
 │                    ~/GITHUB/kgn                                        
 ❯ 
 ```
