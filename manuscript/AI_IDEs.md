@@ -77,12 +77,11 @@ alias CLAUDE=’~/.local/bin/claude --model glm-4.7-flash’
 
 The model [glm-4.7-flash](https://ollama.com/library/glm-4.7-flash) is one of the strongest 32B class models.
 
-Here is an example:
+Here is an example (edited for brevity):
 
 ```
 $ CLAUDE
 
-───────────────────────────────────────────────────────────────────────────────────────────────
  Accessing workspace:
 
  /Users/markwatson
@@ -103,20 +102,14 @@ Marks-MacBook-Air:~ $ g
 Marks-MacBook-Air:GITHUB $ cd kgn 
 Marks-MacBook-Air:kgn $ CLAUDE
 
-╭─── Claude Code v2.1.62 ─────────────────────────────────────────────────────────────────────╮
-│                                                    │ Tips for getting started               │
-│                 Welcome back Mark!                 │ Run /init to create a CLAUDE.md file … │
-│                                                    │ ────────────────────────────────────── │
-│                                                    │ Recent activity                        │
-│                      ▗ ▗   ▖ ▖                     │ No recent activity                     │
-│                                                    │                                        │
-│                        ▘▘ ▝▝                       │                                        │
-│         glm-4.7:cloud · Claude API ·               │                                        │
-│         markw@markwatson.com's Organization        │                                        │
-│                    ~/GITHUB/kgn                    │                                        │
-╰─────────────────────────────────────────────────────────────────────────────────────────────╯
-
-───────────────────────────────────────────────────────────────────────────────────────────────
+╭─── Claude Code v2.1.62                                                     │ Tips for getting started     
+│                 Welcome back Mark!
+    Run /init to create a CLAUDE.md file …
+│ Recent activity             
+No recent activity         
+│         glm-4.7:cloud · Claude API ·                                         │
+│         markwatson.com's Organization                                         │
+│                    ~/GITHUB/kgn                                        
 ❯ 
 ```
 
