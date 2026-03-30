@@ -82,31 +82,10 @@ Here is an example (edited for brevity):
 ```
 $ CLAUDE
 
- Accessing workspace:
-
- /Users/markwatson
-
- Quick safety check: Is this a project you created or one you trust? (Like your own code, a
- well-known open source project, or work from your team). If not, take a moment to review
- what's in this folder first.
-
- Claude Code'll be able to read, edit, and execute files here.
-
- Security guide
-
- ❯ 1. Yes, I trust this folder
-   2. No, exit
-
- Enter to confirm · Esc to cancel
-Marks-MacBook-Air:~ $ g
-Marks-MacBook-Air:GITHUB $ cd kgn 
-Marks-MacBook-Air:kgn $ CLAUDE
-
 ╭─── Claude Code v2.1.62                                                     │ Tips for getting started     
 │                 Welcome back Mark!
     Run /init to create a CLAUDE.md file …
-│ Recent activity             
-No recent activity         
+│ Recent activity: No recent activity         
 │         glm-4.7:cloud · Claude API ·                                         │
 │         markwatson.com's Organization                                         │
 │                    ~/GITHUB/kgn                                        
