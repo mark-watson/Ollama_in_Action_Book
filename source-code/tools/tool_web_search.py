@@ -17,7 +17,7 @@ import re
 from urllib.parse import urlparse
 import html
 import json
-from tool_summarize_text import summarize_text
+from .tool_summarize_text import summarize_text
 
 import requests
 import os
