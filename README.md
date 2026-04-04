@@ -1,7 +1,6 @@
-# Ollama in Action Book: manuscript and source code repository
+# Ollama in Action: Manuscript and Source Code
 
-Book is available on LeanPub: [https://leanpub.com/ollama](https://leanpub.com/ollama)
+This repository contains the manuscript and source code for the book **Ollama in Action**, available on LeanPub at [https://leanpub.com/ollama](https://leanpub.com/ollama).
 
-Author Mark Watson has written 20+ books and holds 50+ US patents.
+The author, **Mark Watson**, has published over 20 books and holds more than 50 US patents. For more information, visit [markwatson.com](https://markwatson.com).
 
-[https://markwatson.com](https://markwatson.com)
