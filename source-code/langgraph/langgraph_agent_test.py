@@ -1,4 +1,4 @@
-from langgraph.prebuilt import create_react_agent
+from langchain.agents import create_agent
 from langchain_core.tools import tool
 from langchain_community.tools import DuckDuckGoSearchRun
 from langchain_ollama import ChatOllama
@@ -44,18 +44,16 @@ def answer_from_search(original_query: str, search_results: str) -> str:
 
 model = ChatOllama(model=get_model())
 tools = [search, answer_from_search]
-agent = create_react_agent(model,
-                           tools)
-
-query = "What city does Mark Watson live? Mark Watson who is an AI Practitioner and Consultant Specializing in Large Language Models, LangChain/Llama-Index Integrations, Deep Learning, and the Semantic Web."
-agent_input = {"messages": [
-    ("system", """You are a helpful assistant that follows these steps:
+agent = create_agent(model,
+                     tools,
+                     system_prompt="""You are a helpful assistant that follows these steps:
 1. First use the 'search' tool to find relevant information
 2. Then use 'answer_from_search' tool with both the original query and search results to provide a final answer
 3. Always use both tools in sequence - search first, then answer_from_search
-Make sure to pass both the original query and search results to answer_from_search."""),
-    ("human", query)
-]}
+Make sure to pass both the original query and search results to answer_from_search.""")
+
+query = "What city does Mark Watson live? Mark Watson who is an AI Practitioner and Consultant Specializing in Large Language Models, LangChain/Llama-Index Integrations, Deep Learning, and the Semantic Web."
+agent_input = {"messages": [("human", query)]}
 
 for s in agent.stream(agent_input, stream_mode="values"):
     message = s["messages"][-1]

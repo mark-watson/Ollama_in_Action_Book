@@ -5,16 +5,18 @@ LangGraph is good for building stateful, multi-step LLM applications, things lik
 
 Key Benefits:
 - State management: Maintains conversation or agent memory across turns.
-- Control flow: Lets you branch, loop, and merge tasks dynamically (unlike LangChain’s mostly linear chains).
+- Control flow: Lets you branch, loop, and merge tasks dynamically (unlike LangChain's mostly linear chains).
 - Tool orchestration: Coordinates multiple tools or models (e.g., search + code interpreter + summarizer).
 - Persistence: Supports saving/reloading graph state for long-running agent sessions.
 
 LangGraph is a combination or LangChain + DAG-style control + memory persistence and is useful for building complex agent systems that need structured, inspectable logic.
 
-We only look at one short example here that is in the file **Ollama_in_Action_Book/source-code/langgraph/langgraph_agent_test.py**. The following listing demonstrates the construction of a sophisticated ReAct (Reasoning and Acting) agent using the LangGraph library, specifically designed to orchestrate a multi-step research workflow. By leveraging the create_react_agent factory function, the code integrates a ChatOllama local language model with custom-defined tools to bridge the gap between static model training data and real-time information. The implementation defines two specialized tools: a search function utilizing DuckDuckGo for web retrieval and a secondary processing tool that uses the local LLM to synthesize those search results into a coherent answer. This architecture goes beyond simple retrieval-augmented generation (RAG) by instructing the agent, through a structured system prompt, to follow a strict sequential logic—first searching for raw data and then passing that data back through a refinement tool—to ensure the final output is grounded in the most current available facts.
+**Note:** LangGraph v1 (released 2025) deprecated `create_react_agent` in favor of `langchain.agents.create_agent`. The example code has been updated to use the new API.
+
+We only look at one short example here that is in the file **Ollama_in_Action_Book/source-code/langgraph/langgraph_agent_test.py**. The following listing demonstrates the construction of a sophisticated ReAct (Reasoning and Acting) agent using LangChain's `create_agent` function, specifically designed to orchestrate a multi-step research workflow. By leveraging `create_agent`, the code integrates a ChatOllama local language model with custom-defined tools to bridge the gap between static model training data and real-time information. The implementation defines two specialized tools: a search function utilizing DuckDuckGo for web retrieval and a secondary processing tool that uses the local LLM to synthesize those search results into a coherent answer. This architecture goes beyond simple retrieval-augmented generation (RAG) by instructing the agent, through a structured system prompt, to follow a strict sequential logic—first searching for raw data and then passing that data back through a refinement tool—to ensure the final output is grounded in the most current available facts.
 
 ```python
-from langgraph.prebuilt import create_react_agent
+from langchain.agents import create_agent
 from langchain_core.tools import tool
 from langchain_community.tools import DuckDuckGoSearchRun
 from langchain_ollama import ChatOllama
@@ -59,18 +61,16 @@ def answer_from_search(original_query: str, search_results: str) -> str:
 
 model = ChatOllama(model=get_model())
 tools = [search, answer_from_search]
-agent = create_react_agent(model,
-                           tools)
-
-query = "What city does Mark Watson live? Mark Watson who is an AI Practitioner and Consultant Specializing in Large Language Models, LangChain/Llama-Index Integrations, Deep Learning, and the Semantic Web."
-agent_input = {"messages": [
-    ("system", """You are a helpful assistant that follows these steps:
+agent = create_agent(model,
+                     tools,
+                     system_prompt="""You are a helpful assistant that follows these steps:
 1. First use the 'search' tool to find relevant information
 2. Then use 'answer_from_search' tool with both the original query and search results to provide a final answer
 3. Always use both tools in sequence - search first, then answer_from_search
-Make sure to pass both the original query and search results to answer_from_search."""),
-    ("human", query)
-]}
+Make sure to pass both the original query and search results to answer_from_search.""")
+
+query = "What city does Mark Watson live? Mark Watson who is an AI Practitioner and Consultant Specializing in Large Language Models, LangChain/Llama-Index Integrations, Deep Learning, and the Semantic Web."
+agent_input = {"messages": [("human", query)]}
 
 for s in agent.stream(agent_input, stream_mode="values"):
     message = s["messages"][-1]
@@ -80,16 +80,14 @@ for s in agent.stream(agent_input, stream_mode="values"):
         message.pretty_print()
 ```
 
-The core logic of this implementation lies in the functional separation of concerns between data retrieval and data synthesis. By wrapping **DuckDuckGoSearchRun** and a custom LLM synthesis call as @tool decorated functions, we allow the LangGraph agent to treat external API calls and internal model reasoning as interchangeable actions. This is particularly evident in the answer_from_search tool, which creates a secondary LLM context to filter through the noise of raw search results, effectively acting as a "cleaner" for the information retrieved in the first step.
+The core logic of this implementation lies in the functional separation of concerns between data retrieval and data synthesis. By wrapping **DuckDuckGoSearchRun** and a custom LLM synthesis call as @tool decorated functions, we allow the LangChain agent to treat external API calls and internal model reasoning as interchangeable actions. This is particularly evident in the answer_from_search tool, which creates a secondary LLM context to filter through the noise of raw search results, effectively acting as a "cleaner" for the information retrieved in the first step.
 
-The agent’s behavior is strictly governed by the `agent_input` system message, which provides the necessary "cognitive" guardrails for the model. Using `agent.stream` with the values mode allows us to observe the agent's internal monologue and tool execution in real-time, providing transparency into how the ReAct loop iterates through the search and synthesis phases before arriving at the final response. This pattern is highly extensible, forming a blueprint for complex autonomous agents that need to interact with various local and remote resources.
+The agent's behavior is governed by the `system_prompt` passed to `create_agent`, which provides the necessary "cognitive" guardrails for the model. Using `agent.stream` with the values mode allows us to observe the agent's internal monologue and tool execution in real-time, providing transparency into how the ReAct loop iterates through the search and synthesis phases before arriving at the final response. This pattern is highly extensible, forming a blueprint for complex autonomous agents that need to interact with various local and remote resources.
 
 Here is some sample output:
 
 ```
 $ uv run langgraph_agent_test.py
-/Users/markwatson/GITHUB/Ollama_in_Action_Book/source-code/langgraph/langgraph_agent_test.py:47: LangGraphDeprecatedSinceV10: create_react_agent has been moved to `langchain.agents`. Please update your import to `from langchain.agents import create_agent`. Deprecated in LangGraph V1.0 to be removed in V2.0.
-  agent = create_react_agent(model,
 ================================ Human Message =================================
 
 What city does Mark Watson live? Mark Watson who is an AI Practitioner and Consultant Specializing in Large Language Models, LangChain/Llama-Index Integrations, Deep Learning, and the Semantic Web.
@@ -160,4 +158,4 @@ Name: answer_from_search
 Sedona, Arizona.
 ```
 
-Note that the agent had to try searching several times before finding the “correct Mark Watson.”
+Note that the agent had to try searching several times before finding the "correct Mark Watson."
