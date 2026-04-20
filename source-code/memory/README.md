@@ -1,6 +1,6 @@
 # Memory / Persistence Examples
 
-**Book Chapter:** [Persistence](https://leanpub.com/read/ollama/leanpub-auto-persistence) — *Ollama in Action* (free to read online).
+**Book Chapter:** [Long Term Persistence Using Mem0 and Chroma](https://leanpub.com/read/ollama/long-term-persistence-using-mem0-and-chroma) — *Ollama in Action* (free to read online).
 
 ## Setup
 

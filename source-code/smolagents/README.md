@@ -1,6 +1,6 @@
 # Smolagents Examples
 
-**Book Chapter:** [Agents](https://leanpub.com/read/ollama/leanpub-auto-agents) — *Ollama in Action* (free to read online).
+**Book Chapter:** [Building Agents with Ollama and the Hugging Face Smolagents Library](https://leanpub.com/read/ollama/building-agents-with-ollama-and-the-hugging-face-smolagents-library) — *Ollama in Action* (free to read online).
 
 ## Running Examples using uv
 
