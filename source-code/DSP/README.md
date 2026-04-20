@@ -1,5 +1,7 @@
 # DSP Experients
 
+**Book Chapter:** [DSP (Declarative Self-improving Python)](https://leanpub.com/read/ollama/leanpub-auto-dsp) — *Ollama in Action* (free to read online).
+
 # Ollama with a list of strings for an answer
 
 ```

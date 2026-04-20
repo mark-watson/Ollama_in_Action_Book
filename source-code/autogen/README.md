@@ -1,5 +1,7 @@
 # AutoGen + Ollama Example
 
+**Book Chapter:** [Agents](https://leanpub.com/read/ollama/leanpub-auto-agents) — *Ollama in Action* (free to read online).
+
 This directory contains a simple example that uses the [Ollama Python SDK](https://github.com/ollama/ollama-python) to send a chat request to a locally-running (or cloud-hosted) Ollama model. The model is asked to generate Python code for plotting year-to-date stock price changes for NVDA and TESLA — demonstrating how Ollama can produce runnable code from a natural-language prompt.
 
 ## Files
