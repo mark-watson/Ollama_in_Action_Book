@@ -1,6 +1,8 @@
 # AutoGen + Ollama Example
 
-**Book Chapter:** [Using AG2 Open-Source AgentOS LLM-Based Agent Framework for Generating and Executing Python Code](https://leanpub.com/read/ollama/using-ag2-open-source-agentos-llm-based-agent-framework-for-generating-and-executing-python-code) — *Ollama in Action* (free to read online).
+**Book:** *Ollama in Action* — available free to read online at [https://leanpub.com/ollama/read](https://leanpub.com/ollama/read)
+
+**Book Chapter:** [Using AG2 Open-Source AgentOS LLM-Based Agent Framework for Generating and Executing Python Code](https://leanpub.com/read/ollama/using-ag2-open-source-agentos-llm-based-agent-framework-for-generating-and-executing-python-code)
 
 This directory contains a simple example that uses the [Ollama Python SDK](https://github.com/ollama/ollama-python) to send a chat request to a locally-running (or cloud-hosted) Ollama model. The model is asked to generate Python code for plotting year-to-date stock price changes for NVDA and TESLA — demonstrating how Ollama can produce runnable code from a natural-language prompt.
 
@@ -45,3 +47,7 @@ uv run autogen_python_example.py
 
 - **Ollama** must be installed and running locally (unless using cloud mode). See [ollama.com](https://ollama.com) for installation instructions.
 - The model specified by `MODEL` (default: `nemotron-3-nano:4b`) must be available. Pull it with: `ollama pull nemotron-3-nano:4b`
+
+## Copyright and License
+
+Copyright 2024-2026 Mark Watson. All rights reserved.
