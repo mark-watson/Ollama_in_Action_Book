@@ -209,3 +209,5 @@ Over time, the system becomes increasingly accurate in its classification becaus
 ```
 
 In the next chapter we start developing tools that can be used for “function calling” with Ollama.
+
+:![Arcitecture diagram](images/short_programs_architecture.png))

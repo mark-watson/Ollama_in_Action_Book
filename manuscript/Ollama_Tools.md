@@ -2,6 +2,8 @@
 
 There are several example Python tool utilities in the GitHub repository [https://github.com/mark-watson/Ollama_in_Action_Book](https://github.com/mark-watson/Ollama_in_Action_Book) in the **source-code/tools** directory that we will use for function calling (this directory also contains examples for other chapters). One of the examples here is in the directory **tool_example**.
 
+
+:![Arcitecture diagram](images/tools_architecture.png))
 **Use of Python docstrings at runtime:**
 
 The Ollama Python SDK leverages docstrings as a crucial part of its runtime function calling mechanism. When defining functions that will be called by the LLM, the docstrings serve as structured metadata that gets parsed and converted into a JSON schema format. This schema describes the function's parameters, their types, and expected behavior, which is then used by the model to understand how to properly invoke the function. The docstrings follow a specific format that includes parameter descriptions, type hints, and return value specifications, allowing the SDK to automatically generate the necessary function signatures that the LLM can understand and work with.
@@ -664,6 +666,8 @@ This Python code implements a text summarization tool using the Ollama chat mode
 
 Here is an example of using this tool that you can find in the file **example_chain_web_summary.py** in the directory **chains**. Please note that this example also uses the web search tool that is discussed in the next section.
 
+
+:![Arcitecture diagram](images/chains_architecture.png))
 ```python
 import sys
 from pathlib import Path
@@ -1023,3 +1027,5 @@ __all__ = ["uri_to_markdown", "search_web"]
 ## Tools Wrap Up
 
 We have looked at the implementations and examples uses for several tools. In the next chapter we continue our study of tool use with the application of judging the accuracy of output generated of LLMs: basically LLMs judging the accuracy of other LLMs to reduce hallucinations, inaccurate output, etc.
+
+:![Arcitecture diagram](images/tool_examples_architecture.png))

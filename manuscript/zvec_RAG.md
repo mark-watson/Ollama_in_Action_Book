@@ -4,6 +4,8 @@ The **zvec** library implements a lightweight, lightning-fast, in-process vector
 
 Note: The source code for this example can be found in **Ollama_in_Action_Book/source-code/RAG_zvec/app.py**. Not all the code in this file is listed here.
 
+
+:![Arcitecture diagram](images/RAG_zvec_architecture.png))
 ## Introduction and Architecture
 
 Building a Retrieval-Augmented Generation (RAG) pipeline entirely locally ensures absolute data privacy, eliminates API latency costs, and provides full control over the embedding and generation models. In this chapter, we construct a fully offline RAG system utilizing Ollama for both embeddings (embeddinggemma) and inference (qwen3:1.7b), paired with zvec, a lightweight, high-performance local vector database.

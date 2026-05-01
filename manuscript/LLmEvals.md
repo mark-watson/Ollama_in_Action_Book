@@ -517,3 +517,5 @@ $ uv run tool_anti_hallucination.py
 ## Wrap Up
 
 Here we looked at several examples for using one LLM to rate the accuracy, usefulness, etc. of another LLM given an input prompt. There are two topics in this book that I spend most of my personal LLM research time on: automatic evaluation of LLM results, and tool using agents (the subject of the next chapter).
+
+:![Arcitecture diagram](images/judges_architecture.png))

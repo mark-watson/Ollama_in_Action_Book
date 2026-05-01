@@ -215,3 +215,5 @@ The key takeaways from this chapter are:
 - A Foundation of Trust: Even while embracing the cloud, Ollama has maintained its foundational commitment to user privacy. The explicit "no log, no retain" policy for cloud queries is a critical feature that builds trust and makes the service a viable option for its privacy-conscious user base.   
 
 Looking ahead, the planned introduction of usage-based pricing signals Ollama's ambition to support a broader range of use cases, from individual developers to large-scale commercial applications. By providing a comprehensive, hybrid platform that spans from the local machine to the cloud, Ollama is solidifying its position as an excellent tool and platform for the entire lifecycle of AI development.
+
+:![Arcitecture diagram](images/OllamaCloud_architecture.png))

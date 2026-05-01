@@ -5,6 +5,8 @@ In this chapter, we pivot from basic prompt engineering to the construction of a
 The examples for this chapter are in the directory **PydanticToolUse**.
 
 
+:![Arcitecture diagram](images/PydanticToolUse_architecture.png))
+
 ## Weather Lookup Tool Use Example
 
 This script demonstrates the integration of Pydantic AI with local or cloud-hosted Ollama models to create an extensible, tool-augmented agent. By leveraging the pydantic-ai library, the code establishes a structured workflow where a Python function, get_weather, is converted into a tool that the agent can autonomously decide to invoke based on user natural language queries. The implementation highlights a robust configuration pattern, utilizing environment variables to toggle between a local Ollama instance and a cloud-based OpenAI-compatible endpoint. This approach ensures that the agent remains agnostic to the underlying infrastructure while maintaining strict data validation and type safety through Pydantic's BaseModel and Field definitions, ultimately providing a seamless bridge between unstructured LLM outputs and deterministic Python logic.

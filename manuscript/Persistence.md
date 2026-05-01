@@ -7,6 +7,8 @@ Something important that we haven’t covered yet: building a persistent memory 
 
 The examples in this file are in the directory **memory**.
 
+
+:![Arcitecture diagram](images/memory_architecture.png))
 The example in this chapter is simple and can be copied and modified for multiple applications; for example:
 
 - Code advice agent for Python

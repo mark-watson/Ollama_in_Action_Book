@@ -12,6 +12,8 @@ By doing this, DSP tightly integrates language model reasoning with Python’s d
 
 Here is the documentation for DSP type signatures: [https://dspy.ai/learn/programming/signatures/](https://dspy.ai/learn/programming/signatures/). The example is in file **Ollama_in_Action_Book/source-code/DSP/ollama_test.py**:
 
+
+:![Arcitecture diagram](images/DSP_architecture.png))
 ```python
 import os
 import sys

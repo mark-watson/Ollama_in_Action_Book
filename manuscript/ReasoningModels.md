@@ -234,3 +234,5 @@ for the city council—just let me know!
 ```
 
 I often use the state of the art commercial LLM APIs for models like Claude Sonnet 4.6, GPT-5, Gemini 3, etc. to brainstorm ideas and help me think and plan out new projects. I find it exciting to be able to run close to state of the art reasoning LLM on my personal com computer using Ollama!
+
+:![Arcitecture diagram](images/reasoning_architecture.png))

@@ -33,6 +33,8 @@ The following program demonstrates the construction of a "Semantic Navigator," a
 
 This example is in the directory **SemanticNavigator** in the file **app.py**:
 
+
+:![Arcitecture diagram](images/SemanticNavigator_architecture.png))
 ```python
 # set: export CLOUD=1
 #      export MODEL=nemotron-3-super:cloud

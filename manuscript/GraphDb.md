@@ -426,3 +426,5 @@ How might you use this example? Using one or two shot prompting in LLM input pro
 Here, the “structured data” I asked an LLM to output was Python code.
 
 I cheated in this example by using what is currently the best code generation LLM: Claude Sonnet 3.5. I also tried this same exercise using Ollama with the model **qwen2.5-coder:14b** and the results were not quite as good. This is a great segway into the final chapter **Book Wrap Up**.
+
+:![Arcitecture diagram](images/graph_architecture.png))

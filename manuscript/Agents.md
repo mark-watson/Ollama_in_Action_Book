@@ -17,6 +17,8 @@ As you work through the examples here using different local models running on Ol
 
 As I update this chapter on March 17, 2025, **smolagents** needs to be run with Python version 3.12. For example:
 
+
+:![Arcitecture diagram](images/smolagents_architecture.png))
 ```bash
 $ uv run python3 -V               
 Python 3.12.0

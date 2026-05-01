@@ -9,6 +9,8 @@ This approach provides several benefits. By leveraging a local model via Ollama,
 The example for this chapter is in directory **AG2_agents**.
 
 
+:![Arcitecture diagram](images/AG2_agents_architecture.png))
+
 ## Example Implementation
 
 As I update this chapter in March 2026 most reasoning models work very well. You can specify which model is used using the MODEL environment variable.
@@ -144,3 +146,5 @@ The AG2 framework for Python tool calling agents streamlines the development of 
 This example highlights AG2’s ability to leverage native tool calling within a Python environment, reducing the need for manual intervention during code execution and debugging. By decoupling the generation of task-specific code from its execution, developers can build systems that are both flexible and scalable. The assistant agent focuses on planning and generating code, while the user proxy agent reliably executes that code, creating an effective feedback loop for refining results. This pattern not only simplifies complex workflows but also provides a foundation for robust, error-resilient applications.
 
 To further explore the potential of AG2, you dear reader might experiment with integrating additional tools—such as web scraping modules, database connectors, or advanced visualization libraries—to expand the capabilities of their agents. Another interesting avenue is to adjust the configuration parameters: try different LLM models, enable Docker-based code execution, or incorporate human-in-the-loop feedback to refine responses. Additionally, extending the workflow to include more specialized agents (e.g., a dedicated CodeExecutorAgent or a DebuggingAgent) can provide insights into multi-agent orchestration and the scalability of autonomous systems. These experiments will help readers understand the full versatility of AG2 in creating dynamic, multi-step applications.
+
+:![Arcitecture diagram](images/autogen_architecture.png))
