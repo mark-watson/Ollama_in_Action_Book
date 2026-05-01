@@ -13,6 +13,10 @@ This example uses LangChain's `ChatOllama` with `reasoning=True` to access model
 | `reasoning_test_1.py` | Structured reasoning query with thinking/answer separation |
 | `pyproject.toml` | Project metadata and dependencies |
 
+## Architecture
+
+![Generated image](architecture.png)
+
 ## Prerequisites
 
 - **Ollama** installed and running locally. See [ollama.com](https://ollama.com).

@@ -19,6 +19,10 @@ This directory contains **reusable tool implementations** shared across multiple
 | `tool_summarize_text.py` | `summarize_text` | Summarizes a block of text using Ollama |
 | `tool_web_search.py` | `uri_to_markdown` | Fetches a web page and converts it to Markdown |
 
+## Architecture
+
+![Generated image](architecture.png)
+
 ## Usage
 
 These tools are imported by other examples (e.g., `chains/`, `tool_examples/`, `judges/`, `smolagents/`). They are not run directly.

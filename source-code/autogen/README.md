@@ -13,6 +13,10 @@ This directory contains a simple example that uses the [Ollama Python SDK](https
 | `autogen_python_example.py` | Main script — sends a chat request to Ollama and prints the model's response |
 | `pyproject.toml` | Project metadata and dependencies for use with `uv` |
 
+## Architecture
+
+![Generated image](architecture.png)
+
 ## Dependencies
 
 The project depends on:

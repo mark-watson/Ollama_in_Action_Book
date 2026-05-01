@@ -13,6 +13,10 @@ This example demonstrates multi-agent collaboration using the AG2 (AutoGen 2) fr
 | `agent.py` | Main script — creates an AssistantAgent and UserProxyAgent, then initiates a code-generation chat |
 | `pyproject.toml` | Project metadata and dependencies |
 
+## Architecture
+
+![Generated image](architecture.png)
+
 ## Prerequisites
 
 - **Ollama** installed and running locally. See [ollama.com](https://ollama.com) for installation.

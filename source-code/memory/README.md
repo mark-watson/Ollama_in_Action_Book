@@ -13,6 +13,10 @@ This example demonstrates **long-term memory persistence** for LLM conversations
 | `mem0_persistence.py` | CLI script — accepts a question, retrieves relevant memories, chats with Ollama, and persists the exchange |
 | `pyproject.toml` | Project metadata and dependencies |
 
+## Architecture
+
+![Generated image](architecture.png)
+
 ## Prerequisites
 
 - **Ollama** installed and running locally. See [ollama.com](https://ollama.com).

@@ -13,6 +13,10 @@ Short, self-contained scripts that demonstrate core Ollama features without addi
 | `Ollama_sdk_image_example.py` | Analyzes an image using Ollama's multimodal/vision API (requires a vision model like `llava:7b`) |
 | `OpenAI_compatibility_example.py` | Uses the OpenAI Python SDK to talk to Ollama via its OpenAI-compatible `/v1` endpoint — demonstrates single-shot and multi-turn conversation |
 
+## Architecture
+
+![Generated image](architecture.png)
+
 ## Prerequisites
 
 - **Ollama** installed and running locally. See [ollama.com](https://ollama.com).

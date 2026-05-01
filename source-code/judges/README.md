@@ -14,6 +14,10 @@ These examples demonstrate the **LLM-as-a-judge** pattern: using one LLM call to
 | `example_judge2.py` | Advanced judge — evaluates translations, code generation, and arithmetic across multiple test cases |
 | `pyproject.toml` | Project metadata and dependencies |
 
+## Architecture
+
+![Generated image](architecture.png)
+
 ## Prerequisites
 
 - **Ollama** installed and running locally. See [ollama.com](https://ollama.com).

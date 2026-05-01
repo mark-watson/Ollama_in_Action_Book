@@ -13,6 +13,10 @@ This example demonstrates **Ollama's native tool/function-calling** capability. 
 | `ollama_tools_examples.py` | End-to-end tool-calling demo using the shared `tools/` library |
 | `pyproject.toml` | Project metadata and dependencies |
 
+## Architecture
+
+![Generated image](architecture.png)
+
 ## Prerequisites
 
 - **Ollama** installed and running locally. See [ollama.com](https://ollama.com).

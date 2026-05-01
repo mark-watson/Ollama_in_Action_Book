@@ -13,6 +13,10 @@ This example demonstrates **Ollama's prompt caching** feature. It sends two requ
 | `ollama_rest_test.py` | Sends two REST API requests with the same static context; compares cold-start vs. warm-cache prompt processing times |
 | `pyproject.toml` | Project metadata and dependencies |
 
+## Architecture
+
+![Generated image](architecture.png)
+
 ## Prerequisites
 
 - **Ollama** installed and running locally. See [ollama.com](https://ollama.com).

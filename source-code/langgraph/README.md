@@ -13,6 +13,10 @@ This example builds a **LangGraph agent** that chains a DuckDuckGo web search wi
 | `langgraph_agent_test.py` | LangGraph agent with `search` and `answer_from_search` tools |
 | `pyproject.toml` | Project metadata and dependencies (includes `langchain`, `langgraph`, `duckduckgo-search`) |
 
+## Architecture
+
+![Generated image](architecture.png)
+
 ## Prerequisites
 
 - **Ollama** installed and running locally. See [ollama.com](https://ollama.com).

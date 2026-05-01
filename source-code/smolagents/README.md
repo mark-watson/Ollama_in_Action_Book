@@ -16,6 +16,10 @@ These examples use the [smolagents](https://huggingface.co/docs/smolagents) libr
 | `smolagents_compat.py` | Compatibility patches for smolagents/LiteLLM dependency changes |
 | `pyproject.toml` | Project metadata and dependencies |
 
+## Architecture
+
+![Generated image](architecture.png)
+
 ## Prerequisites
 
 - **Ollama** installed and running locally. See [ollama.com](https://ollama.com).

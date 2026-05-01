@@ -15,6 +15,10 @@ These examples show how to combine Ollama with the [Kùzu](https://kuzudb.com/) 
 | `grafeo-langchain-test.py` | **Experimental** — tests the Grafeo graph database with LangChain (not covered in the book) |
 | `pyproject.toml` | Project metadata and dependencies |
 
+## Architecture
+
+![Generated image](architecture.png)
+
 ## Prerequisites
 
 - **Ollama** installed and running locally. See [ollama.com](https://ollama.com).

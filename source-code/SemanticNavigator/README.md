@@ -13,6 +13,10 @@ This example builds a **Gradio web application** that combines LLM-powered entit
 | `app.py` | Gradio app — entity/link extraction + streaming chatbot |
 | `pyproject.toml` | Project metadata and dependencies |
 
+## Architecture
+
+![Generated image](architecture.png)
+
 ## Prerequisites
 
 - **Ollama** installed and running, or an Ollama Cloud API key.

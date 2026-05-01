@@ -14,6 +14,10 @@ These examples demonstrate **chaining multiple Ollama tool calls** together. The
 | `example_chain_web_summary.py` | Fetches a web page using `uri_to_markdown`, then summarizes the content |
 | `pyproject.toml` | Project metadata and dependencies |
 
+## Architecture
+
+![Generated image](architecture.png)
+
 ## Prerequisites
 
 - **Ollama** installed and running locally. See [ollama.com](https://ollama.com).

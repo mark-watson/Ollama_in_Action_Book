@@ -13,6 +13,10 @@ This example implements a complete **Retrieval-Augmented Generation (RAG)** pipe
 | `app.py` | RAG pipeline — indexes text files from `../data/`, builds a zvec collection, then enters an interactive Q&A loop |
 | `pyproject.toml` | Project metadata and dependencies |
 
+## Architecture
+
+![Generated image](architecture.png)
+
 ## Prerequisites
 
 - **Ollama** installed and running locally. See [ollama.com](https://ollama.com).

@@ -13,6 +13,10 @@ This example uses the [DSPy](https://dspy.ai/) framework to create a structured 
 | `ollama_test.py` | Chain-of-thought math reasoning with DSPy and Ollama |
 | `pyproject.toml` | Project metadata and dependencies |
 
+## Architecture
+
+![Generated image](architecture.png)
+
 ## Prerequisites
 
 - **Ollama** installed and running locally. See [ollama.com](https://ollama.com).

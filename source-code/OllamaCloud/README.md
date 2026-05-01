@@ -15,6 +15,10 @@ These examples demonstrate how to use Ollama's cloud-hosted models via the Pytho
 | `ollama_web_search.py` | Combines Ollama's `web_search` API with an LLM to search and summarize web results |
 | `pyproject.toml` | Project metadata and dependencies |
 
+## Architecture
+
+![Generated image](architecture.png)
+
 ## Prerequisites
 
 - An **Ollama Cloud API key** — set via the `OLLAMA_API_KEY` environment variable.

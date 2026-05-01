@@ -14,6 +14,10 @@ These examples demonstrate tool calling via the [PydanticAI](https://docs.pydant
 | `tool_use_weather.py` | PydanticAI agent with a stubbed weather tool (demonstrates tool schema with Pydantic `Field` annotations) |
 | `pyproject.toml` | Project metadata and dependencies |
 
+## Architecture
+
+![Generated image](architecture.png)
+
 ## Prerequisites
 
 - **Ollama** installed and running locally. See [ollama.com](https://ollama.com).
