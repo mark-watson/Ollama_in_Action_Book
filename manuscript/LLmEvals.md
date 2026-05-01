@@ -19,6 +19,8 @@ We look at several examples in this chapter of approaches you might want to expe
 
 Here we implement our simple approach of using a second LLM to evaluate the output of the first LLM tat generated a response to user input.
 
+![Arcitecture diagram](images/judges_architecture.png)
+
 The following listing shows the tool **tool_judge_results.py**:
 
 ```python
@@ -518,4 +520,3 @@ $ uv run tool_anti_hallucination.py
 
 Here we looked at several examples for using one LLM to rate the accuracy, usefulness, etc. of another LLM given an input prompt. There are two topics in this book that I spend most of my personal LLM research time on: automatic evaluation of LLM results, and tool using agents (the subject of the next chapter).
 
-:![Arcitecture diagram](images/judges_architecture.png))
