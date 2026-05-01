@@ -56,6 +56,8 @@ Analysis Result:
 The room has a comfortable and homely feel, with elements like a potted plant in the background on the left, which suggests that this might be a living room or a similar space repurposed for a group activity.
 ```
 
+![Arcitecture diagram](images/short_programs_architecture.png)
+
 ## Using the OpenAI Compatibility APIs with Local Models Running on Ollama
 
 If you frequently use the OpenAI APIs for either your own LLM projects or work projects, you might want to simply use the same SDK library from OpenAI but specify a local Ollama REST endpoint:
@@ -210,4 +212,3 @@ Over time, the system becomes increasingly accurate in its classification becaus
 
 In the next chapter we start developing tools that can be used for “function calling” with Ollama.
 
-:![Arcitecture diagram](images/short_programs_architecture.png))

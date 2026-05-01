@@ -158,6 +158,9 @@ The implementation populates the database with specific data about "The Godfathe
 
 This example then sets up a question-answering chain using LangChain, which combines the Kuzu graph database with the Ollama language model (specifically the qwen2.5-coder:14b model). This chain enables natural language queries against the graph database, allowing users to ask questions about actor-movie relationships and receive responses based on the stored graph data. The implementation includes two example queries to demonstrate the system's functionality.
 
+
+![Arcitecture diagram](images/graph_architecture.png)
+
 Here is the output from this example:
 
 ```bash
@@ -427,4 +430,3 @@ Here, the “structured data” I asked an LLM to output was Python code.
 
 I cheated in this example by using what is currently the best code generation LLM: Claude Sonnet 3.5. I also tried this same exercise using Ollama with the model **qwen2.5-coder:14b** and the results were not quite as good. This is a great segway into the final chapter **Book Wrap Up**.
 
-:![Arcitecture diagram](images/graph_architecture.png))

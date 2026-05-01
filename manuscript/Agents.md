@@ -18,7 +18,6 @@ As you work through the examples here using different local models running on Ol
 As I update this chapter on March 17, 2025, **smolagents** needs to be run with Python version 3.12. For example:
 
 
-:![Arcitecture diagram](images/smolagents_architecture.png))
 ```bash
 $ uv run python3 -V               
 Python 3.12.0
@@ -35,6 +34,8 @@ The `smolagents` library [https://github.com/huggingface/smolagents](https://git
 This library implements a tools-first approach where capabilities are encapsulated as discrete tools that agents can use. The **tools.py** file in the `smolagents` implementation defines a clean interface for tools with input/output specifications, making it straightforward to add new tools. This tools-based architecture enables agents to have clear, well-defined capabilities while maintaining separation of concerns between the agent logic and the actual implementation of capabilities.
 
 Agents are designed to be lightweight and focused on specific tasks rather than trying to be general-purpose. The BaseAgent class provides core functionality while specific agents like WebAgent extend it for particular use cases. This specialization allows the agents to be more efficient and reliable at their designated tasks rather than attempting to be jack-of-all-trades.
+
+![Arcitecture diagram](images/smolagents_architecture.png)
 
 ## Overview for LLM Agents (optional section)
 

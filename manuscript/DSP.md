@@ -10,10 +10,11 @@ The following Ollama DSP code leverages Pydantic-style typing to enforce structu
 
 By doing this, DSP tightly integrates language model reasoning with Python’s data model, allowing structured validation and predictable data flow across model calls. Pydantic typing not only helps catch mismatched or ill-formed responses but also provides self-documenting clarity for developers—making each prompt specification both executable and strongly typed. This makes DSP code more robust and maintainable, particularly in complex prompt pipelines or when integrating multiple model components.
 
+![Arcitecture diagram](images/DSP_architecture.png)
+
 Here is the documentation for DSP type signatures: [https://dspy.ai/learn/programming/signatures/](https://dspy.ai/learn/programming/signatures/). The example is in file **Ollama_in_Action_Book/source-code/DSP/ollama_test.py**:
 
 
-:![Arcitecture diagram](images/DSP_architecture.png))
 ```python
 import os
 import sys

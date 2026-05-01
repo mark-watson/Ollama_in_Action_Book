@@ -4,9 +4,9 @@ Prompt caching serves as an optimization for the computationally expensive "pref
 
 The examples for this chapter are in the directory **prompt_caching**.
 
-
-:![Arcitecture diagram](images/prompt_caching_architecture.png))
 APIs like Anthropic's Claude and Google's Gemini support an explicit form of API calls to enable and use caching. As we will see, caching is different in Ollama.
+
+![Arcitecture diagram](images/prompt_caching_architecture.png)
 
 ## Caching is Implicit with Ollama
 

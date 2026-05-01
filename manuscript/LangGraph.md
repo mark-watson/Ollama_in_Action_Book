@@ -13,10 +13,11 @@ LangGraph is a combination or LangChain + DAG-style control + memory persistence
 
 **Note:** LangGraph v1 (released 2025) deprecated `create_react_agent` in favor of `langchain.agents.create_agent`. The example code has been updated to use the new API.
 
+![Arcitecture diagram](images/langgraph_architecture.png)
+
 We only look at one short example here that is in the file **Ollama_in_Action_Book/source-code/langgraph/langgraph_agent_test.py**. The following listing demonstrates the construction of a sophisticated ReAct (Reasoning and Acting) agent using LangChain's `create_agent` function, specifically designed to orchestrate a multi-step research workflow. By leveraging `create_agent`, the code integrates a ChatOllama local language model with custom-defined tools to bridge the gap between static model training data and real-time information. The implementation defines two specialized tools: a search function utilizing DuckDuckGo for web retrieval and a secondary processing tool that uses the local LLM to synthesize those search results into a coherent answer. This architecture goes beyond simple retrieval-augmented generation (RAG) by instructing the agent, through a structured system prompt, to follow a strict sequential logic—first searching for raw data and then passing that data back through a refinement tool—to ensure the final output is grounded in the most current available facts.
 
 
-:![Arcitecture diagram](images/langgraph_architecture.png))
 ```python
 from langchain.agents import create_agent
 from langchain_core.tools import tool

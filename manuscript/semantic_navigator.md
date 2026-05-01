@@ -31,10 +31,11 @@ We will use the Gradio toolkit for creating interactive web apps. You can find d
 
 The following program demonstrates the construction of a "Semantic Navigator," a web application built with Gradio that leverages Large Language Models (LLMs) to transform unstructured prose into structured knowledge. By using the Ollama Python client library, the application connects to a high-performance model to perform two distinct natural language processing tasks: named entity recognition (NER) and relationship extraction. The code implements a dual-stage workflow where users first submit raw text for analysis—triggering a system prompt that enforces a strict JSON schema for identifying persons, places, and organizations—and then interact with that data through a context-aware chatbot. This implementation showcases critical modern AI patterns, including the handling of structured LLM outputs, state management within a reactive UI, and the use of RAG-lite (Retrieval-Augmented Generation) techniques to constrain assistant responses to a specific, extracted dataset.
 
+![Arcitecture diagram](images/SemanticNavigator_architecture.png)
+
 This example is in the directory **SemanticNavigator** in the file **app.py**:
 
 
-:![Arcitecture diagram](images/SemanticNavigator_architecture.png))
 ```python
 # set: export CLOUD=1
 #      export MODEL=nemotron-3-super:cloud

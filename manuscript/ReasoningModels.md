@@ -48,6 +48,8 @@ Here are some key characteristics of reasoning models:
 * **Strong Performance:** It has shown significant improvements in reasoning and translation benchmarks, including increased accuracy on the MGSM dataset (both English and Chinese) and strong performance in machine translation tasks[1].
 * **Open Source Datasets and Implementation:** Alibaba has released Marco-o1's datasets and implementation guides on GitHub, encouraging collaboration and further advancements in AI research.
 
+![Arcitecture diagram](images/reasoning_architecture.png)
+
 
 ## A More Complex Example: City Traffic Planning
 
@@ -235,4 +237,3 @@ for the city council—just let me know!
 
 I often use the state of the art commercial LLM APIs for models like Claude Sonnet 4.6, GPT-5, Gemini 3, etc. to brainstorm ideas and help me think and plan out new projects. I find it exciting to be able to run close to state of the art reasoning LLM on my personal com computer using Ollama!
 
-:![Arcitecture diagram](images/reasoning_architecture.png))

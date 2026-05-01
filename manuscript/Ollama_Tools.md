@@ -3,7 +3,8 @@
 There are several example Python tool utilities in the GitHub repository [https://github.com/mark-watson/Ollama_in_Action_Book](https://github.com/mark-watson/Ollama_in_Action_Book) in the **source-code/tools** directory that we will use for function calling (this directory also contains examples for other chapters). One of the examples here is in the directory **tool_example**.
 
 
-:![Arcitecture diagram](images/tools_architecture.png))
+![Arcitecture diagram](images/tools_architecture.png)
+
 **Use of Python docstrings at runtime:**
 
 The Ollama Python SDK leverages docstrings as a crucial part of its runtime function calling mechanism. When defining functions that will be called by the LLM, the docstrings serve as structured metadata that gets parsed and converted into a JSON schema format. This schema describes the function's parameters, their types, and expected behavior, which is then used by the model to understand how to properly invoke the function. The docstrings follow a specific format that includes parameter descriptions, type hints, and return value specifications, allowing the SDK to automatically generate the necessary function signatures that the LLM can understand and work with.
@@ -664,10 +665,11 @@ __all__ = ["summarize_text"]
 
 This Python code implements a text summarization tool using the Ollama chat model. The core function **summarize_text** takes two parameters: the main text to summarize and an optional context string. The function operates by constructing a prompt that instructs the model to provide a concise summary without additional commentary. It includes an interesting logic where if the input text is very short (less than 50 characters), it defaults to using the context parameter instead. Additionally, if there's substantial context provided (more than 50 characters), it prepends this context to the prompt. The function utilizes the Ollama chat model "llama3.2:latest" to generate the summary, structuring the request with a system message containing the prompt and a user message containing the text to be summarized. The program includes metadata for Ollama integration, specifying the function name, description, and parameter details, and exports the summarize_text function through __all__.
 
+![Arcitecture diagram](images/chains_architecture.png)
+
 Here is an example of using this tool that you can find in the file **example_chain_web_summary.py** in the directory **chains**. Please note that this example also uses the web search tool that is discussed in the next section.
 
 
-:![Arcitecture diagram](images/chains_architecture.png))
 ```python
 import sys
 from pathlib import Path
@@ -841,6 +843,8 @@ A sole proprietorship company by Mark Watson promoting AI, NLP, and Semantic Web
 ## Tool for Web Search and Fetching Web Pages
 
 The examples in this section are in the directory **tools**.
+
+![Arcitecture diagram](images/tool_examples_architecture.png)
 
 This code provides a set of functions for web searching and HTML content processing in the file **tool_web_search.py**, with the main functions being **uri_to_markdown**, **search_web**, **brave_search_summaries**, and **brave_search_text**. The **uri_to_markdown** function fetches content from a given URI and converts HTML to markdown-style text, handling various edge cases and cleaning up the text by removing multiple blank lines and spaces while converting HTML entities. The **search_web** function is a placeholder that's meant to be implemented with a preferred search API, while brave_search_summaries implements actual web searching using the Brave Search API, requiring an API key from the environment variables and returning structured results including titles, URLs, and descriptions. The **brave_search_text** function builds upon **brave_search_summaries** by fetching search results and then using **uri_to_markdown** to convert the content of each result URL to text, followed by summarizing the content using a separate **summarize_text** function. The code also includes utility functions like **replace_html_tags_with_text** which uses BeautifulSoup to strip HTML tags and return plain text, and includes proper error handling, logging, and type hints throughout. The module is designed to be integrated with Ollama and exports **uri_to_markdown** and **search_web** as its primary interfaces.
 
@@ -1028,4 +1032,3 @@ __all__ = ["uri_to_markdown", "search_web"]
 
 We have looked at the implementations and examples uses for several tools. In the next chapter we continue our study of tool use with the application of judging the accuracy of output generated of LLMs: basically LLMs judging the accuracy of other LLMs to reduce hallucinations, inaccurate output, etc.
 
-:![Arcitecture diagram](images/tool_examples_architecture.png))

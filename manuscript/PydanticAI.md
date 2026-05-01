@@ -5,7 +5,7 @@ In this chapter, we pivot from basic prompt engineering to the construction of a
 The examples for this chapter are in the directory **PydanticToolUse**.
 
 
-:![Arcitecture diagram](images/PydanticToolUse_architecture.png))
+![Arcitecture diagram](images/PydanticToolUse_architecture.png)
 
 ## Weather Lookup Tool Use Example
 
