@@ -4,3 +4,5 @@ This repository contains the manuscript and source code for the book **Ollama in
 
 The author, **Mark Watson**, has published over 20 books and holds more than 50 US patents. For more information, visit [markwatson.com](https://markwatson.com).
 
+![Book Cover](manuscript/resources/images/title_page.jpg)
+
