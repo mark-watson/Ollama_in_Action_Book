@@ -1,17 +1,17 @@
-# Kùzu Graph Database Examples
+# LadybugDB Graph Database Examples
 
 **Book:** *Ollama in Action* — available free to read online at [https://leanpub.com/ollama/read](https://leanpub.com/ollama/read)
 
 **Book Chapter:** [Using Property Graph Database with Ollama](https://leanpub.com/read/ollama/using-property-graph-database-with-ollama)
 
-These examples show how to combine Ollama with the [Kùzu](https://kuzudb.com/) embedded property graph database. One script uses Ollama (via LangChain's `KuzuQAChain`) to answer natural-language questions about a movie/actor graph by generating and executing Cypher queries. The other builds a graph schema from an economics text and runs pre-defined Cypher queries against it.
+These examples show how to combine Ollama with the [LadybugDB](https://ladybugdb.com/) embedded property graph database (the community successor to Kùzu). One script uses Ollama (via LangChain's `GraphCypherQAChain` with a custom `LadybugGraph` wrapper) to answer natural-language questions about a movie/actor graph by generating and executing Cypher queries. The other builds a graph schema from an economics text and runs pre-defined Cypher queries against it.
 
 ## Files
 
 | File | Description |
 |---|---|
-| `graph_kuzu_property_example.py` | Builds a movie/actor graph in Kùzu, then uses LangChain's `KuzuQAChain` with Ollama to answer questions in natural language |
-| `graph_kuzu_from_text.py` | Creates a graph schema (Schools, Economists, Institutions, Concepts) from `../data/economics.txt` and runs sample Cypher queries |
+| `graph_ladybug_property_example.py` | Builds a movie/actor graph in LadybugDB, then uses LangChain's `GraphCypherQAChain` with Ollama to answer questions in natural language |
+| `graph_ladybug_from_text.py` | Creates a graph schema (Schools, Economists, Institutions, Concepts) from `../data/economics.txt` and runs sample Cypher queries |
 | `grafeo-langchain-test.py` | **Experimental** — tests the Grafeo graph database with LangChain (not covered in the book) |
 | `pyproject.toml` | Project metadata and dependencies |
 
@@ -29,8 +29,8 @@ These examples show how to combine Ollama with the [Kùzu](https://kuzudb.com/) 
 
 ```bash
 cd graph
-uv run graph_kuzu_property_example.py
-uv run graph_kuzu_from_text.py
+uv run graph_ladybug_property_example.py
+uv run graph_ladybug_from_text.py
 ```
 
 > **Note:** Each run creates a local database directory (`test_db` or `economics_db`). Delete these directories to start fresh.

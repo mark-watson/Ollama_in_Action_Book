@@ -5,7 +5,7 @@ Given some text, I want you to define Property graph schemas for
 the information in the text. As context, here is some Python code
 for defining two tables and a relation and querying the data:
 
-[[CODE FROM graph_kuzu_property_example.py]]
+[[CODE FROM graph_ladybug_property_example.py]]
 
 NOW, HERE IS THE TEST TO CREATE SCHEME FOR, and to write code to
 create nodes and links conforming to the scheme:
@@ -14,10 +14,10 @@ create nodes and links conforming to the scheme:
 
 """
 
-import kuzu
+import ladybug
 
-db = kuzu.Database("economics_db")
-conn = kuzu.Connection(db)
+db = ladybug.Database("economics_db")
+conn = ladybug.Connection(db)
 
 # Node tables
 conn.execute("""
@@ -109,7 +109,7 @@ economics, you can write queries to extract information from the database.
 """
 
 def query_and_print_result(query):
-    """Basic pretty printer for Kuzu query results"""
+    """Basic pretty printer for Ladybug query results"""
     print(f"\n* Processing: {query}")
     result = conn.execute(query)
     if not result:
@@ -177,4 +177,3 @@ WHERE NOT EXISTS {
 }
 RETURN e.name
 """)
-
