@@ -2,24 +2,30 @@
 
 The **zvec** library implements a lightweight, lightning-fast, in-process vector database. Allibaba released **zvec** in February 2026. We will see how to use **zvec** and then build a high performance RAG system. We will use the tiny model **qwen3:1.7b** as part of the application.
 
+The Agentic RAG implementation in this chapter is based on the Google Research blog post/paper ["Unlocking dependable responses with Gemini: Enterprise Agent Platforms & Agentic RAG"](https://research.google/blog/unlocking-dependable-responses-with-gemini-enterprise-agent-platforms-agentic-rag/).
+
 Note: The source code for this example can be found in **Ollama_in_Action_Book/source-code/RAG_zvec/app.py**. Not all the code in this file is listed here.
 
 
 ## Introduction and Architecture
 
-Building a Retrieval-Augmented Generation (RAG) pipeline entirely locally ensures absolute data privacy, eliminates API latency costs, and provides full control over the embedding and generation models. In this chapter, we construct a fully offline RAG system utilizing Ollama for both embeddings (embeddinggemma) and inference (qwen3:1.7b), paired with zvec, a lightweight, high-performance local vector database.
+Building a Retrieval-Augmented Generation (RAG) pipeline entirely locally ensures absolute data privacy, eliminates API latency costs, and provides full control over the embedding and generation models. In this chapter, we construct a fully offline **Agentic RAG** system using local Ollama models for embedding (`embeddinggemma`) and inference (such as `nemotron-3-nano:4b` or `qwen3:1.7b`), paired with **zvec**, a lightweight, high-performance local vector database.
 
-The architecture follows a classic two-phase RAG pattern, adding an additional third step to improve the user experience:
+Unlike standard (or "Vanilla") RAG, which follows a linear pipeline (query -> retrieve -> generate), our **Agentic RAG** pattern uses multiple specialized agents that plan, rewrite queries, and evaluate context sufficiency iteratively to guarantee grounding and avoid hallucination:
 
-- Ingestion: Parse local text files, chunk the content, generate embeddings via Ollama, and index them into zvec.
-- Retrieval & Generation: Embed the user query, perform a similarity search in zvec, and save the retrieved top-k chunks for processing by a local Ollama chat model.
-- Use a small LLM model (qwen3:1.7b) to process the retrieved chunks and  taking into account the user’s original query and then format a subset of the text in the returned chunks for the user to read.
+- **Ingestion**: Parse local text files, chunk the content, generate embeddings via Ollama, and index them into `zvec`.
+- **Planning & Query Rewriting**: An orchestrator agent analyzes the user's question, drafts a search plan, and generates multiple sub-queries to capture all facets of a multi-hop or complex question.
+- **Iterative Retrieval & Sufficiency Assessment**:
+  - The vector retriever searches `zvec` for the sub-queries and aggregates unique snippets.
+  - The **Sufficient Context Agent** acts as a quality inspector: it drafts a response, evaluates whether the retrieved snippets contain enough information, and flags any missing pieces as feedback.
+  - If context is insufficient, the rewriter uses the feedback to formulate new queries, retrieving more snippets. This loop runs up to 3 times.
+- **Synthesis**: The **Synthesis Agent** compiles the final answer using the accumulated context. If context remains insufficient after iterations, it clearly states what is missing rather than guessing.
 
-![Arcitecture diagram](images/RAG_zvec_architecture.png)
+![Architecture diagram](images/RAG_zvec_architecture.png)
 
 ## Design Analysis: Dependency Minimization
 
-A notable design choice in our implementation is the reliance on Python's standard library for network calls. By utilizing **urllib.request** instead of third-party libraries like **requests** or the official **ollama-python** client library, the dependency footprint is minimized exclusively to **zvec**. This reduces virtual environment overhead and potential version conflicts, prioritizing a lean deployment.
+A notable design choice in our implementation is the reliance on Python's standard library for network calls. By utilizing **urllib.request** instead of third-party libraries like **requests**, the dependency footprint is minimized exclusively to **zvec**. This reduces virtual environment overhead and potential version conflicts, prioritizing a lean deployment.
 
 ## Implementation Walkthrough
 
@@ -44,7 +50,7 @@ Analysis of code:
 
 - Chunk Size (500 chars): This relatively small chunk size yields high-granularity embeddings. It reduces the risk of retrieving "diluted" context where a single chunk contains multiple disparate concepts.
 - Overlap (50 chars): Crucial for preventing context loss at the boundaries of chunks. It ensures that a semantic concept bisected by a hard character limit is still captured cohesively in at least one chunk.
-- Embedding Model: The system uses embeddinggemma. The Ollama API endpoint (/api/embeddings) is called directly. If the server fails to respond, a fallback zero-vector [0.0] * 768 is returned to prevent pipeline crashes, though logging or raising an exception might be preferred in production.
+- Embedding Model: The system uses `embeddinggemma`. The Ollama API endpoint (`/api/embeddings`) is called directly. If the server fails to respond, a fallback zero-vector `[0.0] * 768` is returned to prevent pipeline crashes.
 
 ### Vector Storage with zvec
 The **zvec** integration demonstrates a strictly typed, schema-driven approach to local vector storage.
@@ -59,8 +65,8 @@ The **zvec** integration demonstrates a strictly typed, schema-driven approach t
 
 Analysis of code:
 
-- Dimensionality Matching: The vector schema is hardcoded to 768 dimensions (FP32), which strictly matches the output tensor of the embeddinggemma model. Any change to the embedding model in the configuration must be accompanied by a corresponding update to this schema.
-- Storage Path: The database is initialized locally at ./zvec_example. The implementation includes a defensive teardown (shutil.rmtree) of existing databases on startup. This is excellent for testing and iterative development, though destructive in a persistent production environment.
+- Dimensionality Matching: The vector schema is hardcoded to 768 dimensions (FP32), which strictly matches the output tensor of the `embeddinggemma` model. Any change to the embedding model in the configuration must be accompanied by a corresponding update to this schema.
+- Storage Path: The database is initialized locally at `./zvec_example`. The implementation includes a defensive teardown (`shutil.rmtree`) of existing databases on startup. This is excellent for testing and iterative development, though destructive in a persistent production environment.
 
 The following function builds the index using an embedding model for the local Ollama server:
 
@@ -110,66 +116,158 @@ def build_index():
 
 This function **build_index** initializes a local vector database and populates it with document embeddings. Specifically, it executes four main operations:
 
-- Schema & Storage Initialization: Defines a strict schema for zvec (768-dimensional FP32 vectors and a string metadata field) and destructively recreates the local database directory (./zvec_example).
-- File Traversal: Recursively walks a configured target directory (config["data_dir"]) to locate specific file types.
-- Transformation & Embedding: Reads each file, splits it into overlapping chunks, and retrieves the vector embedding for each chunk via an external call (get_embedding).
-- Batch Insertion: Accumulates all processed chunks and their embeddings into a single memory list (docs), then performs a bulk insert into the zvec collection.
+- Schema & Storage Initialization: Defines a strict schema for zvec (768-dimensional FP32 vectors and a string metadata field) and recreates the local database directory (`./zvec_example`).
+- File Traversal: Recursively walks a configured target directory to locate specific file types.
+- Transformation & Embedding: Reads each file, splits it into overlapping chunks, and retrieves the vector embedding for each chunk via `get_embedding`.
+- Batch Insertion: Accumulates all processed chunks and their embeddings, then performs a bulk insert.
 
-### Retrieval and LLM Synthesis
+### Multi-Query Retrieval and Deduplication
 
-The synthesis phase bridges the vector database and the Generative LLM. Function **search** identifies matching text chunks in the vector database:
+To support queries that target multiple concepts, we define a wrapper `search_multi_queries` that performs Top-K retrieval across multiple queries and aggregates only unique snippets to avoid context bloat:
 
 ```python
-def search(collection, query, topk=5):
-    """Search the zvec collection for chunks relevant to the query."""
-    query_vector = get_embedding(query)
-    results = collection.query(
-        zvec.VectorQuery("embedding", vector=query_vector),
-        topk=topk,
-    )
-    chunks = []
-    for res in results:
-        text = res.fields.get("text", "") if res.fields else ""
-        if text:
-            chunks.append(text)
-    return chunks
+def search_multi_queries(collection, queries, topk=3):
+    """Search the zvec collection for multiple queries, aggregating and deduplicating chunks."""
+    all_chunks = []
+    seen = set()
+    for query in queries:
+        chunks = search(collection, query, topk=topk)
+        for chunk in chunks:
+            cleaned = chunk.strip()
+            if cleaned and cleaned not in seen:
+                seen.add(cleaned)
+                all_chunks.append(chunk)
+    return all_chunks
 ```
 
-Function **search** performs a Top-K retrieval. The default topk=5 retrieves roughly 2,500 characters of context. This easily fits within the context window of modern small models like qwen3:1.7b without causing attention dilution ("lost in the middle" syndrome).
+### Agentic RAG Multi-Agent Components
 
-### System Prompt Engineering and Using a Small LLM to Prepare Output for a User
-
-The **ask_ollama** function utilizes strict prompt constraints: "Answer the user's question using ONLY the context provided below. If the context does not contain enough information, say so." This significantly mitigates hallucination by forcing the model to ground its response exclusively in the retrieved data.
+To implement the multi-agent planning and sufficiency check, we define helpers to make structured chat calls to Ollama using its built-in JSON constraint parameter (`"format": "json"`), and parse the outputs reliably.
 
 ```python
-def ask_ollama(question, context_chunks):
-    """Send retrieved chunks + user question to the Ollama chat model."""
-    context = "\n\n---\n\n".join(context_chunks)
-    system_prompt = (
-        "You are a helpful assistant. Answer the user's question using ONLY "
-        "the context provided below. If the context does not contain enough "
-        "information, say so. Be concise and accurate.\n\n"
-        f"Context:\n{context}"
-    )
+def call_llm(system_prompt: str, user_prompt: str, json_format: bool = False) -> str:
+    """Helper to send a prompt to the Ollama chat model, optionally enforcing JSON format."""
     url = f"{OLLAMA_BASE}/api/chat"
-    payload = json.dumps({
+    payload = {
         "model": config["chat_model"],
         "stream": False,
         "messages": [
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": question},
+            {"role": "user", "content": user_prompt},
         ],
-    }).encode("utf-8")
-    req = urllib.request.Request(url, data=payload, headers={"Content-Type": "application/json"})
+        "options": {
+            "temperature": 0.1,  # Low temperature for deterministic behavior
+        }
+    }
+    if json_format:
+        payload["format"] = "json"
+        
+    req = _make_request(url, payload)
     try:
         with urllib.request.urlopen(req) as res:
             body = json.loads(res.read().decode("utf-8"))
             return body["message"]["content"]
     except Exception as e:
-        return f"Error calling Ollama chat: {e}"
+        print(f"Error calling Ollama chat: {e}")
+        return ""
 ```
 
-Function **ask_ollama** uses stateless execution: The /api/chat call sets "stream": False and does not maintain a conversation history array across loop iterations. This makes it a pure Q&A interface rather than a continuous chat, ensuring each answer is cleanly tied to a fresh zvec retrieval.
+Using this foundation, we implement the individual agents:
+
+#### Planner Agent
+Generates a plan and breaks down the user query into multiple specific search queries.
+
+```python
+def plan_and_rewrite(question: str) -> dict:
+    """Planner Agent: Analyzes the question, generates a plan and search queries."""
+    system_prompt = (
+        "You are a Plan and Query Rewriter agent. Your task is to analyze the user's question, "
+        "create a brief search plan, and generate 1 to 3 distinct search queries to retrieve relevant "
+        "information from a vector database.\n"
+        "You must respond ONLY with a JSON object in this format:\n"
+        "{\n"
+        '  "plan": "brief explanation of what to search for",\n'
+        '  "queries": ["query 1", "query 2"]\n'
+        "}\n"
+        "Do not include any other text."
+    )
+    user_prompt = f"Question: {question}"
+    res_text = call_llm(system_prompt, user_prompt, json_format=True)
+    res_json = parse_json_response(res_text)
+    
+    if not res_json or "queries" not in res_json:
+        res_json = {
+            "plan": f"Direct search for: '{question}'",
+            "queries": [question]
+        }
+    return res_json
+```
+
+#### Sufficient Context Agent
+Evaluates if the retrieved snippets contain enough information to fully address the query. If not, it outputs `is_sufficient: false` and logs exactly what facts are missing.
+
+```python
+def evaluate_context(question: str, snippets: list) -> dict:
+    """Sufficient Context Agent: Evaluates whether the retrieved snippets contain enough info."""
+    context_str = "\n\n---\n\n".join(snippets)
+    system_prompt = (
+        "You are a Sufficient Context Agent. Your job is to review the user's question, "
+        "the retrieved context snippets, and determine if the snippets contain all the "
+        "necessary information to answer the question fully.\n"
+        "First, mentally draft a potential answer. Then assess if any parts of the question "
+        "are unanswered or if any crucial information is missing.\n"
+        "You must respond ONLY with a JSON object in this format:\n"
+        "{\n"
+        '  "is_sufficient": true or false (boolean),\n'
+        '  "draft_answer": "a rough draft answer based on the current context",\n'
+        '  "reason": "explanation of what is present or what is missing from the snippets",\n'
+        '  "feedback": "if is_sufficient is false, detailed feedback of what specific keywords, topics, or facts are missing and should be searched for next. If is_sufficient is true, leave this empty."\n'
+        "}\n"
+        "Do not include any other text."
+    )
+    user_prompt = (
+        f"Question: {question}\n\n"
+        f"Retrieved Snippets:\n{context_str}"
+    )
+    res_text = call_llm(system_prompt, user_prompt, json_format=True)
+    res_json = parse_json_response(res_text)
+    
+    if not res_json or "is_sufficient" not in res_json:
+        res_json = {
+            "is_sufficient": True,
+            "draft_answer": "No draft available.",
+            "reason": "Failed to parse sufficiency evaluation, defaulting to sufficient.",
+            "feedback": ""
+        }
+    return res_json
+```
+
+#### Synthesis Agent
+Generates the final response grounded in the accumulated context. If context sufficiency failed, it explicitly reports the missing details.
+
+```python
+def synthesize_answer(question: str, snippets: list, is_fully_sufficient: bool, sufficiency_reason: str) -> str:
+    """Synthesis Agent: Generates final grounded response using retrieved context."""
+    context_str = "\n\n---\n\n".join(snippets)
+    if is_fully_sufficient:
+        system_prompt = (
+            "You are a Synthesis Agent. Write a clear, comprehensive, and accurate final answer "
+            "to the user's question using ONLY the provided context. Do not extrapolate or assume facts.\n"
+            f"Context:\n{context_str}"
+        )
+        user_prompt = f"Question: {question}"
+    else:
+        system_prompt = (
+            "You are a Synthesis Agent. The retrieved context was NOT fully sufficient to answer the question. "
+            "Answer what you can from the provided context, and clearly note what information is missing "
+            "or could not be retrieved from the database. Do not make up any information.\n"
+            f"Reason for insufficiency: {sufficiency_reason}\n\n"
+            f"Context:\n{context_str}"
+        )
+        user_prompt = f"Question: {question}"
+        
+    return call_llm(system_prompt, user_prompt, json_format=False)
+```
 
 ## Example Run
 
@@ -179,29 +277,71 @@ Here is an example run where we specify the use of model **qwen3:1.7b**:
 
 ```bash
 $ export MODEL=qwen3:1.7b
-$ uv run app.py 
-Using CPython 3.12.12
-Creating virtual environment at: .venv
-Installed 2 packages in 31ms
+ $ uv run app.py
 Building zvec index from text files …
 Indexed 9 chunks from ../data
 
-RAG chat ready  (model: qwen3:1.7b)
+Agentic RAG chat ready  (model: nemotron-3-nano:4b)
 Type your question, or 'quit' to exit.
 
-You> who says economics is bullshit?
+You> What are the main schools of economic thought?
 
-Assistant> The context mentions Pauli Blendergast, an economist at the University of Krampton Ohio, who is noted for stating that "economics is bullshit." No other individuals are explicitly cited in the provided text.
+🧠 [Planner] Analyzing question and generating search plan...
+   ↳ Plan: Search for a comprehensive list and description of the main schools of economic thought, such as Keynesian, Neoclassical, Marxist, Austrian, etc.
+   ↳ Initial Queries: ['main schools of economic thought', 'major schools of economics overview', 'schools of economic thought']
+🔍 [Retriever] Searching vector store for queries...
+   ↳ Found 4 unique context snippet(s).
+🤖 [Sufficiency Check] Evaluating context sufficiency (Iteration 1)...
+   ↳ Sufficiency: False
+   ↳ Reason: Only the Austrian School is described in the snippets; other major schools such as Keynesian, Neoclassical, Marxist, etc., are not mentioned.
+🔄 [Rewriter] Context insufficient. Feedback: 'Missing information on Keynesian economics, neoclassical theory, Marxist economics, and possibly other contemporary schools. These should be searched for.'
+   Generating new queries based on feedback...
+   ↳ New queries: ['Keynesian economics overview', 'Neoclassical economic theory summary']
+🔍 [Retriever] Retrieving additional context...
+   ↳ Found 2 new unique snippet(s). Total unique snippets: 6.
+🤖 [Sufficiency Check] Evaluating context sufficiency (Iteration 2)...
+   ↳ Sufficiency: False
+   ↳ Reason: The snippets only describe the Austrian School in detail. They do not mention other significant schools of economic thought like Keynesian, Neoclassical, or Marxist, which are essential to a complete answer.
+🔄 [Rewriter] Context insufficient. Feedback: 'Missing keywords: Keynesian, Neoclassical, Marxist, and possibly others such as Institutional economics.'
+   Generating new queries based on feedback...
+   ↳ New queries: ['Marxist economic theory summary', 'Institutional economics schools of thought']
+🔍 [Retriever] Retrieving additional context...
+   ↳ Found 0 new unique snippet(s). Total unique snippets: 6.
+🤖 [Sufficiency Check] Evaluating context sufficiency (Iteration 3)...
+   ↳ Sufficiency: False
+   ↳ Reason: The snippets only describe the Austrian School in detail. They do not mention or provide information about other significant schools of economic thought (e.g., Keynesian, Neoclassical, Marxist).
+⚠️  [Iteration Limit] Reached max iterations (3). Proceeding to synthesis with partial context.
+✍️  [Synthesis] Generating final response...
 
-You> what procedures are performed in chemistry labs?
+Assistant> **Answer based on the provided context**
 
-Assistant> The provided context does not contain information about procedures performed in chemistry labs. It focuses on economic concepts, microeconomics, macroeconomics, and related topics, but does not mention chemistry or laboratory procedures.
+- The **Austrian School** (also called the Vienna or Psychological School) is described in detail as one school of economic thought that emphasizes the spontaneous organizing power of the price mechanism, advocates a “laissez‑faire” approach, and stresses voluntary contractual agreements with minimal government intervention.
 
-You> how do microeconomics and macroeconomics differ?
+**What is missing / could not be retrieved**
 
-Assistant> Microeconomics focuses on individual agents (e.g., households, firms) and specific markets, analyzing decisions like pricing, resource allocation, and consumer behavior. Macroeconomics examines the entire economy, addressing broader issues such as unemployment, inflation, growth, and fiscal/money policy. While microeconomics deals with "how" resources are used, macroeconomics focuses on "what" the economy produces and "how collectively" it functions.
+- The context does **not** mention or provide any information about other significant schools of economic thought such as Keynesian economics, Neoclassical economics, Marxist economics, etc.  
+- Therefore, I cannot list those schools or describe their characteristics from the given material.
 
-You> quit
+**Conclusion**
+
+From the supplied text, the only school explicitly described is the **Austrian School**. The existence and description of other major schools (e.g., Keynesian, Neoclassical, Marxist) are not present in the retrieved context.
+
+You> who says that Economics is bullshit?
+
+🧠 [Planner] Analyzing question and generating search plan...
+   ↳ Plan: Search for statements where someone calls Economics 'bullshit' and identify the speaker or source.
+   ↳ Initial Queries: ['economics is bullshit quote', 'who said economics is bullshit', 'criticism of economics bullshit']
+🔍 [Retriever] Searching vector store for queries...
+   ↳ Found 3 unique context snippet(s).
+🤖 [Sufficiency Check] Evaluating context sufficiency (Iteration 1)...
+   ↳ Sufficiency: True
+   ↳ Reason: The snippet explicitly states that Pauli Blendergast, who teaches at the University of Krampton Ohio and is famous for saying economics is bullshit, is the person who makes this claim.
+✅ [Sufficiency Check] Context is fully sufficient!
+✍️  [Synthesis] Generating final response...
+
+Assistant> Pauli Blendergast, an economist who teaches at the University of Krampton, Ohio, is said to claim that “economics is bullshit.”
+
+You> ^D
 Goodbye!
 ```
 
