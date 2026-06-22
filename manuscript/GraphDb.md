@@ -503,3 +503,13 @@ Here, the “structured data” I asked an LLM to output was Python code.
 
 I cheated in this example by using what is currently the best code generation LLM: Claude Sonnet 3.5. I also tried this same exercise using Ollama with the model **qwen2.5-coder:14b** and the results were not quite as good. This is a great segway into the final chapter **Book Wrap Up**.
 
+## Optional Practice Problems
+
+1. **Adding Properties to the Graph Schema.** Modify the Cypher schema creation in `graph_ladybug_property_example.py` to add a new property `birth_year` to the `Economist` node type. Insert birth years for Carl Menger (1840) and Ludwig von Mises (1881), and run a query that filters for economists born before 1900.
+
+2. **Common Affiliation Query.** Write a Cypher query to find pairs of economists who are associated with the same `School` or teach at the same `Institution`. Print their names and the shared node name.
+
+3. **Natural Language to Cypher Translator.** Build a Python script that takes a natural language question (e.g. "Which school studies microeconomics?") and uses Ollama to translate it into a Cypher query. Execute this query on your local Kuzu/Ladybug database and print the results. Hint: use few-shot prompt examples to guide the query generation.
+
+4. **Bi-directional Relationships.** In graph databases, relationships are directed. Discuss what happens if you query `MATCH (a)-[:FoundedBy]->(b)` vs `MATCH (b)-[:FoundedBy]->(a)`. Write a query that finds all connections between two nodes regardless of relationship direction.
+

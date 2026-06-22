@@ -237,3 +237,13 @@ for the city council—just let me know!
 
 I often use the state of the art commercial LLM APIs for models like Claude Sonnet 4.6, GPT-5, Gemini 3, etc. to brainstorm ideas and help me think and plan out new projects. I find it exciting to be able to run close to state of the art reasoning LLM on my personal com computer using Ollama!
 
+## Optional Practice Problems
+
+1. **Reasoning vs. Standard Model Comparison.** Modify `reasoning_test_1.py` to prompt two models: a reasoning model (e.g., `deepseek-r1:8b` or `deepseek-r1:1.5b`) and a standard model (e.g., `llama3.2` or `qwen2.5:7b`). Ask them to solve a complex math word problem or logic puzzle. Compare the response times, the presence/absence of step-by-step thinking, and the correctness of the final answers.
+
+2. **Manual `<think>` Tag Parser.** Some older versions of LangChain or alternative API clients do not automatically separate reasoning content into `additional_kwargs['reasoning_content']`. Write a robust text parsing function that looks for `<think>` and `</think>` tags in the raw response text, extracts the thinking process, and separates it from the final user-facing response.
+
+3. **Einstein's Riddle Solver.** Write a script that prompts a local reasoning model to solve a small logic grid puzzle (for example: three houses, each a different color, owned by people of different nationalities who drink different beverages; find who owns the fish). Extract and print the reasoning block to analyze the model's intermediate steps and logical deductions.
+
+4. **Structured Reasoning Extraction.** Combine reasoning with LangChain's structured output. Define a Pydantic class `PuzzleSolution` with fields `reasoning_steps: list[str]` and `final_answer: int`. Attempt to enforce this structure on a reasoning model. Observe if the model places its thinking into the structured fields or if structured output restricts the model's natural reasoning capabilities.
+

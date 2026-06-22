@@ -216,4 +216,14 @@ AgentRunResult(output='The population of San Diego is approximately 1.4 million 
 
 The experiments conducted in this chapter illustrate a significant shift in AI development: the move toward "Agentic Type Safety." By leveraging the Pydantic AI library, we have successfully demonstrated that the inherent "fuzziness" of Large Language Models can be tamed and integrated into robust software architectures. Through the Weather Lookup and DuckDuckGo Search examples we saw how the library uses Python type hints and docstrings as a functional schema, allowing models to perform precise tool calls and handle real-time data retrieval with minimal friction. This marriage of Pydantic’s validation functionality with the reasoning capabilities of models, like those we run via Ollama, creates a developer experience that feels less like "prompting" and more like traditional API orchestration. As you move forward, the patterns established here like dynamic model configuration, environment-aware providers, and low-temperature settings for reliability will serve as a good basis for building production grade agents that are both extensible and maintainable within modern DevOps and production ecosystems.
 
+## Optional Practice Problems
+
+1. **Multi-City Weather Comparison.** Extend the weather lookup example (`tool_use_weather.py`) so that the agent can accept a list of multiple cities. Define a Pydantic response schema `WeatherComparison` that contains a list of individual city forecasts and a field summarizing which city is the warmest or coldest.
+
+2. **Web Search fallback.** In `tool_duckduckgo_search.py`, when a DuckDuckGo search completes but returns no direct summary (e.g. returns a list of result links), modify the search tool to fetch the actual web page content of the first result and return it to the agent so it can answer more accurately.
+
+3. **Agentic Structured Entity Extraction.** Create a script that uses Pydantic AI to parse unstructured text (such as news snippets or event descriptions) and return a structured Pydantic model containing a list of `Entity` objects, where each entity has a `name`, `category` (e.g., Person, Organization, Location), and a brief `context` string.
+
+4. **Dynamic Context Injection.** Implement a Pydantic AI agent that utilizes the `RunContext` feature. Write a tool that accesses a mock user profile database, retrieving the user's location or temperature unit preferences based on a user ID passed in via the run context, and use that preference to customize the agent's output format automatically.
+
 

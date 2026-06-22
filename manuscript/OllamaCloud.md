@@ -218,3 +218,13 @@ The key takeaways from this chapter are:
 
 Looking ahead, the planned introduction of usage-based pricing signals Ollama's ambition to support a broader range of use cases, from individual developers to large-scale commercial applications. By providing a comprehensive, hybrid platform that spans from the local machine to the cloud, Ollama is solidifying its position as an excellent tool and platform for the entire lifecycle of AI development.
 
+## Optional Practice Problems
+
+1. **Compare Local vs. Cloud Performance.** Write a benchmark script that sends the same prompts (such as generating a long creative story or solving a coding puzzle) to a small local model (e.g., `llama3.2`) and a larger model hosted on Ollama Cloud (such as a 70B parameter model). Measure and compare: (a) Time-to-First-Token, (b) total execution time, and (c) overall quality of the generated text.
+
+2. **Grounding Search Results with Citations.** Extend `ollama_web_search.py` so that the final output includes a separate section "Sources Cited:". Under this section, list the titles and clickable URLs of the web pages retrieved by the Ollama Web Search API that the model used to ground its answer.
+
+3. **Hybrid Fallback Mechanism.** Implement a wrapper client in Python that first attempts to execute inferences using a local model on Ollama. If the local request fails (e.g. Ollama service not running) or takes longer than a specified timeout (e.g., 5 seconds), the script should automatically failover to use the Ollama Cloud API.
+
+4. **Token Rate and Latency Monitor.** Build a CLI tool that wraps streaming chat completions from Ollama Cloud. Calculate the tokens per second in real time as they arrive and print a running stat in the terminal: `[Speed: XX tokens/sec | Cumulative time: X.XXs]`. Compare the throughput of cloud streaming vs. local streaming.
+

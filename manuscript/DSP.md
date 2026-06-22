@@ -84,3 +84,13 @@ Reasoning: When two dice are tossed, there are 36 possible outcomes. The sum of 
 Answer: [0.16666666666666666, 0.1388888888888889, 0.1388888888888889]
 ```
 
+## Optional Practice Problems
+
+1. **Text Classification Signature.** Create a new DSPy signature class called `TextClassifier` where the input is a news article `text` and the output is a `category: str` (e.g. Sports, Tech, Business) and a `sentiment: float` from -1.0 to 1.0. Run a script using this signature to classify a few test paragraphs.
+
+2. **Sequential Multi-stage Pipeline.** Implement a two-step DSPy pipeline. Step 1 should take a user question and output a list of keywords. Step 2 should take the original question and the keywords generated in Step 1 to produce the final detailed answer. Verify that the outputs match the structured signatures.
+
+3. **Predict vs. ChainOfThought.** Modify `ollama_test.py` to compare standard `dspy.Predict` and `dspy.ChainOfThought` on a riddle or logical reasoning problem. Print both predictions and write down the comparison in your console. Note if the answer format is cleaner or if the reasoning is more accurate with `ChainOfThought`.
+
+4. **Structured JSON List Output.** Define a DSPy signature that takes a paragraph describing a meeting and outputs a structured list of action items, where each action item contains an `owner: str` and a `description: str`. Verify that DSPy enforces the output schema correctly when calling your local model.
+

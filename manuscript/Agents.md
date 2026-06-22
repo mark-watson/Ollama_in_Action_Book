@@ -640,3 +640,13 @@ Through multiple iterations, the agent analyzes a directory containing various P
 ## Agents Wrap Up
 
 There are several options for LLM agent frameworks. I especially like `smolagents` because it works fairly well with smaller models run with Ollama. I have experimented with other agent frameworks that work well with Claude, GPT-5, Gemini 3, etc., but fail more frequently when used with smaller LLMs.
+
+## Optional Practice Problems
+
+1. **Integrating a Web Search Tool.** Create a new tool `sa_web_search` using `smolagents`'s `@tool` decorator. It should wrap the Brave Search API logic or use a simpler mock search implementation. Register this tool with `CodeAgent` in `smolagents_agent_test1.py` and run a query requiring external data (e.g., "Find the latest updates on Ollama releases and summarize them").
+
+2. **Hierarchical Multi-Agent Systems.** Hugging Face `smolagents` supports hierarchical agent structures via `ManagedAgent`. Wrap your `CodeAgent` inside a `ManagedAgent` and create a second supervisor `CodeAgent` that delegates file-listing and file-reading tasks to it. Test if the supervisor successfully commands the subordinate to inspect the workspace files and reports back.
+
+3. **Safe Python Interpreter Experimentation.** The `CodeAgent` utilizes an internal Python interpreter to execute generated code. Test its sandbox limits by prompting the agent to perform actions like importing prohibited modules (e.g., `os`, `subprocess`) or executing infinite loops. Observe the security exceptions or timeouts thrown and check how the agent recovers from these execution errors.
+
+4. **Structured JSON Output from Agents.** Define a custom `Tool` or output parser that returns data in a structured schema. Use Pydantic or basic python dict hints inside the docstrings of a `@tool` to force `smolagents` to return structured information (e.g. a list of files sorted by size) and print the parsed result.

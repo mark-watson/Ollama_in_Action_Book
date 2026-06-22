@@ -181,3 +181,20 @@ In the current version of Ollama's API, the prompt_eval_count field reports the 
 ## Wrap Up for Prompt Caching
 
 You don't need to optimize initially for prompt caching but it is a good idea to keeping caching in mind for applications where, for example, you have a large system prompt containing several example data transformation (perhaps text to JSON) and then want to run a large number of data transformation inference calls. You might make your data transformation applications an order of magnitude faster.
+
+## Optional Practice Problems
+
+1. **Verify Cache Invalidation by Breaking the Prefix**
+   Modify the `ollama_rest_test.py` script so that Request B includes a dynamic timestamp (e.g., the current date and time) inserted at the *beginning* of the static context string. Run the script and observe the `prompt_eval_duration` for both requests. Do you still see a speedup? Now move the timestamp to the very *end* of the prompt, after the user question. Run again and compare. Write a short paragraph explaining why the position of changing data matters for Ollama's prefix-based caching.
+
+2. **Switch from the Generate API to the Chat Completions API**
+   Rewrite `query_ollama()` to use Ollama's `/api/chat` endpoint instead of `/api/generate`. Structure the payload with separate `system` and `user` messages (as shown in the JSON example earlier in the chapter). Verify that prompt caching still works by comparing `prompt_eval_duration` across a cold and warm request. *Hint*: the response JSON from `/api/chat` uses the same timing fields.
+
+3. **Build a Multi-Query Benchmarking Harness**
+   Extend the example script to send *five* different user questions (not just two) while keeping the same static context. Collect the `prompt_eval_duration` for each request and print a summary table at the end showing the request label, processing time, and speedup relative to Request A. Does the cache benefit remain consistent across all subsequent requests, or does it vary? Explain your observations.
+
+4. **Experiment with `num_ctx` and `keep_alive` Sensitivity**
+   Write a new script that sends two identical-prefix requests three times each under different configurations: (a) with matching `num_ctx` values, (b) with *different* `num_ctx` values between the two requests (e.g., 4096 then 8192), and (c) with `keep_alive` set to `"0"` (immediate unload) between requests. Record the `prompt_eval_duration` for every run. Create a small table summarizing which configurations preserved the cache and which did not, and explain *why* based on what you learned in this chapter.
+
+5. **Design a Prompt Structure for a Multi-Turn RAG Application**
+   Imagine you are building a retrieval-augmented generation (RAG) application where a large reference document (several pages) is included in every request, but each request also includes a few retrieved passages that change per query. Design a prompt structure that maximizes cache reuse. Write pseudocode or a Python outline showing the order of prompt components (system instruction, static reference document, retrieved passages, user question). Explain which parts will benefit from caching and estimate—based on the speedup factors you observed in this chapter—how much faster the second and subsequent requests might be compared to the first.

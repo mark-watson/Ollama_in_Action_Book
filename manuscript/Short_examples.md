@@ -212,3 +212,12 @@ Over time, the system becomes increasingly accurate in its classification becaus
 
 In the next chapter we start developing tools that can be used for “function calling” with Ollama.
 
+## Optional Practice Problems
+
+1. **Streaming Image Descriptions to the Console.** The `analyze_image` function in `Ollama_sdk_image_example.py` accumulates the entire response before printing it. Modify the script so that each chunk is printed to the console as it arrives (i.e., token-by-token streaming output). *Hint:* replace the accumulation loop with a call to `print(..., end="", flush=True)` inside the `for chunk in stream` loop. Verify the behavior difference by running the modified script against a large image and observing the real-time output.
+
+2. **Adding Streaming Support to the OpenAI Compatibility Client.** The `OllamaClient` class in `OpenAI_compatibility_example.py` always sets `stream=False`. Add a new method called `chat_with_context_stream` that sets `stream=True` and yields each token as it arrives so the caller can iterate over partial results. Write a short `main` block that calls your new method and prints tokens in real time, similar to how `ollama.generate` streams in the image example.
+
+3. **Conversation History Manager.** The multi-turn conversation example hard-codes the conversation list. Create a new class called `ConversationManager` that wraps `OllamaClient` and provides `add_user_message(text)` and `get_response()` methods. Each call to `get_response()` should append the assistant's reply to the internal message history so the next user message has full context. Test your manager by conducting a three-turn conversation about a topic of your choice and printing the entire history at the end.
+
+4. **Temperature Experiment Report.** Write a script that sends the *same* prompt to the `OllamaClient.chat_with_context` method five times, each time with a different `temperature` value (for example 0.0, 0.25, 0.5, 0.75, and 1.0). Collect the responses and print them side-by-side (or sequentially with clear labels). In a comment at the top of your script, write two to three sentences describing how temperature affected the creativity and consistency of the outputs you observed.

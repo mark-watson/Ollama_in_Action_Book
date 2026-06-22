@@ -1032,3 +1032,13 @@ __all__ = ["uri_to_markdown", "search_web"]
 
 We have looked at the implementations and examples uses for several tools. In the next chapter we continue our study of tool use with the application of judging the accuracy of output generated of LLMs: basically LLMs judging the accuracy of other LLMs to reduce hallucinations, inaccurate output, etc.
 
+## Optional Practice Problems
+
+1. **Implement a Calculator Tool.** Create a new tool file `tool_calculator.py` with a function `evaluate_expression(expression: str) -> str` that evaluates safe mathematical expressions. Register this tool with Ollama using the function metadata format shown in the chapter. Test it by asking the LLM to solve a multi-step word math problem that requires using the tool.
+
+2. **Directory-to-Summary Chain.** Combine `tool_file_dir.py`, `tool_file_contents.py`, and `tool_summarize_text.py` into a three-step chain script. Given a directory name and a target filename, the LLM should first check if the file exists in the directory, retrieve its content using the file contents tool, and finally summarize the content.
+
+3. **Enhance the SQLite Tool with Schema Inspection.** In `tool_sqlite.py`, the LLM can query the database but might not know the available tables and columns. Add a new tool `get_database_schema(db_path: str) -> str` that returns the schema of all tables. Verify that the LLM first calls this schema-inspection tool before querying a table it was not previously aware of.
+
+4. **Graceful Tool Error Recovery.** Modify the tool execution loop in `ollama_tools_examples.py` so that if a tool raises an exception (e.g., file not found, network error), the error message is wrapped in a system instruction and passed back to the LLM. Test this by prompting the LLM to read a non-existent file, and observe if it attempts to correct its argument or reports the error back to the user.
+

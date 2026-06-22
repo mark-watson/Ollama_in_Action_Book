@@ -205,6 +205,16 @@ ANSWER:
 {'role': 'assistant', 'content': 'QUERY: What is the last color we talked about?\n\nANSWER:\nBlue.\n'}
 
 Assistant: Blue.
+
+## Optional Practice Problems
+
+1. **Persistent Local Database Storage.** By default, the memory database might run in-memory or in a temporary folder. Modify the `config` dictionary in `mem0_persistence.py` to specify a concrete local directory path (e.g., `./chroma_db`) for Chroma storage. Verify that memories are persisted on disk and survive running the script multiple times.
+
+2. **Inference-based Memory Filtering.** Set `infer=True` in `mem0_persistence.py` under `m.add(...)`. Customize the prompt template or configuration to instruct Mem0 to only save factual details about the user (e.g., their name, preferences, location, or pets) while ignoring general factual trivia questions like "What is the capital of France?".
+
+3. **Multi-User Memory Separation.** Test the agent's memory isolation capabilities. Add two different user profiles, say `USER_ID = "user_alice"` and `USER_ID = "user_bob"`. Store a preference for Alice (e.g., "Alice loves green tea") and one for Bob (e.g., "Bob prefers coffee"). Run a query for Bob asking what his favorite drink is, and verify that the retrieved memories do not leak Alice's preference.
+
+4. **Wipe and Delete Memory Utility.** Add a new command-line option (e.g., `--clear`) to `mem0_persistence.py`. When run with this flag, the script should invoke Mem0's database reset or delete methods to erase all stored memories for the given user, making it easy to reset the session.
 ```
 
 

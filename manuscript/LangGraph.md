@@ -162,3 +162,13 @@ Sedona, Arizona.
 ```
 
 Note that the agent had to try searching several times before finding the "correct Mark Watson."
+
+## Optional Practice Problems
+
+1. **Implement a Router Node.** Extend the LangGraph agent in `langgraph_agent_test.py` by adding a conditional router node. The router should inspect the initial user query and determine if it requires a web search. If the query can be answered directly (e.g., "What is 2+2?"), route the state directly to an answer generation node, bypassing the search tool completely.
+
+2. **Add Search History to Graph State.** Modify the state definition of the graph to include a list field `search_history: list[str]`. Each time the search node is executed, append the query to this list. If the agent generates a search query that matches an entry in the list, redirect it to refine its search query to avoid infinite loops.
+
+3. **Graph Architecture Visualization.** Use LangGraph's built-in visualization utility. Write a short snippet in your python script that calls `graph.get_graph().draw_png()` (or `draw_mermaid_png()`) and saves the resulting image to disk. Verify the flow of nodes and edges matches your code definition.
+
+4. **Verify Answers Node.** Introduce a validation node called `answer_verifier`. Once the agent produces a final candidate answer, this node should use the LLM to verify if the answer completely answers the user's initial query. If it does, route to `__end__`; if not, route back to the search node with feedback on what was missing.
