@@ -1,14 +1,16 @@
 # Benchmarking Model Inference Speeds
 
-When working with local large language models through Ollama, one of the most practical questions you face is: *which model should I use for a given task?* Model selection is rarely about picking the "best" model in the abstract — it's about finding the best trade-off between response quality, inference speed, and the memory footprint your hardware can support. A model that produces beautiful prose is of limited use if it takes two minutes to answer a simple question on your laptop.
+When working with local large language models through Ollama, one of the most practical questions you face is: *which model should I use for a given task?* Model selection is rarely about picking the "best" model in the abstract because it's about finding the best trade-off between response quality, inference speed, and the memory footprint your hardware can support. A model that produces beautiful prose is of limited use if it takes two minutes to answer a simple question on your laptop.
 
 This chapter provides a hands-on utility for measuring inference speed across different models on your own hardware. The examples for this chapter are in the directory **benchmarking_model_inference_speeds**.
+
+**Dear reader**, this chapter provides suggestions and example code for comparing inference speeds of models running on Ollama. In my personal research I prefer using local models for appropriate use cases and I run open models on inference providers like, for example, FireWorks.ai. You can use the ideas presented here to also evaluate inference speed on commercial APIs.
 
 ![Arcitecture diagram](images/inference_speed_test_architecture.png)
 
 ## Why Wall-Clock Time Matters
 
-Most published benchmark numbers — tokens per second, time-to-first-token, etc. — are measured on high-end GPUs that bear little resemblance to the MacBook or Linux workstation on your desk. The only reliable benchmark is one you run yourself.
+Most published benchmark numbers (tokens per second, time-to-first-token, etc.) are measured on high-end GPUs that bear little resemblance to the MacBook or Linux workstation on your desk. The only reliable benchmark is one you run yourself.
 
 Our approach is deliberately simple:
 
@@ -147,11 +149,11 @@ if __name__ == "__main__":
 
 ### Code Walkthrough
 
-**Model list.** The `MODELS` constant at the top of the file defines the three models we are benchmarking. You can edit this list to add or remove models — just ensure each model has been pulled locally with `ollama pull <model>`.
+**Model list.** The `MODELS` constant at the top of the file defines the three models we are benchmarking. You can edit this list to add or remove models that you have pulled locally with `ollama pull <model>`.
 
 **Warm-up.** The `warmup` function sends a trivial classification prompt ("identify which numbers are even") to the model using Ollama's `chat` API in non-streaming mode. The warm-up serves two purposes: it forces Ollama to load the model weights into memory, and it populates Ollama's internal KV cache with the prompt prefix. Without a warm-up, the first timed benchmark would include model-loading overhead, skewing the results.
 
-**Benchmark function.** The `benchmark` function streams the model's response and times the operation from the moment the first chunk is requested until the final chunk arrives. Streaming is used so we can measure wall-clock time that includes time-to-first-token — the latency the user actually experiences while waiting for the response to start appearing.
+**Benchmark function.** The `benchmark` function streams the model's response and times the operation from the moment the first chunk is requested until the final chunk arrives. Streaming is used so we can measure wall-clock time that includes time-to-first-token which is the latency the user actually experiences while waiting for the response to start appearing.
 
 The function counts tokens from each chunk, but then overrides that count with `eval_count` from the final chunk. The Ollama streaming API includes `eval_count` only in the last chunk of the response, and it is the definitive count of generated tokens. Using it ensures an accurate tokens-per-second calculation even if individual chunks contain partial tokens.
 
@@ -204,11 +206,11 @@ $ uv run inference_speed_tests.py
 
 Several patterns emerge from these numbers:
 
-**The 9B parameter model (qwen3.5:9b) is the fastest** on both prompts, generating tokens at roughly 39 ms each. This is expected — fewer parameters means fewer matrix multiplications per token. Despite the smaller size, it produced the longest responses (1047 and 1165 tokens), suggesting it was more verbose in its explanations.
+**The 9B parameter model (qwen3.5:9b) is the fastest** on both prompts, generating tokens at roughly 39 ms each. This is expected because fewer parameters means fewer matrix multiplications per token. Despite the smaller size, it produced the longest responses (1047 and 1165 tokens), suggesting it was more verbose in its explanations.
 
 **The MLX-optimized Gemma variant (gemma4:12b-mlx) is noticeably slower** than the QAT variant on both prompts. MLX is Apple's machine learning framework optimized for Apple Silicon, and while it can sometimes offer other advantages, on this hardware it did not translate to faster token generation for this particular model.
 
-**Both Gemma variants show a per-token speed gap between prompts.** The sky-blue prompt ran at 56.23 ms/token on the MLX variant but the primes prompt ran at 47.16 ms/token — about 16% faster. This is counterintuitive since the primes prompt produced *more* tokens. The likely explanation is that code generation involves more predictable token sequences (syntax keywords, common variable names) that the model's output head can sample faster than the more varied vocabulary of prose explanation.
+**Both Gemma variants show a per-token speed gap between prompts.** The sky-blue prompt ran at 56.23 ms/token on the MLX variant but the primes prompt ran at 47.16 ms/token: about 16% faster. This is counterintuitive since the primes prompt produced *more* tokens. The likely explanation is that code generation involves more predictable token sequences (syntax keywords, common variable names) that the model's output head can sample faster than the more varied vocabulary of prose explanation.
 
 **The QAT variant shows near-identical per-token speed** across both prompts (46.90 vs 47.56 ms/token), suggesting it has more consistent generation behavior than the MLX variant.
 
@@ -232,7 +234,7 @@ The script is designed to be easy to modify:
 
 **Adding models.** Edit the `MODELS` list at the top of the file. Any model pulled locally with `ollama pull` can be added.
 
-**Changing the prompts.** Edit `PROMPT_SKY` and `PROMPT_PRIMES` to test different types of tasks — translation, summarization, classification, etc. For a fair comparison, use prompts that are likely to produce outputs of similar length across models, or always report the per-token metric.
+**Changing the prompts.** Edit `PROMPT_SKY` and `PROMPT_PRIMES` to test different types of tasks such as translation, summarization, classification, etc. For a fair comparison, use prompts that are likely to produce outputs of similar length across models, or always report the per-token metric.
 
 **Adding more prompts.** Extend the `for label, prompt in [...]` loop in `main()` with additional (label, prompt) pairs.
 
@@ -246,7 +248,7 @@ The utility in this chapter gives you a baseline. From here, you can experiment 
 
 ## Optional Practice Problems
 
-1. **Quantization-Level Comparison.** Pull two different quantization levels of the same base model — for example, `qwen3.5:9b-q4_K_M` and `qwen3.5:9b-q8_0`. Add both to the `MODELS` list and run the benchmark. Compare the per-token speeds. Does the higher-precision model produce noticeably better responses, or is the speed difference the main trade-off? Write a short paragraph summarizing your findings.
+1. **Quantization-Level Comparison.** Pull two different quantization levels of the same base model, for example `qwen3.5:9b-q4_K_M` and `qwen3.5:9b-q8_0`. Add both to the `MODELS` list and run the benchmark. Compare the per-token speeds. Does the higher-precision model produce noticeably better responses, or is the speed difference the main trade-off? Write a short paragraph summarizing your findings.
 
 2. **Context Window Stress Test.** Modify the script to add a third prompt category: a long prompt that includes several pages of text (use `Path("../data/economics.txt").read_text()` from the Prompt Caching chapter) followed by a short question. Measure both inference time and prompt evaluation time (`prompt_eval_duration` from the response). Compare how different models handle long-context scenarios.
 
