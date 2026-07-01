@@ -40,7 +40,6 @@ members = [
     "MCP_experiments",
     "new_tool_examples",
     "AG2_agents",
+    "benchmarking_model_inference_speeds",
 ]
 
-[tool.uv]
-exclude-newer = "2 days"

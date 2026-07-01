@@ -20,4 +20,5 @@ OllamaCloud.md
 AI_IDEs.md
 semantic_navigator.md
 zvec_RAG.md
+Inference_Speed_Tests.md
 WrapUp.md
