@@ -19,7 +19,8 @@ if os.environ.get("CLOUD"):
         api_base="https://ollama.com",
         api_key=api_key,
         temperature=1.0,
-        max_tokens=4096,
+        max_tokens=16336,
+        num_think=0,
     )
 else:
     lm = dspy.LM(
@@ -27,16 +28,20 @@ else:
         api_base="http://localhost:11434",
         api_key="ollama",
         temperature=1.0,
-        max_tokens=4096,
+        max_tokens=16336,
+        num_think=0,
     )
 
 dspy.configure(lm=lm)
 
+
 class MathProblem(dspy.Signature):
     """question -> answer: list[float]"""
+
     # The docstring defines the input and output fields, including
     # the required output type (float)
-    
+
+
 class ChainOfThoughtMath(dspy.Module):
     def __init__(self):
         super().__init__()
@@ -45,6 +50,7 @@ class ChainOfThoughtMath(dspy.Module):
 
     def forward(self, question):
         return self.prog(question=question)
+
 
 math_model = dspy.ChainOfThought("question -> answer: list[float]")
 question_text = "Two dice are tossed. Give me a list of the three most probable rolls."

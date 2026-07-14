@@ -13,11 +13,7 @@ if str(ROOT) not in sys.path:
 
 from ollama import Client
 
-MODELS = [
-    "qwen3.5:9b",
-    "gemma4:12b-mlx",
-    "gemma4:12b-it-qat",
-]
+MODELS = ["qwen3.5:2b", "gemma4:e2b-mlx"]
 
 WARMUP_PROMPT = (
     "Generate a short list of random numbers between 1 and 10, "
@@ -81,9 +77,9 @@ def main() -> None:
     results: list[tuple[str, str, float, int]] = []
 
     for model in MODELS:
-        print(f"\n{'='*60}")
+        print(f"\n{'=' * 60}")
         print(f"  Benchmarking: {model}")
-        print(f"{'='*60}")
+        print(f"{'=' * 60}")
 
         print("  Warming up …", end=" ", flush=True)
         warmup(client, model)
@@ -99,19 +95,13 @@ def main() -> None:
             results.append((model, label, elapsed, tokens))
 
     # ---- summary table -----------------------------------------------------
-    divider = (
-        f"\n┌{'─'*22}┬{'─'*14}┬{'─'*10}┬{'─'*8}┬{'─'*14}┐"
-    )
+    divider = f"\n┌{'─' * 22}┬{'─' * 14}┬{'─' * 10}┬{'─' * 8}┬{'─' * 14}┐"
     header = (
         f"│ {'Model':<20s} │ {'Prompt':<12s} │ {'Time':>8s} │ "
         f"{'Tokens':>6s} │ {'ms/token':>10s}   │"
     )
-    sep = (
-        f"├{'─'*22}┼{'─'*14}┼{'─'*10}┼{'─'*8}┼{'─'*14}┤"
-    )
-    footer = (
-        f"└{'─'*22}┴{'─'*14}┴{'─'*10}┴{'─'*8}┴{'─'*14}┘"
-    )
+    sep = f"├{'─' * 22}┼{'─' * 14}┼{'─' * 10}┼{'─' * 8}┼{'─' * 14}┤"
+    footer = f"└{'─' * 22}┴{'─' * 14}┴{'─' * 10}┴{'─' * 8}┴{'─' * 14}┘"
 
     print(divider)
     print(header)
