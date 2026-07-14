@@ -2,9 +2,7 @@ import sqlite3
 import json
 import sys
 from pathlib import Path
-from typing import Dict, Any, List, Optional
-from functools import wraps
-import re
+from typing import Dict, Any, List
 from contextlib import contextmanager
 from textwrap import dedent  # for multi-line string literals
 

@@ -2,8 +2,6 @@ from langchain.agents import create_agent
 from langchain_core.tools import tool
 from langchain_community.tools import DuckDuckGoSearchRun
 from langchain_ollama import ChatOllama
-import json
-from pprint import pprint
 import sys
 from pathlib import Path
 

@@ -20,6 +20,9 @@ dependencies = [
     "spider-client>=0.1.71",
 ]
 
+[tool.ruff.lint]
+ignore = ["E402"]
+
 [tool.uv.workspace]
 members = [
     "infinite_memory_agent",

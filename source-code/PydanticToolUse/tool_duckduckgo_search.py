@@ -42,10 +42,10 @@ def search_web(query: str = Field(..., description="The search query to look up 
         
         if summary:
             summary = summary.replace('<b>', '').replace('</b>', '').replace('<i>', '').replace('</i>', '')
-            print(f"--- Search successful. Summary found. ---")
+            print("--- Search successful. Summary found. ---")
             return summary
         else:
-            print(f"--- Search completed, but no direct summary was found. ---")
+            print("--- Search completed, but no direct summary was found. ---")
             return "No summary found for that query."
             
     except requests.RequestException as e:

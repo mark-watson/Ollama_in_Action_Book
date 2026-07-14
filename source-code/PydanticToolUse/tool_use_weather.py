@@ -1,7 +1,7 @@
 import os
 import sys
 from pathlib import Path
-from pydantic import BaseModel, Field
+from pydantic import Field
 from pydantic_ai import Agent, ModelSettings
 from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.openai import OpenAIProvider

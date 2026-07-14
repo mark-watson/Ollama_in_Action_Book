@@ -9,11 +9,9 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from typing import Optional, Dict, Any
+from typing import Dict
 from pathlib import Path
-import json
 import re
-from pprint import pprint
 
 from ollama_config import get_client, get_model
 

@@ -19,11 +19,8 @@ import html
 import json
 from .tool_summarize_text import summarize_text
 
-import requests
 import os
 import logging
-from pprint import pprint
-from bs4 import BeautifulSoup
 
 logging.basicConfig(level=logging.INFO)
 

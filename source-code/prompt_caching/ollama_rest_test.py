@@ -1,6 +1,5 @@
 import requests
 import time
-import json
 import os
 import sys
 from pathlib import Path
@@ -69,7 +68,7 @@ time_b = query_ollama("Name one person who criticizes the study of economics.", 
 # 4. CALCULATE RESULTS
 if time_a > 0 and time_b > 0:
     speedup = time_a / time_b
-    print(f"\n--- RESULTS ---")
+    print("\n--- RESULTS ---")
     print(f"Request A (Cold): {time_a:.2f} ms")
     print(f"Request B (Warm): {time_b:.2f} ms")
     print(f"Speedup Factor:   {speedup:.1f}x FASTER")

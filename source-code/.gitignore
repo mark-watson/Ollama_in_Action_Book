@@ -8,3 +8,4 @@ __pycache__
 *.log
 .claude
 .ruff_cache
+db_local

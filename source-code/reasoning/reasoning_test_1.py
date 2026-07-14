@@ -1,4 +1,3 @@
-import os
 import sys
 import json
 from pathlib import Path
@@ -73,7 +72,7 @@ def main():
     )
     
     # 1. Initialize
-    print(f"Initializing model...")
+    print("Initializing model...")
     chat_model = initialize_model()
     
     # 2. Execute

@@ -3,11 +3,9 @@ File Directory Module
 Provides functions for listing files in the current directory
 """
 
-from typing import Dict, List, Any
-from typing import Optional
+from typing import Dict, Any
 from pathlib import Path
 
-import os
 
 
 def list_directory() -> Dict[str, Any]:

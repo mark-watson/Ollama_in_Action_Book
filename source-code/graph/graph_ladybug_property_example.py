@@ -1,7 +1,6 @@
 import ladybug
 from langchain_community.chains.graph_qa.cypher import GraphCypherQAChain
 from langchain_community.graphs.graph_store import GraphStore
-from langchain_ollama.llms import OllamaLLM
 import sys
 from pathlib import Path
 
@@ -9,7 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from ollama_config import get_client, get_model
+from ollama_config import get_model
 import shutil
 
 db_path = "test_db"

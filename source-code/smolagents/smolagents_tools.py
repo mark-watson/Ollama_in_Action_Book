@@ -12,11 +12,9 @@ Wrapper for book example tools for smolagents compatibility
 import smolagents_compat  # noqa: F401
 
 from smolagents import tool
-from typing import Optional
 from pprint import pprint
 
 from tools.tool_file_dir import list_directory
-from tools.tool_file_contents import read_file_contents
 
 from ollama_config import get_client, get_model
 

@@ -99,7 +99,7 @@ def build_index():
                             fields={"text": chunk},
                         ))
                     doc_count += len(chunks)
-                except Exception as e:
+                except Exception:
                     pass
 
     if docs:
@@ -296,13 +296,13 @@ def synthesize_answer(question: str, snippets: list, is_fully_sufficient: bool, 
 
 def run_agentic_rag(collection, question: str) -> str:
     """Orchestrates the Agentic RAG multi-step/multi-agent loop."""
-    print(f"\n🧠 \033[94m[Planner]\033[0m Analyzing question and generating search plan...")
+    print("\n🧠 \033[94m[Planner]\033[0m Analyzing question and generating search plan...")
     plan_res = plan_and_rewrite(question)
     print(f"   ↳ Plan: {plan_res.get('plan')}")
     print(f"   ↳ Initial Queries: {plan_res.get('queries')}")
 
     queries = plan_res.get('queries', [question])
-    print(f"🔍 \033[92m[Retriever]\033[0m Searching vector store for queries...")
+    print("🔍 \033[92m[Retriever]\033[0m Searching vector store for queries...")
     context_snippets = search_multi_queries(collection, queries, topk=3)
     print(f"   ↳ Found {len(context_snippets)} unique context snippet(s).")
 
@@ -339,14 +339,14 @@ def run_agentic_rag(collection, question: str) -> str:
             break
             
         print(f"🔄 \033[93m[Rewriter]\033[0m Context insufficient. Feedback: '{feedback}'")
-        print(f"   Generating new queries based on feedback...")
+        print("   Generating new queries based on feedback...")
         rewrite_res = rewrite_with_feedback(question, all_queries, feedback)
         new_queries = rewrite_res.get("queries", [])
         print(f"   ↳ New queries: {new_queries}")
         
         all_queries.extend(new_queries)
         
-        print(f"🔍 \033[92m[Retriever]\033[0m Retrieving additional context...")
+        print("🔍 \033[92m[Retriever]\033[0m Retrieving additional context...")
         new_snippets = search_multi_queries(collection, new_queries, topk=3)
         
         added_count = 0
@@ -356,7 +356,7 @@ def run_agentic_rag(collection, question: str) -> str:
                 added_count += 1
         print(f"   ↳ Found {added_count} new unique snippet(s). Total unique snippets: {len(context_snippets)}.")
 
-    print(f"✍️  \033[96m[Synthesis]\033[0m Generating final response...")
+    print("✍️  \033[96m[Synthesis]\033[0m Generating final response...")
     answer = synthesize_answer(question, context_snippets, is_sufficient, reason)
     return answer
 

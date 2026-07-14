@@ -10,7 +10,7 @@ Environment variables:
 import os
 from ollama import Client
 
-DEFAULT_MODEL = "nemotron-3-nano:4b"
+DEFAULT_MODEL = "qwen3.5:2b"  # "nemotron-3-nano:4b"
 
 
 def get_model() -> str:

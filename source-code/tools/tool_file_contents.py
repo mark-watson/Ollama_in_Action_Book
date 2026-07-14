@@ -3,7 +3,6 @@ Provides functions for reading and writing file contents with proper error handl
 """
 
 from pathlib import Path
-import json
 
 
 def read_file_contents(file_path: str, encoding: str = "utf-8") -> str:
@@ -53,7 +52,7 @@ def write_file_contents(
         path.parent.mkdir(parents=True, exist_ok=True)
 
         with path.open(mode, encoding=encoding) as f:
-            bytes_written = f.write(content)
+            f.write(content)
 
         return f"File '{file_path}' written OK."
 

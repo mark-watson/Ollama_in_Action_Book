@@ -2,11 +2,9 @@
 
 # Note: the answer.contents is nicely converted from HTML to Markdown.
 
-import os
 import sys
 from pathlib import Path
 import ollama
-from ollama import Client
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:

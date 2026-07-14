@@ -9,7 +9,6 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from typing import Optional, Dict, Any
 from pprint import pprint
 import json
 
@@ -78,7 +77,7 @@ def main():
     test_context = "Double check all math results."
     test_output = "Sally and John:  55 - 18 = 31. Sally and Mary:  55 - 31 = 24. John and Mary:  31 - 18 = 10."
     judgement = detect_hallucination(test_prompt, test_context, test_output)
-    print(f"\n** JUDGEMENT ***\n")
+    print("\n** JUDGEMENT ***\n")
     pprint(judgement)
 
 
