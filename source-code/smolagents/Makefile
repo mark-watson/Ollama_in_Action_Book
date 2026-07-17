@@ -2,6 +2,7 @@
 
 check:
 	ruff check .
+	uv run python -c "import litellm, smolagents, transformers"
 
 test:
 	uv run python ../fast_test.py

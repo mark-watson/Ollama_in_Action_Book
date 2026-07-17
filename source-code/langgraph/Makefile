@@ -2,6 +2,7 @@
 
 check:
 	ruff check .
+	uv run python -c "import langchain, langchain_community, langchain_core, langchain_ollama"
 
 test:
 	uv run python ../fast_test.py

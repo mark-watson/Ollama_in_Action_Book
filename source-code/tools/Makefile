@@ -2,6 +2,7 @@
 
 check:
 	ruff check .
+	uv run python -c "import bs4, requests"
 
 test:
 	uv run python ../fast_test.py

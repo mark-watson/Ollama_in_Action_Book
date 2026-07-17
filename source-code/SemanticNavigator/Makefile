@@ -2,6 +2,7 @@
 
 check:
 	ruff check .
+	uv run python -c "import gradio, ollama"
 
 test:
 	uv run python ../fast_test.py

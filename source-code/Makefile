@@ -7,6 +7,12 @@ SUBDIRS = AG2_agents autogen benchmarking_model_inference_speeds chains DSP \
 
 check:
 	ruff check .
+	@for dir in $(SUBDIRS); do \
+		if [ -f "$$dir/Makefile" ]; then \
+			echo "==> $$dir"; \
+			$(MAKE) -C $$dir check || true; \
+		fi; \
+	done
 
 test:
 	@for dir in $(SUBDIRS); do \
