@@ -9,7 +9,7 @@ This approach provides several benefits. By leveraging a local model via Ollama,
 The example for this chapter is in directory **AG2_agents**.
 
 
-![Arcitecture diagram](images/AG2_agents_architecture.png)
+![Architecture diagram](images/AG2_agents_architecture.png)
 
 
 ## Example Implementation
@@ -55,7 +55,7 @@ user_proxy.initiate_chat(assistant,
 
 This code sets up a multi-agent workflow using AG2 by configuring an assistant agent and a user proxy agent. First, it defines a configuration for a local Ollama-based model that supports native tool calling. The configuration specifies details such as the API type ("ollama"), the local server URL ("http://localhost:11434"), a placeholder API key, and an option to enable native tool calls. This configuration is then passed to instantiate the AssistantAgent, which uses it to generate responses based on the local LLM.
 
-![Arcitecture diagram](images/autogen_architecture.png)
+![Architecture diagram](images/autogen_architecture.png)
 
 This example uses a UserProxyAgent configured for Python code execution with a designated working directory ("coding") and Docker disabled. Finally, the user proxy agent initiates an automated chat with the assistant by sending a message requesting the plotting of a chart for NVDA and TESLA stock price changes year-to-date. This setup demonstrates a simple, automated multi-agent interaction where the assistant generates responses (potentially including code) and the user proxy executes those responses to fulfill the requested task. You will either want to remove the generated code directory **coding** after running this example of add **coding** to your **.gitignore** file.
 

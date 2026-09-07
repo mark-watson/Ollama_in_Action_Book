@@ -56,7 +56,7 @@ Analysis Result:
 The room has a comfortable and homely feel, with elements like a potted plant in the background on the left, which suggests that this might be a living room or a similar space repurposed for a group activity.
 ```
 
-![Arcitecture diagram](images/short_programs_architecture.png)
+![Architecture diagram](images/short_programs_architecture.png)
 
 ## Using the OpenAI Compatibility APIs with Local Models Running on Ollama
 

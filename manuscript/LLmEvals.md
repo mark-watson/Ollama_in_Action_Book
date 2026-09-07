@@ -19,7 +19,7 @@ We look at several examples in this chapter of approaches you might want to expe
 
 Here we implement our simple approach of using a second LLM to evaluate the output of the first LLM tat generated a response to user input.
 
-![Arcitecture diagram](images/judges_architecture.png)
+![Architecture diagram](images/judges_architecture.png)
 
 The following listing shows the tool **tool_judge_results.py**:
 

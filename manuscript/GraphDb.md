@@ -232,7 +232,7 @@ The implementation populates the database with specific data about "The Godfathe
 This example then sets up a question-answering chain using LangChain, which combines the LadybugDB graph database with the Ollama language model. This chain enables natural language queries against the graph database, allowing users to ask questions about actor-movie relationships and receive responses based on the stored graph data. The implementation includes several example queries to demonstrate the system's functionality.
 
 
-![Arcitecture diagram](images/graph_architecture.png)
+![Architecture diagram](images/graph_architecture.png)
 
 Here is the output from this example:
 

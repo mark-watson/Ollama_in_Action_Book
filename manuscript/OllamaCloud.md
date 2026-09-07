@@ -38,7 +38,7 @@ Advantages of Ollama Cloud:
 
 A key design principle of Ollama Cloud is its seamless integration with existing workflows. Whether interacting via the command line or a programmatic API, the process is designed to be intuitive and require minimal changes.
 
-![Arcitecture diagram](images/OllamaCloud_architecture.png)
+![Architecture diagram](images/OllamaCloud_architecture.png)
 
 #### Seamless Command-Line Integration
 

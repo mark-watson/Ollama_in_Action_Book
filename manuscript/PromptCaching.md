@@ -6,7 +6,7 @@ The examples for this chapter are in the directory **prompt_caching**.
 
 APIs like Anthropic's Claude and Google's Gemini support an explicit form of API calls to enable and use caching. As we will see, caching is different in Ollama.
 
-![Arcitecture diagram](images/prompt_caching_architecture.png)
+![Architecture diagram](images/prompt_caching_architecture.png)
 
 ## Caching is Implicit with Ollama
 

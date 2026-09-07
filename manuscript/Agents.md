@@ -35,7 +35,7 @@ This library implements a tools-first approach where capabilities are encapsulat
 
 Agents are designed to be lightweight and focused on specific tasks rather than trying to be general-purpose. The BaseAgent class provides core functionality while specific agents like WebAgent extend it for particular use cases. This specialization allows the agents to be more efficient and reliable at their designated tasks rather than attempting to be jack-of-all-trades.
 
-![Arcitecture diagram](images/smolagents_architecture.png)
+![Architecture diagram](images/smolagents_architecture.png)
 
 ## Overview for LLM Agents (optional section)
 

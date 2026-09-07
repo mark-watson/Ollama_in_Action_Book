@@ -48,7 +48,7 @@ Here are some key characteristics of reasoning models:
 * **Strong Performance:** It has shown significant improvements in reasoning and translation benchmarks, including increased accuracy on the MGSM dataset (both English and Chinese) and strong performance in machine translation tasks[1].
 * **Open Source Datasets and Implementation:** Alibaba has released Marco-o1's datasets and implementation guides on GitHub, encouraging collaboration and further advancements in AI research.
 
-![Arcitecture diagram](images/reasoning_architecture.png)
+![Architecture diagram](images/reasoning_architecture.png)
 
 
 ## A More Complex Example: City Traffic Planning

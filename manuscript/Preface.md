@@ -53,3 +53,9 @@ Ollama, as a tool for running large language models (LLMs) locally, offers sever
 - Customization and Flexibility: Ollama allows you to customize your local environment and security settings according to your specific needs. This level of control is often not possible with cloud-based solutions.
 
 It's important to note that while Ollama enhances privacy and security, it's still crucial to follow general security best practices for your local environment. This includes keeping your operating system and software updated, using strong passwords, and implementing appropriate firewall rules.
+
+# Acknowledgements
+
+I would like to thank my wife Carol Watson for editing all of my books.
+
+I would like to thank Roberto Alessi for reporting errors in the book (and corrections).

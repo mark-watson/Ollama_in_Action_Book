@@ -6,7 +6,7 @@ This chapter provides a hands-on utility for measuring inference speed across di
 
 **Dear reader**, this chapter provides suggestions and example code for comparing inference speeds of models running on Ollama. In my personal research I prefer using local models for appropriate use cases and I run open models on inference providers like, for example, FireWorks.ai. You can use the ideas presented here to also evaluate inference speed on commercial APIs.
 
-![Arcitecture diagram](images/inference_speed_test_architecture.png)
+![Architecture diagram](images/inference_speed_test_architecture.png)
 
 ## Why Wall-Clock Time Matters
 

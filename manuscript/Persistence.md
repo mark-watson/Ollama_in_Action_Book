@@ -12,7 +12,7 @@ The example in this chapter is simple and can be copied and modified for multipl
 - Code advice agent for Python
 - Store thoughts and ideas
 
-![Arcitecture diagram](images/memory_architecture.png)
+![Architecture diagram](images/memory_architecture.png)
 
 
 ## Code Example Using Mem0 and Chroma
