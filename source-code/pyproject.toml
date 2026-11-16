@@ -45,5 +45,6 @@ members = [
     "AG2_agents",
     "benchmarking_model_inference_speeds",
     "jev_style_instant_decision_models",
+    "parallel_apis",
 ]
 

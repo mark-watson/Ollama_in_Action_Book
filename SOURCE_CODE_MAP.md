@@ -9,6 +9,7 @@ This table maps each chapter file in `./manuscript` to its source code example d
 | `manuscript/Commandline.md` | (none) |
 | `manuscript/Short_examples.md` | `source-code/short_programs` |
 | `manuscript/Ollama_Tools.md` | `source-code/tools`<br>`source-code/tool_examples` |
+| `manuscript/parallel_apis.md` | `source-code/parallel_apis` |
 | `manuscript/PydanticAI.md` | `source-code/PydanticToolUse` |
 | `manuscript/LLmEvals.md` | `source-code/judges` |
 | `manuscript/PromptCaching.md` | `source-code/prompt_caching` |
